@@ -5,17 +5,19 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import lombok.*;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 
-public class Usuario {
+public abstract class Usuario {
     @NotNull
     private String nombre;
     @NotNull
