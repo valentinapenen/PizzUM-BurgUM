@@ -19,6 +19,7 @@ public class Producto {
     @NotNull
     private String nombre;
     @NotNull
-    private int precio;
-
+    private Double precioBase;
+    @NotNull
+    private Boolean disponible; // para no borrarlo de la bd en caso de volver a ofrecerlo a futuro
 }

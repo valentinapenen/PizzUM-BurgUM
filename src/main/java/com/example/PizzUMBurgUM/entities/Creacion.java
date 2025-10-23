@@ -1,7 +1,6 @@
 package com.example.PizzUMBurgUM.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.*;
@@ -16,13 +15,22 @@ import lombok.*;
 public class Creacion {
     @Id
     @NotNull
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @NotNull
-    private int precio_base;
+    private Double precioTotal;
     @NotNull
-    private int precio_total;
+    @OneToOne
+    @JoinColumn(name = "producto_base_id")
+    private BaseProducto productoBase;
+    @OneToMany
+    private List<Topping> toppings;
     @NotNull
     private Boolean favorito;
-    @NotNull
-    private List<Producto> productos_adicionales;
+
+    public Double calcularTotal() {
+        return toppings.stream()
+                .mapToDouble(Topping::getPrecioBase)
+                .sum();
+    }
 }
