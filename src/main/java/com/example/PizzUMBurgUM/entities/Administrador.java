@@ -19,4 +19,6 @@ public class Administrador extends Usuario{
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @NotNull
     private Domicilio domicilio_facturacion;
+
+
 }
