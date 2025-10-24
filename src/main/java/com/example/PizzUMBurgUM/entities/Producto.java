@@ -15,11 +15,11 @@ import lombok.*;
 public class Producto {
     @Id
     @NotNull
-    private String id;
+    private long id;
     @NotNull
     private String nombre;
     @NotNull
-    private Double precioBase;
+    private double precioBase;
     @NotNull
-    private Boolean disponible; // para no borrarlo de la bd en caso de volver a ofrecerlo a futuro
+    private boolean disponible; // para no borrarlo de la bd en caso de volver a ofrecerlo a futuro
 }

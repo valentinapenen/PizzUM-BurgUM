@@ -16,9 +16,9 @@ public class Creacion {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @NotNull
-    private Double precioTotal;
+    private double precioTotal;
     @NotNull
     @OneToOne
     @JoinColumn(name = "producto_base_id")
@@ -26,9 +26,12 @@ public class Creacion {
     @OneToMany
     private List<Topping> toppings;
     @NotNull
-    private Boolean favorito;
+    private boolean favorito;
+    @NotNull
+    @ManyToOne
+    private Pedido pedido;
 
-    public Double calcularTotal() {
+    public double calcularTotal() {
         return toppings.stream()
                 .mapToDouble(Topping::getPrecioBase)
                 .sum();

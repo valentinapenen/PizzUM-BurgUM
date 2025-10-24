@@ -15,7 +15,7 @@ public abstract class BaseProducto extends Producto{
     @NotNull
     private List<Topping> toppings;
 
-    private Double calcularPrecioFinal() {
+    private double calcularPrecioFinal() {
         double total = this.getPrecioBase();
         for (Topping topping : this.toppings) {
             total += topping.getPrecioBase();
