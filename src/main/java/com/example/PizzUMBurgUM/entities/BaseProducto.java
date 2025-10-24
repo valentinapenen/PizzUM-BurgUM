@@ -12,14 +12,4 @@ import java.util.List;
 @Builder
 
 public abstract class BaseProducto extends Producto{
-    @NotNull
-    private List<Topping> toppings;
-
-    private double calcularPrecioFinal() {
-        double total = this.getPrecioBase();
-        for (Topping topping : this.toppings) {
-            total += topping.getPrecioBase();
-        }
-        return total;
-    }
 }

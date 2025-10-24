@@ -31,9 +31,10 @@ public class Creacion {
     @ManyToOne
     private Pedido pedido;
 
-    public double calcularTotal() {
-        return toppings.stream()
+    public void calcularTotal() { //calculo el precioTotal directamente en la clase ya que utiliza datos que guarda, por lo que no es necesario buscarlos en la bd
+        double precioToppings = toppings.stream()
                 .mapToDouble(Topping::getPrecioBase)
                 .sum();
+        precioTotal = precioToppings + productoBase.getPrecioBase();
     }
 }
