@@ -20,16 +20,30 @@ import java.util.Date;
 public abstract class Usuario {
     @NotNull
     private String nombre;
+
     @NotNull
     private String apellido;
+
     @Id
     @Column(length = 8)
     @NotNull
     private int cedula;
+
     @NotNull
     private Date fechaNacimiento;
+
     @NotNull
     private String correo;
+
+
     @NotNull
     private String telefono;
+
+    @NotNull
+    private String contrasena;
+
+
+
+
+
 }
