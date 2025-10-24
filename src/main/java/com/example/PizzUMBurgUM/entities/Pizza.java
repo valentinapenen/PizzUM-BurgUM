@@ -1,5 +1,6 @@
 package com.example.PizzUMBurgUM.entities;
 
+import com.example.PizzUMBurgUM.entities.enums.CategoriaTopping;
 import com.example.PizzUMBurgUM.entities.enums.TamanoPizza;
 import com.example.PizzUMBurgUM.entities.enums.TipoTopping;
 import jakarta.persistence.*;

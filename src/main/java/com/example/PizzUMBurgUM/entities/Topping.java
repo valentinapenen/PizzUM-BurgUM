@@ -17,10 +17,10 @@ import lombok.*;
 public class Topping extends Producto{
     @NotNull
     @Enumerated(EnumType.STRING)
-    public static TipoTopping tipo; // aderezo, ingrediente extra, bebida
+    public static TipoTopping tipo; // salsa, masa, queso, pan, tipo de carne, aderezo, ingrediente extra, bebida
     @NotNull
     @Enumerated(EnumType.STRING)
-    private CategoriaTopping categoria; // pizza, hamburguesa o ambos
+    private CategoriaTopping categoria; // pizza, hamburguesa, ambos
 
 
     public static TipoTopping getTipo() {
@@ -29,5 +29,14 @@ public class Topping extends Producto{
 
     public CategoriaTopping getCategoria() {
         return categoria;
+    }
+
+    public Topping(TipoTopping tipo, CategoriaTopping categoria) {
+        if ((TipoTopping.MASA.equals(tipo) && !CategoriaTopping.PIZZA.equals(categoria)) || (TipoTopping.SALSA.equals(tipo) && !CategoriaTopping.PIZZA.equals(categoria)) || (TipoTopping.QUESO.equals(tipo) && !CategoriaTopping.PIZZA.equals(categoria)) || (TipoTopping.PAN.equals(tipo) && !CategoriaTopping.HAMBURGUESA.equals(categoria)) || (TipoTopping.CARNE.equals(tipo) && !CategoriaTopping.HAMBURGUESA.equals(categoria))) {
+            throw new IllegalArgumentException("El tipo de topping no corresponde a esa categoria");
+        }
+
+        this.tipo = tipo;
+        this.categoria = categoria;
     }
 }
