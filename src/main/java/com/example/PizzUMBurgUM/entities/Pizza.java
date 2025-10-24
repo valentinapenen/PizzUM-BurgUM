@@ -13,6 +13,7 @@ import java.util.ArrayList;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 
 public class Pizza extends BaseProducto {
@@ -32,13 +33,12 @@ public class Pizza extends BaseProducto {
     @NotNull
     private Topping salsa;
 
-    public Pizza(TamanoPizza tamano, Topping masa, Topping queso, Topping salsa) {
+    public Pizza(Topping masa, Topping queso, Topping salsa) {
         if (masa.getTipo() != TipoTopping.MASA || queso.getTipo() != TipoTopping.QUESO || salsa.getTipo() != TipoTopping.SALSA) {
             throw new IllegalArgumentException("Toppings esenciales inválidos");
         }
         this.masa = masa;
         this.queso = queso;
         this.salsa = salsa;
-        this.tamano = tamano;
     }
 }

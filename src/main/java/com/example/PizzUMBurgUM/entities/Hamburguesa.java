@@ -13,6 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 
 public class Hamburguesa extends BaseProducto{
@@ -27,12 +28,11 @@ public class Hamburguesa extends BaseProducto{
     @Enumerated(EnumType.STRING)
     private Topping tipoCarne;
 
-    public Hamburguesa(int cantidadCarnes, Topping tipoPan, Topping tipoCarne) {
+    public Hamburguesa(Topping tipoPan, Topping tipoCarne) {
         if (tipoPan.getTipo() != TipoTopping.PAN || tipoCarne.getTipo() != TipoTopping.PAN) {
             throw new IllegalArgumentException("Toppings esenciales inválidos");
         }
 
-        this.cantidadCarnes = cantidadCarnes;
         this.tipoPan = tipoPan;
         this.tipoCarne = tipoCarne;
     }
