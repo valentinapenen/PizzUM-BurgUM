@@ -1,15 +1,18 @@
 package com.example.PizzUMBurgUM.entities;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 
-public abstract class BaseProducto extends Producto{
+public class BaseProducto extends Producto{
 }
