@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface ToppingRepository extends JpaRepository<Topping, Long> {
     List<Topping> findByCategoria(CategoriaTopping categoria);
-    List<Topping> findByTipo(TipoTopping tipo);
+    List<Topping> findByCategoriaAndTipo(CategoriaTopping categoria, TipoTopping tipo);
 }

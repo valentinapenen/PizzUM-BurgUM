@@ -17,6 +17,11 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
+    @GetMapping
+    public ResponseEntity<List<Producto>> listarActivos() {
+        return ResponseEntity.ok(productoService.listarActivos());
+    }
+
     @PostMapping
     public ResponseEntity<Producto> crear(@RequestBody @Valid Producto producto) {
         return ResponseEntity.ok(productoService.crear(producto));
@@ -25,5 +30,11 @@ public class ProductoController {
     @PutMapping("/{id}/precio")
     public ResponseEntity<Producto> actualizarPrecio(@PathVariable long id, @RequestParam double precio) {
         return ResponseEntity.ok(productoService.actualizarPrecio(id, precio));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Producto> desactivar(@PathVariable long id) {
+        productoService.desactivar(id);
+        return ResponseEntity.noContent().build();
     }
 }
