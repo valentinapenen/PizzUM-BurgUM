@@ -42,8 +42,4 @@ public abstract class Usuario {
     @NotNull
     private String contrasena;
 
-
-
-
-
 }
