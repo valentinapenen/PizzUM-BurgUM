@@ -1,4 +1,4 @@
-package com.example.PizzUMBurgUM.entities;
+package com.example.PizzUMBurgUM.repositories;
 
 public interface AdministradorRepositorio {
 }
