@@ -4,21 +4,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 
 public class Producto {
     @Id
     @NotNull
-    private String id;
+    private long id;
     @NotNull
     private String nombre;
     @NotNull
-    private int precio;
-
+    private double precioBase;
+    @NotNull
+    private boolean disponible; // para no borrarlo de la bd en caso de volver a ofrecerlo a futuro
 }
