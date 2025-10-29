@@ -39,4 +39,11 @@ public class ProductoService {
         producto.setDisponible(false);
         productoRepository.save(producto);
     }
+
+    public void activar(long id) {
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("El producto no existe"));
+        producto.setDisponible(true);
+        productoRepository.save(producto);
+    }
 }

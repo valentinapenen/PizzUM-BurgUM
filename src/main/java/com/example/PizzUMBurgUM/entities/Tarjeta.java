@@ -25,9 +25,9 @@ public class Tarjeta {
     @NotNull
     private String nombreTitular; // Porque el titular de la tarjeta puede no ser el mismo que quien la usa
     @ManyToOne
-    @JoinColumn(name = "usuario_cedula")
+    @JoinColumn(name = "cliente_cedula")
     @NotNull
-    private Usuario usuario;
+    private Cliente cliente;
     @NotNull
     @Enumerated(EnumType.STRING)
     private TipoTarjeta tipoTarjeta;
@@ -37,7 +37,7 @@ public class Tarjeta {
     @NotNull
     private boolean predeterminada;
 
-    private String enmascarar(String numero) {
+    public static String enmascarar(String numero) {
         return "**** **** **** " + numero.substring(numero.length() - 4);
     }
 }

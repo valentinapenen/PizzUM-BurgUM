@@ -23,7 +23,6 @@ public class Domicilio {
     private String departamento;
     @NotNull
     private String ciudad;
-    @NotNull
     private String apartamento;
     @NotNull
     private boolean predeterminado;
