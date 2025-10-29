@@ -1,9 +1,11 @@
 package com.example.PizzUMBurgUM.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.example.PizzUMBurgUM.entities.enums.TipoTarjeta;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 @Entity
@@ -16,12 +18,26 @@ import java.util.Date;
 public class Tarjeta {
     @Id
     @NotNull
-    private String numero;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @NotNull
-    private String nombre_titular;
+    private String numeroEnmascarado;
     @NotNull
-    private String apellido_titular;
+    private String nombreTitular; // Porque el titular de la tarjeta puede no ser el mismo que quien la usa
+    @ManyToOne
+    @JoinColumn(name = "usuario_cedula")
     @NotNull
+    private Usuario usuario;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TipoTarjeta tipoTarjeta;
+    @NotNull
+    @DateTimeFormat
     private Date fecha_vencimiento;
+    @NotNull
+    private boolean predeterminada;
 
+    private String enmascarar(String numero) {
+        return "**** **** **** " + numero.substring(numero.length() - 4);
+    }
 }
