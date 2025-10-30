@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 
 public class Administrador extends Usuario{
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @NotNull
     private Domicilio domicilio_facturacion;
 

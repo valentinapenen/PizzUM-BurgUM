@@ -1,10 +1,11 @@
 package com.example.PizzUMBurgUM.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,16 +17,16 @@ import java.util.List;
 
 public class Cliente extends Usuario{
 
-    @NotNull
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "cliente_cedula", joinColumns = @JoinColumn(name = "cliente_cedula"), inverseJoinColumns = @JoinColumn(name = "domicilio_id"))
-    private List<Domicilio> domicilios;
+    @NotEmpty(message = "Debe de guardarse por lo menos un domicilio")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "cliente_domicilio", joinColumns = @JoinColumn(name = "cliente_cedula"), inverseJoinColumns = @JoinColumn(name = "domicilio_id"))
+    private List<Domicilio> domicilios = new ArrayList<>();
 
-    @NotNull
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Tarjeta> tarjetas;
+    @NotEmpty(message = "Debe de guardarse por lo menos una tarjeta")
+    @OneToMany(mappedBy= "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Tarjeta> tarjetas = new ArrayList<>();
 
-    @NotNull
-    private List<Pedido> pedidos;
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pedido> pedidos = new ArrayList<>();
     
 }

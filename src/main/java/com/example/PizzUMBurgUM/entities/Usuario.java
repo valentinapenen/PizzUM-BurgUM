@@ -33,7 +33,7 @@ public abstract class Usuario {
     @Id
     @Column(length = 8, nullable = false, unique = true)
     @NotNull
-    private int cedula;
+    private String cedula;
 
     @NotNull
     @Column(nullable = false)
@@ -41,7 +41,7 @@ public abstract class Usuario {
 
     @NotNull
     @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String correo;
 
 
