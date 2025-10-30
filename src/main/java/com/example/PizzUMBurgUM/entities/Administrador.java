@@ -1,9 +1,6 @@
 package com.example.PizzUMBurgUM.entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 
 public class Administrador extends Usuario{
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @NotNull
     private Domicilio domicilio_facturacion;
 
