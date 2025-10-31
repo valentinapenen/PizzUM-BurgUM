@@ -17,7 +17,7 @@ public class TarjetaService {
     //Autowired
     //private ClienteRepository clienteRepository;
 
-    //public Tarjeta registrarTarjeta(String numero, String nombreTitular, int clienteId, TipoTarjeta tipoTarjeta, Date fechaVencimiento, boolean predeterminada) {
+    //public Tarjeta crearTarjeta(String numero, String nombreTitular, long clienteId, TipoTarjeta tipoTarjeta, Date fechaVencimiento, boolean predeterminada) {
     //    Cliente cliente = clienteRepository.findById(clienteId)
     //            .orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
     //

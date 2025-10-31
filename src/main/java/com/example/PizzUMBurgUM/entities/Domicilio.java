@@ -26,7 +26,4 @@ public class Domicilio {
     private String apartamento;
     @NotNull
     private boolean predeterminado;
-    @NotNull
-    @ManyToOne
-    private Cliente cliente;
 }

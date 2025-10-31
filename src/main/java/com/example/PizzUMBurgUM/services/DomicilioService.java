@@ -17,15 +17,12 @@ public class DomicilioService {
     //@Autowired
     //private ClienteRepository clienteRepository;
 
-    //public Domicilio agregarDomicilio(String numero, String calle, String departamento, String ciudad, String apartamento, boolean predeterminado, long clienteId) {
+    //public Domicilio crearDomicilio(String numero, String calle, String departamento, String ciudad, String apartamento, boolean predeterminado, long clienteId) {
     //    Cliente cliente = clienteRepository.findById(clienteId)
     //            .orElseThrow(new RuntimeException("Cliente no encontrado."));
-    //    Domicilio domicilio = new Domicilio(numero, calle, departamento, ciudad, apartamento, predeterminado, cliente);
+    //    Domicilio domicilio = new Domicilio(numero, calle, departamento, ciudad, apartamento, predeterminado);
+    //    domicilioRepository.save(domicilio);
     //}
-
-    public List<Domicilio> listarDomicilioPorCliente(long clienteId) {
-        return domicilioRepository.findByClienteId(clienteId);
-    }
 
     public void eliminarDomicilio(long idDomicilio) {
         domicilioRepository.deleteById(idDomicilio);
