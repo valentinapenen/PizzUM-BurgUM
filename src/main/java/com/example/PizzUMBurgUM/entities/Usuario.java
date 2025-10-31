@@ -33,7 +33,7 @@ public abstract class Usuario {
     @Id
     @Column(length = 8, nullable = false, unique = true)
     @NotNull
-    private String cedula;
+    private Long cedula;
 
     @NotNull
     @Column(nullable = false)
