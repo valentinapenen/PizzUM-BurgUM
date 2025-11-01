@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PizzUM & BurgUM — Página principal cliente</title>
+
+  <link rel="stylesheet" href="../static/css/base.css" th:href="@{/css/base.css}">
+  <link rel="stylesheet" href="../static/css/menu.css" th:href="@{/css/menu.css}">
+
+
+
+</head>
+
+<body>
+<header>
+  <div class="container nav">
+    <div class="nav__brand">
+      <img class="logo" alt="PizzUM & BurgUM"
+           src="https://i.postimg.cc/qMLhFSwz/Logo-final-removebg-preview.png" />
+      <strong>PizzUM &amp; BurgUM</strong>
+    </div>
+
+    <nav class="nav__links">
+      <!-- Usá siempre class="pill" y marcá el activo con .active -->
+      <a class="pill active" href="#pizza">Pizza</a>
+      <a class="pill active" href="#burger">Burger</a>
+      <a class="pill" href="favoritos.html">Favoritos</a>
+      <a class="pill" href="historial.html">Historial</a>
+      <a class="pill" href="usuario.html">Usuario</a>
+      <a class="pill" href="pedido.html">Pedido</a>
+    </nav>
+  </div>
+</header>
+
+
+<!-- PIZZA -->
+<main class="container hero" id="pizza">
+  <section class="hero__media">
+    <img class="photo" alt="Pizza"
+         src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?q=80&w=1600&auto=format&fit=crop" />
+    <span class="badge">Pizza personalizada</span>
+  </section>
+
+  <section class="hero__content">
+    <p class="eyebrow">Creá tu pedido</p>
+    <h1>Armá tu <span class="marca">pizza</span></h1>
+    <p class="lead">Elegí tamaño, masa, salsa, queso y toppings.</p>
+
+    <div class="steps">
+      <div class="step step--active"><span class="dot">1</span> Tamaño</div>
+      <div class="step"><span class="dot">2</span> Masa</div>
+      <div class="step"><span class="dot">3</span> Salsa</div>
+      <div class="step"><span class="dot">4</span> Queso</div>
+      <div class="step"><span class="dot">5</span> Toppings</div>
+      <div class="step"><span class="dot">6</span> Acompañamientos</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--primario">Armar mi pizza</button>
+    </div>
+    <p class="disclaimer">Los precios varían según los ingredientes seleccionados.</p>
+  </section>
+</main>
+
+<!-- BURGER -->
+<main class="container hero" id="burger">
+  <section class="hero__media">
+    <img class="photo" alt="Burger"
+         src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1600&auto=format&fit=crop" />
+    <span class="badge">Burger personalizada</span>
+  </section>
+
+  <section class="hero__content">
+    <p class="eyebrow">Creá tu pedido</p>
+    <h1>Armá tu <span class="marca">burger</span></h1>
+    <p class="lead">Elegí pan, carne, queso, extras y acompañamientos.</p>
+
+    <div class="steps">
+      <div class="step step--active"><span class="dot">1</span> Pan</div>
+      <div class="step"><span class="dot">2</span> Carne</div>
+      <div class="step"><span class="dot">3</span> Queso</div>
+      <div class="step"><span class="dot">4</span> Extras</div>
+      <div class="step"><span class="dot">5</span> Acompañamientos</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--primario">Armar mi burger</button>
+    </div>
+    <p class="disclaimer">Los precios varían según los ingredientes seleccionados.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer__inner">
+    <div class="nav__brand">
+      <img class="logo" alt="PizzUM & BurgUM"
+           src="https://i.postimg.cc/qMLhFSwz/Logo-final-removebg-preview.png" />
+      <strong>PizzUM &amp; BurgUM</strong>
+    </div>
+    <div class="social" aria-label="Redes">
+      <a href="#" aria-label="Instagram">IG</a>
+      <a href="#" aria-label="Facebook">FB</a>
+      <a href="#" aria-label="X">X</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
