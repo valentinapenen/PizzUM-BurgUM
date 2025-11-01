@@ -4,7 +4,7 @@ import com.example.PizzUMBurgUM.controllers.DTOS.PedidoRequest;
 import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Pedido;
 import com.example.PizzUMBurgUM.entities.enums.EstadoPedido;
-import com.example.PizzUMBurgUM.services.ClienteService;
+//import com.example.PizzUMBurgUM.services.ClienteService;
 import com.example.PizzUMBurgUM.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/pedidos")
 public class PedidoController {
+
     @Autowired
     private PedidoService pedidoService;
 

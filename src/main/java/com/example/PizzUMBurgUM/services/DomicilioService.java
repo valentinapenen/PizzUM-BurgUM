@@ -36,4 +36,9 @@ public class DomicilioService {
         }
         return domicilioRepository.findById(domicilioId).get();
     }
+
+    public Domicilio buscarPorId(Long id) {
+        return domicilioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Domicilio no encontrado con id: " + id));
+    }
 }

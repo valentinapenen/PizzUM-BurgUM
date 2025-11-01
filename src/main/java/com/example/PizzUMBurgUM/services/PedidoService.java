@@ -16,35 +16,40 @@ import java.util.List;
 
 @Service
 public class PedidoService {
+
     @Autowired
     private PedidoRepository pedidoRepository;
+
     @Autowired
     private CreacionRepository creacionRepository;
 
     @Autowired
     private DomicilioService domicilioService;
 
-    public Pedido crearPedido(Cliente cliente, List<Long> idsCreaciones, Domicilio domicilio, MedioDePago medioDePago) {
-        Pedido pedido = new Pedido();
-        pedido.setCliente(cliente);
-        pedido.setDomicilio(domicilioService.buscarPorId(idDomicilio));
-        pedido.setEstado(EstadoPedido.EN_COLA);
-        pedido.setFecha(LocalDateTime.now());
-        pedido.setMedioDePago(MedioDePago.valueOf(medioDePago.toUpperCase()));
-
-        List<Creacion> creaciones = creacionRepository.findAllById(idsCreaciones);
-
-        double total = 0.0;
-        for (Creacion creacion : creaciones) {
-            total += creacion.getPrecioTotal();
-            creacion.setPedido(pedido);
-        }
-
-        pedido.setCreaciones(creaciones);
-        pedido.setTotal(total);
-
-        return pedidoRepository.save(pedido);
-    }
+//    @Autowired
+//    private ClienteRepository clienteRepository;
+//
+//    public Pedido crearPedido(long clienteId, List<Long> idsCreaciones, long idDomicilio, String medioDePago) {
+//        Pedido pedido = new Pedido();
+//        pedido.setCliente(clienteRepository.buscarPorId(clienteId));
+//        pedido.setDomicilio(domicilioService.buscarPorId(idDomicilio));
+//        pedido.setEstado(EstadoPedido.EN_COLA);
+//        pedido.setFecha(LocalDateTime.now());
+//        pedido.setMedioDePago(MedioDePago.valueOf(medioDePago.toUpperCase()));
+//
+//        List<Creacion> creaciones = creacionRepository.findAllById(idsCreaciones);
+//
+//        double total = 0.0;
+//        for (Creacion creacion : creaciones) {
+//            total += creacion.getPrecioTotal();
+//            creacion.setPedido(pedido);
+//        }
+//
+//        pedido.setCreaciones(creaciones);
+//        pedido.setTotal(total);
+//
+//        return pedidoRepository.save(pedido);
+//    }
 
     public Pedido cambiarEstado(long id, EstadoPedido nuevoEstado) {
         Pedido pedido = pedidoRepository.findById(id)

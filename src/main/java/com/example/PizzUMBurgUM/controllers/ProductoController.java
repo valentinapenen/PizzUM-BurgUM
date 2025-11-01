@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/admin/productos")
 @PreAuthorize("hasRole('ADMIN')")
 public class ProductoController {
+
     @Autowired
     private ProductoService productoService;
 
