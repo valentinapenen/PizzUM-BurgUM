@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Pedido — PizzUM & BurgUM</title>
+
+    <link rel="stylesheet" href="../static/css/base.css"   th:href="@{/css/base.css}">
+    <link rel="stylesheet" href="../static/css/pedido.css" th:href="@{/css/pedido.css}">
+</head>
+<body>
+
+<header>
+    <div class="container nav">
+        <div class="nav__brand">
+            <img class="logo" alt="PizzUM & BurgUM"
+                 src="https://i.postimg.cc/qMLhFSwz/Logo-final-removebg-preview.png" />
+            <strong>PizzUM &amp; BurgUM</strong>
+        </div>
+        <nav class="nav__links">
+            <a class="pill"               href="../templates/paginaPrincipalCliente.html" th:href="@{/}">Menú</a>
+            <a class="pill active"        href="pedido.html"                               th:href="@{/pedido}">Pedido</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container grid">
+    <!-- Carrito -->
+    <section class="card section">
+        <h3>Creaciones</h3>
+        <ul id="cartList" class="list"></ul>
+        <p id="emptyCart" class="empty">No hay items en el pedido todavía.</p>
+        <div class="total">
+            <span>Total (estimado)</span>
+            <span id="totalAmount">$ —</span>
+        </div>
+    </section>
+
+    <!-- Checkout -->
+    <aside class="card section">
+        <h3>Entrega y pago</h3>
+
+        <div class="section">
+            <strong>Domicilio</strong>
+            <div id="addrWrap" class="radio" style="margin-top:8px"></div>
+            <p id="addrEmpty" class="empty">
+                No tenés domicilios guardados.
+                <a class="pill" href="../templates/usuario.html" th:href="@{/usuario}">Agregar domicilio</a>
+            </p>
+        </div>
+
+        <div class="section" style="margin-top:10px">
+            <strong>Tarjeta</strong>
+            <div id="cardWrap" class="radio" style="margin-top:8px"></div>
+            <p id="cardEmpty" class="empty">
+                No tenés tarjetas guardadas.
+                <a class="pill" href="../templates/usuario.html" th:href="@{/usuario}">Agregar tarjeta</a>
+            </p>
+            <p class="empty">Se usa: número, titular, vencimiento. <b>El CVV no se guarda</b>.</p>
+        </div>
+
+        <div class="section" style="margin-top:10px">
+            <strong>CVV</strong>
+            <div class="field">
+                <input id="cvv" class="input" type="password"
+                       inputmode="numeric" maxlength="4" placeholder="3 o 4 dígitos"
+                       aria-describedby="cvvHelp" />
+            </div>
+            <small id="cvvHelp" class="empty">Código de seguridad (no se almacena).</small>
+            <div id="cvvError" class="error" style="display:none">Ingresá 3 o 4 dígitos.</div>
+        </div>
+
+        <div class="actions" style="margin-top:12px">
+            <button id="payBtn" class="btn btn--primary" disabled>Pagar ahora</button>
+            <button id="clearBtn" class="btn btn--danger">Vaciar pedido</button>
+        </div>
+    </aside>
+</main>
+
+<script>
+    /* ——— Lógica de carrito DEMO (igual a la tuya, sin tocar) ——— */
+    const cartList = document.getElementById('cartList');
+    const emptyCart = document.getElementById('emptyCart');
+    const totalAmount = document.getElementById('totalAmount');
+    const clearBtn = document.getElementById('clearBtn');
+    const payBtn = document.getElementById('payBtn');
+
+    function renderCart(){
+      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+      cartList.innerHTML = '';
+      if(cart.length===0){
+        emptyCart.style.display='block';
+        totalAmount.textContent = '$ —';
+        payBtn.disabled = true;
+        return;
+      }
+      emptyCart.style.display='none';
+      cart.forEach((item, idx) => {
+        const tags = [];
+        if(item.tipo==='Pizza'){
+          tags.push(item.tamano, item.masa, item.salsa, item.queso);
+          (item.toppings||[]).forEach(t=>tags.push('Top: '+t));
+          (item.acomp||[]).forEach(a=>tags.push('Ac: '+a));
+        } else {
+          tags.push(item.pan, item.proteina, (item.cantidadCarnes||'1')+'x', item.queso);
+          (item.extras||[]).forEach(t=>tags.push('Extra: '+t));
+          (item.acomp||[]).forEach(a=>tags.push('Ac: '+a));
+        }
+        const li = document.createElement('li');
+        li.className='item';
+        li.innerHTML = `
+          <div class="top">
+            <div><b>${item.tipo}</b></div>
+            <span class="badge">${item.favorito?'★ Favorito':''}</span>
+          </div>
+          <div class="tags">${tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+          <div class="actions">
+            <button class="btn btn--ghost" data-idx="${idx}" data-act="up">↑</button>
+            <button class="btn btn--ghost" data-idx="${idx}" data-act="down">↓</button>
+            <button class="btn btn--danger" data-idx="${idx}" data-act="del">Eliminar</button>
+          </div>`;
+        cartList.appendChild(li);
+      });
+      totalAmount.textContent = '$ —';
+    }
+    renderCart();
+
+    cartList.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button');
+      if(!btn) return;
+      const idx = +btn.dataset.idx;
+      const act = btn.dataset.act;
+      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+      if(act==='del'){ cart.splice(idx,1); }
+      if(act==='up' && idx>0){ [cart[idx-1],cart[idx]]=[cart[idx],cart[idx-1]]; }
+      if(act==='down' && idx<cart.length-1){ [cart[idx+1],cart[idx]]=[cart[idx],cart[idx+1]]; }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart(); checkReady();
+    });
+
+    clearBtn.addEventListener('click', ()=>{
+      if(confirm('¿Vaciar por completo el pedido?')){
+        localStorage.removeItem('cart');
+        renderCart(); checkReady();
+      }
+    });
+
+    const addrWrap = document.getElementById('addrWrap');
+    const cardWrap = document.getElementById('cardWrap');
+    const addrEmpty = document.getElementById('addrEmpty');
+    const cardEmpty = document.getElementById('cardEmpty');
+
+    function renderAddresses(){
+      const addrs = JSON.parse(localStorage.getItem('addresses')||'[]');
+      addrWrap.innerHTML = '';
+      if(addrs.length===0){ addrEmpty.style.display='block'; return; }
+      addrEmpty.style.display='none';
+      addrs.forEach((a,i)=>{
+        const id = 'addr_'+i;
+        const label = `${a.calle} ${a.numero}` + (a.apto?`, apto ${a.apto}`:'');
+        addrWrap.insertAdjacentHTML('beforeend',
+          `<div><input type="radio" name="addr" id="${id}" value="${a.id||id}" ${i===0?'checked':''}><label for="${id}">${label}</label></div>`);
+      });
+    }
+    function renderCards(){
+      const cards = JSON.parse(localStorage.getItem('cards')||'[]');
+      cardWrap.innerHTML = '';
+      if(cards.length===0){ cardEmpty.style.display='block'; return; }
+      cardEmpty.style.display='none';
+      cards.forEach((c,i)=>{
+        const id = 'card_'+i;
+        const lab = `${c.numero||'**** **** **** ****'} — ${c.nombre||''} ${c.apellido||''} — ${c.vencimiento||''}`;
+        cardWrap.insertAdjacentHTML('beforeend',
+          `<div><input type="radio" name="card" id="${id}" value="${c.id||id}" ${i===0?'checked':''}><label for="${id}">${lab}</label></div>`);
+      });
+    }
+    renderAddresses();
+    renderCards();
+
+    function hasAddr(){ return !!addrWrap.querySelector('input[type=radio]:checked'); }
+    function hasCard(){ return !!cardWrap.querySelector('input[type=radio]:checked'); }
+    function hasItems(){ return (JSON.parse(localStorage.getItem('cart')||'[]').length>0); }
+
+    const cvv = document.getElementById('cvv');
+    const cvvError = document.getElementById('cvvError');
+    function cvvOK(){ return /^\d{3,4}$/.test((cvv.value||'').trim()); }
+    function showCVVError(){ cvvError.style.display = cvv.value && !cvvOK() ? 'block' : 'none'; }
+
+    function checkReady(){
+      document.getElementById('payBtn').disabled = !(hasItems() && hasAddr() && hasCard() && cvvOK());
+    }
+    document.addEventListener('change', (e)=>{
+      if(e.target.name==='addr' || e.target.name==='card'){ checkReady(); }
+    });
+    cvv.addEventListener('input', ()=>{ showCVVError(); checkReady(); });
+    checkReady();
+
+    document.getElementById('payBtn').addEventListener('click', ()=>{
+      if(!cvvOK()){ showCVVError(); return; }
+      alert('Pago simulado. (Cuando conecten backend: validar tarjeta, dirección y confirmar pedido).');
+    });
+</script>
+</body>
+</html>

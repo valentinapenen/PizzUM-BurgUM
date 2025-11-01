@@ -8,7 +8,7 @@ body{
 
 .title{ margin-bottom: 8px }
 .card{
-  padding: 28px;                 /* más espacio dentro */
+  padding: 28px;
 }
 @media (min-width: 980px){
   main .card{ padding: 34px }

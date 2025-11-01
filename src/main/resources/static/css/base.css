@@ -97,3 +97,23 @@ header{background:transparent}
 .footer{
   margin:40px auto 28px;color:#475569;display:flex;align-items:center;justify-content:space-between;gap:14px;
 }
+
+.nav__links a { text-decoration: none; } /* por si algún navegador subraya */
+.nav__links a.pill {
+  display:inline-flex; align-items:center; justify-content:center;
+  height:36px; padding:0 16px; border-radius:999px;
+  color:#334155; font-weight:600; border:1px solid transparent;
+  transition:all .15s ease;
+}
+.nav__links a.pill:hover { background:#f8fafc; box-shadow: inset 0 -2px 0 0 #ff7a00; }
+
+
+.nav__links a.pill.active,
+.nav__links a[aria-current="page"] {
+  background:#ff7a00; color:#fff; border-color:#ff7a00;
+  box-shadow:0 8px 18px rgba(255,122,0,.25);
+}
+
+/* Asegurar misma altura del logo en todas las páginas */
+.logo { height:44px; width:auto; }
+
