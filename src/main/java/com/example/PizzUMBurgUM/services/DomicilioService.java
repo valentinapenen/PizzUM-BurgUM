@@ -29,6 +29,13 @@ public class DomicilioService {
     }
 
     public Domicilio marcarPredeterminado(long clienteId, long domicilioId) {
+        Domicilio dom = buscarPorId(domicilioId);
+        Cliente cliente = dom.getCliente();
+
+//        if (cliente.getId() != clienteId) {
+//            throw new RuntimeException("El domicilio no pertenece al cliente especificado");
+//        }
+
         List<Domicilio> domicilios = domicilioRepository.findByClienteId(clienteId);
         for (Domicilio domicilio : domicilios) {
             domicilio.setPredeterminado(domicilio.getId() == domicilioId);
@@ -40,5 +47,9 @@ public class DomicilioService {
     public Domicilio buscarPorId(Long id) {
         return domicilioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Domicilio no encontrado con id: " + id));
+    }
+
+    public List<Domicilio> listarPorCliente(Cliente cliente) {
+        return domicilioRepository.findByCliente(cliente);
     }
 }

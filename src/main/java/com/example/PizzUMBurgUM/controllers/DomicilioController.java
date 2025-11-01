@@ -1,42 +1,65 @@
 package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.controllers.DTOS.DomicilioRequest;
+import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Domicilio;
-import com.example.PizzUMBurgUM.repositories.DomicilioRepository;
 import com.example.PizzUMBurgUM.services.DomicilioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
-@RestController
+@Controller
+
 public class DomicilioController {
     @Autowired
     private DomicilioService domicilioService;
 
-    //@PostMapping
-    //public ResponseEntity<Domicilio> crearDomicilio(@RequestBody DomicilioRequest request) {
-    //    Domicilio nuevoDomicilio = domicilioService.crearDomicilio(
-    //            request.getNumero(),
-    //            request.getCalle(),
-    //            request.getDepartamento(),
-    //            request.getCiudad(),
-    //            request.getApartamento(),
-    //            request.getPredeterminado(),
-    //    );
-    //    return ResponseEntity.status(HttpStatus.CREATED).body(nuevoDomicilio);
-    //}
+//    @Autowired
+//    private ClienteService clienteService;
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarDomicilio(@RequestParam long idDomicilio) {
+    @GetMapping("/nuevo/{idCliente}")
+    public String mostrarFormularioNuevo(@PathVariable Long idCliente, Model model) {
+        model.addAttribute("domicilio", new Domicilio());
+        model.addAttribute("clienteId", idCliente);
+        return "domicilios/formulario"; // → templates/domicilios/formulario.html
+    }
+
+//    @PostMapping("/crear")
+//    public String crearDomicilio(@RequestParam Long clienteId,
+//                                 @RequestParam String calle,
+//                                 @RequestParam String numero,
+//                                 @RequestParam String ciudad,
+//                                 @RequestParam(required = false) String departamento,
+//                                 @RequestParam(required = false) String apartamento,
+//                                 @RequestParam(defaultValue = "false") boolean predeterminado) {
+//
+//        domicilioService.crearDomicilio(clienteId, calle, numero, ciudad, departamento, apartamento, predeterminado);
+//        return "redirect:/domicilios/cliente/" + clienteId;
+//    }
+
+    @PostMapping("/{idDomicilio}/eliminar")
+    public String eliminarDomicilio(@PathVariable Long idDomicilio, @RequestParam Long clienteId) {
         domicilioService.eliminarDomicilio(idDomicilio);
-        return ResponseEntity.noContent().build();
+        return "redirect:/domicilios/cliente/" + clienteId;
     }
 
-    @PutMapping()
-    public ResponseEntity<Domicilio> marcarPredeterminado(@RequestParam long clienteId, @RequestParam long domicilioId) {
-        return ResponseEntity.ok(domicilioService.marcarPredeterminado(clienteId, domicilioId));
+    @PostMapping("/{idCliente}/predeterminado/{idDomicilio}")
+    public String marcarPredeterminado(@PathVariable Long idCliente, @PathVariable Long idDomicilio) {
+        domicilioService.marcarPredeterminado(idCliente, idDomicilio);
+        return "redirect:/domicilios/cliente/" + idCliente;
     }
+
+//    @GetMapping("/cliente/{idCliente}")
+//    public String listarPorCliente(@PathVariable Long idCliente, Model model) {
+//        Cliente cliente = clienteService.buscarPorId(idCliente);
+//        List<Domicilio> domicilios = domicilioService.listarPorCliente(cliente);
+//
+//        model.addAttribute("cliente", cliente);
+//        model.addAttribute("domicilios", domicilios);
+//        return "domicilios/lista"; // → templates/domicilios/lista.html
+//    }
 }
