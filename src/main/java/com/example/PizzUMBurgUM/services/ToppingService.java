@@ -18,4 +18,8 @@ public class ToppingService {
     public List<Topping> listarToppingsPorCategoriaYTipo(@PathVariable CategoriaTopping categoria, @PathVariable TipoTopping tipo) {
         return toppingRepository.findByCategoriaAndTipo(categoria, tipo);
     }
+
+    public List<Topping> listarTodos() {
+        return toppingRepository.findAll();
+    }
 }

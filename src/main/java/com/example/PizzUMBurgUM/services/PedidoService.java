@@ -21,15 +21,19 @@ public class PedidoService {
     @Autowired
     private CreacionRepository creacionRepository;
 
+    @Autowired
+    private DomicilioService domicilioService;
+
     public Pedido crearPedido(Cliente cliente, List<Long> idsCreaciones, Domicilio domicilio, MedioDePago medioDePago) {
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
-        pedido.setDomicilio(domicilio);
-        pedido.setMedioDePago(medioDePago);
+        pedido.setDomicilio(domicilioService.buscarPorId(idDomicilio));
         pedido.setEstado(EstadoPedido.EN_COLA);
         pedido.setFecha(LocalDateTime.now());
+        pedido.setMedioDePago(MedioDePago.valueOf(medioDePago.toUpperCase()));
 
         List<Creacion> creaciones = creacionRepository.findAllById(idsCreaciones);
+
         double total = 0.0;
         for (Creacion creacion : creaciones) {
             total += creacion.getPrecioTotal();
@@ -51,5 +55,9 @@ public class PedidoService {
 
     public List<Pedido> listarPorCliente(Cliente cliente) {
         return pedidoRepository.findByClienteId(cliente.getCedula());
+    }
+
+    public List<Pedido> listarTodos() {
+        return pedidoRepository.findAll();
     }
 }
