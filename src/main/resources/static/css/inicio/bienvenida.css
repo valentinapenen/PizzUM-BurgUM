@@ -1,7 +1,6 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #fff;
 }
 
@@ -15,6 +14,11 @@ body {
     padding: 20px 20px;
     color: #fff;
     position: relative;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
 }
 
 /* Caja semi-transparente dentro del hero */
@@ -31,7 +35,7 @@ body {
 
 /* Títulos */
 .hero .title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 30px;
     font-weight: 700;
 }
@@ -45,13 +49,13 @@ body {
 
 .hero .list li {
     position: relative;
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin: 15px 0;
     padding-left: 30px;
 }
 
 .hero .list li::before {
-    content: '•';
+    content: '• ';
     position: relative;
     left: 0;
     color: #fff;
@@ -76,6 +80,7 @@ body {
 .hero .btn {
     text-decoration: none;
     color: #ffffff;
+    font-size: 1rem;
     font-weight: 500;
     padding: 8px 14px;
     border-radius: 10px;
