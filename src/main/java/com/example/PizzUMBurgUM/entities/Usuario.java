@@ -30,7 +30,6 @@ public abstract class Usuario {
     @Column(nullable = false)
     private String apellido;
 
-    @Id
     @Column(length = 8, nullable = false, unique = true)
     @NotNull
     private Long cedula;
@@ -39,6 +38,7 @@ public abstract class Usuario {
     @Column(nullable = false)
     private LocalDate fechaNacimiento;
 
+    @Id
     @NotNull
     @Email
     @Column(unique = true, nullable = false)

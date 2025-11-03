@@ -1,18 +1,21 @@
 package com.example.PizzUMBurgUM.repositories;
 
 import com.example.PizzUMBurgUM.entities.Cliente;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ClienteRepositorio {
+
+@Repository
+public interface ClienteRepositorio extends JpaRepository<Cliente, String> {
 
     List<Cliente> findByNombreContaining(String nombre);
 
     List<Cliente> findByApellidoContaining(String apellido);
 
-    Cliente findByCorreo(String Correo);
+    Cliente findByCedula(Long cedula);
 
-    Cliente findByTelefono(String Telefono);
-
+    boolean existsByCedula(Long cedula);
 
 }
