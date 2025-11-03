@@ -5,21 +5,36 @@ import com.example.PizzUMBurgUM.entities.enums.CategoriaTopping;
 import com.example.PizzUMBurgUM.entities.enums.TipoTopping;
 import com.example.PizzUMBurgUM.services.ToppingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
+@RequestMapping("/admin/toppings")
 public class ToppingController {
 
     @Autowired
     private ToppingService toppingService;
 
+    @GetMapping("/{categoria}/{tipo}")
+    public String listarToppingsPorCategoriaYTipo(
+            @PathVariable("categoria") CategoriaTopping categoriaTopping,
+            @PathVariable("tipo") TipoTopping tipo,
+            Model model) {
+
+        List<Topping> toppings = toppingService.listarToppingsPorCategoriaYTipo(categoriaTopping, tipo);
+        model.addAttribute("toppings", toppings);
+        model.addAttribute("categoria", categoriaTopping);
+        model.addAttribute("tipo", tipo);
+        return "toppings/lista"; // → templates/toppings/lista.html
+    }
+
     @GetMapping
-    public ResponseEntity<List<Topping>> listarToppingsPorCategoriaYTipo(@PathVariable CategoriaTopping categoriaTopping, @PathVariable TipoTopping tipo) {
-        return ResponseEntity.ok(toppingService.listarToppingsPorCategoriaYTipo(categoriaTopping, tipo));
+    public String listarTodos(Model model) {
+        List<Topping> toppings = toppingService.listarTodos();
+        model.addAttribute("toppings", toppings);
+        return "toppings/lista";
     }
 }

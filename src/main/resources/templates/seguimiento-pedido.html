@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Seguimiento del pedido — PizzUM & BurgUM</title>
+
+    <link rel="stylesheet" href="../static/css/base.css"   th:href="@{/css/base.css}">
+    <link rel="stylesheet" href="../static/css/pedido.css" th:href="@{/css/pedido.css}">
+</head>
+<body>
+
+<header>
+    <div class="container nav">
+        <div class="nav__brand">
+            <img class="logo" alt="PizzUM & BurgUM"
+                 src="https://i.postimg.cc/qMLhFSwz/Logo-final-removebg-preview.png" />
+            <strong>PizzUM &amp; BurgUM</strong>
+        </div>
+        <nav class="nav__links">
+            <a class="pill"               href="#pizza"          th:href="@{/#pizza}">Pizza</a>
+            <a class="pill"               href="#burger"         th:href="@{/#burger}">Burger</a>
+            <a class="pill"               href="favoritos.html"  th:href="@{/favoritos}">Favoritos</a>
+            <a class="pill"               href="historial.html"  th:href="@{/historial}">Historial</a>
+            <a class="pill"               href="usuario.html"    th:href="@{/usuario}">Usuario</a>
+            <a class="pill active"        href="pedido.html"     th:href="@{/pedido}">Pedido</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <section class="pedido-header">
+        <h1>Pedido #12458</h1>
+        <div class="estado"><span class="dot"></span> En preparación</div>
+    </section>
+
+    <div class="timeline">
+        <div class="step step-done"><span class="dot">1</span> En cola</div>
+        <div class="step step-activa"><span class="dot">2</span> En preparación</div>
+        <div class="step"><span class="dot">3</span> En camino</div>
+        <div class="step"><span class="dot">4</span> Entregado</div>
+    </div>
+
+    <div class="card">
+        <h2>Detalle del pedido</h2>
+        <div class="items">
+            <article class="item">
+                <img class="thumb" src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?q=80&w=300" alt="Pizza">
+                <div>
+                    <h4>Pizza grande • muzza • aceitunas</h4>
+                    <p>Extra queso, masa napolitana</p>
+                </div>
+                <div class="precio">$450</div>
+            </article>
+        </div>
+
+        <div class="totales">
+            <div class="fila"><span>Subtotal</span><strong>$450</strong></div>
+            <div class="fila"><span>Envío</span><strong>$50</strong></div>
+            <div class="fila total"><span>Total</span><strong>$500</strong></div>
+        </div>
+
+        <div class="acciones">
+            <button class="btn btn-primario">Editar pedido</button>
+            <button class="btn btn-peligro">Cancelar pedido</button>
+            <a class="btn btn-fantasma" href="historial.html" th:href="@{/historial}">Volver</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
+

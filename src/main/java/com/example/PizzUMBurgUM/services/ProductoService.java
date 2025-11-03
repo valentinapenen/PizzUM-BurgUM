@@ -39,4 +39,16 @@ public class ProductoService {
         producto.setDisponible(false);
         productoRepository.save(producto);
     }
+
+    public Producto buscarPorId(long id) {
+        return productoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+    }
+  
+    public void activar(long id) {
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("El producto no existe"));
+        producto.setDisponible(true);
+        productoRepository.save(producto);
+    }
 }

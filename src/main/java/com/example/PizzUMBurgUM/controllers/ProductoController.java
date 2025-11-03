@@ -4,37 +4,57 @@ import com.example.PizzUMBurgUM.entities.Producto;
 import com.example.PizzUMBurgUM.services.ProductoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/admin/productos")
+@Controller
+@RequestMapping("/admin/productos")
 @PreAuthorize("hasRole('ADMIN')")
 public class ProductoController {
+
     @Autowired
     private ProductoService productoService;
 
     @GetMapping
-    public ResponseEntity<List<Producto>> listarActivos() {
-        return ResponseEntity.ok(productoService.listarActivos());
+    public String listarActivos(Model model) {
+        List<Producto> productos = productoService.listarActivos();
+        model.addAttribute("productos", productos);
+        return "productos/lista"; // → templates/productos/lista.html
+    }
+
+
+    @GetMapping("/nuevo")
+    public String mostrarFormularioCrear(Model model) {
+        model.addAttribute("producto", new Producto());
+        return "productos/formulario"; // → templates/productos/formulario.html
     }
 
     @PostMapping
-    public ResponseEntity<Producto> crear(@RequestBody @Valid Producto producto) {
-        return ResponseEntity.ok(productoService.crear(producto));
+    public String crear(@ModelAttribute("producto") @Valid Producto producto) {
+        productoService.crear(producto);
+        return "redirect:/admin/productos"; // redirige a la lista después de guardar
     }
 
-    @PutMapping("/{id}/precio")
-    public ResponseEntity<Producto> actualizarPrecio(@PathVariable long id, @RequestParam double precio) {
-        return ResponseEntity.ok(productoService.actualizarPrecio(id, precio));
+    @GetMapping("/{id}/editar")
+    public String mostrarFormularioEditar(@PathVariable long id, Model model) {
+        Producto producto = productoService.buscarPorId(id);
+        model.addAttribute("producto", producto);
+        return "productos/editar"; // → templates/productos/editar.html
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Producto> desactivar(@PathVariable long id) {
+    @PostMapping("/{id}/actualizar-precio")
+    public String actualizarPrecio(@PathVariable long id, @RequestParam double precio) {
+        productoService.actualizarPrecio(id, precio);
+        return "redirect:/admin/productos";
+    }
+
+    @PostMapping("/{id}/desactivar")
+    public String desactivar(@PathVariable long id) {
         productoService.desactivar(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/admin/productos";
     }
 }
