@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+}
+
+/* Hero principal */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 20px;
+    color: #fff;
+    position: relative;
+}
+
+/* Caja semi-transparente dentro del hero */
+.hero .hero-box {
+    background-color: rgba(255, 255, 255, 0.05); /* semitransparente */
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    max-width: fit-content;
+    width: 100%;
+}
+
+/* Títulos */
+.hero .title {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* Lista de beneficios */
+.hero .list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+}
+
+.hero .list li {
+    position: relative;
+    font-size: 1.2rem;
+    margin: 15px 0;
+    padding-left: 30px;
+}
+
+.hero .list li::before {
+    content: '•';
+    position: relative;
+    left: 0;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Sub-hero*/
+.hero h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+/* contenedor de botones */
+.hero .btn-container {
+    display: flex;
+    justify-content: center; /* centra los botones horizontalmente */
+    gap: 20px; /* espacio entre botones */
+    margin-top: 20px; /* separación con el título */
+}
+
+/* botones estilo hero */
+.hero .btn {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 10px;
+    transition: background 0.2s, color 0.2s;
+    display: inline-block;
+}
+
+/* hover */
+.hero .btn:hover {
+    background-color: #ff6347;
+}
+
+/* activo */
+.hero .btn.active {
+    background-color: #ff6347;
+    color: #fff;
+}
