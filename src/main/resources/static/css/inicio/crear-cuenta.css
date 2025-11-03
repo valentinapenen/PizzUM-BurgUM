@@ -10,12 +10,14 @@ main.container {
 
 /* Card del formulario */
 .card {
-    background-color: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 40px 30px;
     border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
     max-width: 700px;
     width: 100%;
+    text-align: center;
 }
 
 /* Título del form */
@@ -59,6 +61,12 @@ main.container {
     outline: none;
     transition: border 0.2s, background 0.2s;
 }
+
+.input::placeholder,
+.textarea::placeholder {
+    color: rgba(255, 255, 255, 0.8); /* blanco con leve transparencia */
+}
+
 
 .input:focus {
     border-color: #ff6347;

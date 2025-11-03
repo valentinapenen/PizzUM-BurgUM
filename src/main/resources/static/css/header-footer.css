@@ -2,18 +2,18 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #54214f, #a84634, #410909, #360c0c);
-    background-size: 300% 300%;
-    animation: gradientMove 15s ease infinite;
+    background: radial-gradient(circle at left, #cc9e00, rgb(119, 43, 10), #8b0000, #380101);
+    background-size: 200% 200%; /* Amplía el gradiente para la animación */
+    animation: darkGradient 20s ease infinite;
     color: #fff;
     position: relative;
 }
 
 /* Animación del gradiente */
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+@keyframes darkGradient {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
 }
 
 header {
@@ -42,7 +42,7 @@ header {
 }
 
 .brand-title {
-    font-family: 'Lobster', cursive;
+    font-family: 'Righteous', cursive;
     font-size: 3rem;
     color: #ffffff;
     margin: 0;
