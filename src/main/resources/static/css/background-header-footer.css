@@ -39,10 +39,12 @@ header {
 }
 
 .brand-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 5rem;
-    color: #ffffff;
-    margin: 0;
+    display: inline-block;
+    width: 220px; /* ajustá según el tamaño del logo */
+    height: 80px;
+    background: url('/images/title-white.png') center/contain no-repeat;
+    text-indent: -9999px; /* oculta el texto accesiblemente */
+    overflow: hidden;
 }
 
 /* BARRA DE NAVEGACIÓN */

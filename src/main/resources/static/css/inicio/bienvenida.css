@@ -21,12 +21,12 @@ body {
     z-index: 1;
 }
 
-/* Caja semi-transparente dentro del hero */
 .hero .hero-box {
     padding: 40px 30px;
     border-radius: 20px;
-    max-width: none;
     width: 100%;
+    max-width: 1200px; /* o el ancho máximo que quieras */
+    box-sizing: border-box; /* para que el padding no sume al ancho total */
     text-align: center;
 }
 
@@ -46,13 +46,12 @@ body {
 
 .hero .list li {
     position: relative;
-    font-size: 1rem;
+    font-size: 1.5rem;
     margin: 15px 0;
     padding-left: 30px;
 }
 
 .hero .list li::before {
-    content: '• ';
     position: relative;
     left: 0;
     color: #fff;
@@ -60,7 +59,8 @@ body {
 }
 
 .hero .hero-slogan {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
+    font-family: 'Garamond', serif;
     font-style: italic;
     font-weight: 500;
 }
@@ -82,18 +82,20 @@ body {
 /* botones estilo hero */
 .hero .btn {
     text-decoration: none;
-    color: #ffffff;
     font-size: 1rem;
     font-weight: 500;
     padding: 8px 14px;
     border-radius: 10px;
     transition: background 0.2s, color 0.2s;
     display: inline-block;
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
 }
 
 /* hover */
 .hero .btn:hover {
-    background-color: #ff6347;
+    background-color: #ff8163;
 }
 
 /* activo */
@@ -103,7 +105,11 @@ body {
 }
 
 .main-section {
-    background-color: #5a0000; /* rojo oscuro profundo */
+    background-color: #440c0c; /* rojo oscuro profundo */
     padding-top: 10px;
     padding-bottom: 40px;
+}
+
+html, body {
+    overflow-x: hidden;
 }
