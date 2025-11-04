@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <title>Crear cuenta - PizzUM & BurgUM</title>
-
-
-    <link rel="stylesheet" href="../static/css/base.css" th:href="@{/css/base.css}">
-    <link rel="stylesheet" href="../static/css/auth.css" th:href="@{/css/auth.css}">
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/inicio/crear-cuenta.css" th:href="@{/css/inicio/crear-cuenta.css}">
 </head>
 <body>
-<header class="container nav">
-    <div class="nav__brand">
-        <img class="logo" alt="PizzUM & BurgUM"
-             src="https://i.postimg.cc/qMLhFSwz/Logo-final-removebg-preview.png" />
-        <strong>PizzUM &amp; BurgUM</strong>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
     </div>
-    <nav class="nav__links">
-        <a class="pill" href="../templates/inicio.html" th:href="@{/}">Inicio</a>
-        <a class="pill active" href="../templates/registrarse.html" th:href="@{/registrarse}">Crear cuenta</a>
-        <a class="pill" href="IniciarSesion.html" th:href="@{/iniciar-sesion}">Iniciar sesión</a>
+
+    <nav class="nav-bar">
+        <a href="bienvenida.html" th:href="@{/static}">Inicio</a>
+        <a class="active" href="../templates/crear-cuenta.html" th:href="@{/crear-cuenta}">Crear cuenta</a>
+        <a href="iniciar-sesion.html" th:href="@{/iniciar-sesion}">Iniciar sesión</a>
     </nav>
 </header>
 
-<main class="container hero">
-    <section class="card">
+<main class="container">
+    <section class="card hero">
         <h1 class="title">Registrar usuario</h1>
+        <div th:if="${error}" class="error-banner" th:text="${error}"></div>
 
+        <form class="form-grid" th:action="@{/crear-cuenta}" method="post">
 
-        <div th:if="${error}" class="error-banner show" th:text="${error}"></div>
-
-        <form class="form-grid" th:action="@{/registrarse}" method="post">
             <div class="grid-2">
                 <div class="field">
                     <label class="label" for="nombre">Nombre</label>
@@ -60,13 +60,11 @@
             <div class="grid-2">
                 <div class="field">
                     <label class="label" for="telefono">Teléfono</label>
-                    <input class="input" id="telefono" name="telefono" type="tel"
-                           placeholder="+598 9 123 4567" required>
+                    <input class="input" id="telefono" name="telefono" type="tel" placeholder="+598 9 123 4567" required>
                 </div>
                 <div class="field">
                     <label class="label" for="correo">Correo electrónico</label>
-                    <input class="input" id="correo" name="correo" type="email"
-                           placeholder="tucorreo@ejemplo.com" required>
+                    <input class="input" id="correo" name="correo" type="email" placeholder="tucorreo@ejemplo.com" required>
                 </div>
             </div>
 
@@ -74,12 +72,12 @@
                 <div class="field">
                     <label class="label" for="contrasena">Contraseña</label>
                     <input class="input" id="contrasena" name="contrasena" type="password"
-                           placeholder="Mín. 8 caracteres" minlength="8" required>
+                         placeholder="Mín. 8 caracteres" minlength="8" required>
                 </div>
                 <div class="field">
                     <label class="label" for="contrasena2">Confirmar contraseña</label>
                     <input class="input" id="contrasena2" name="contrasena2" type="password"
-                           placeholder="Repetí la contraseña" minlength="8" required>
+                         placeholder="Repetí la contraseña" minlength="8" required>
                 </div>
             </div>
 
@@ -90,16 +88,19 @@
 
             <div class="actions">
                 <button class="btn btn--primary" type="submit">Registrar</button>
-                <a class="btn btn--ghost" href="IniciarSesion.html" th:href="@{/iniciar-sesion}">
-                    ¿Ya tenés cuenta? Iniciá sesión
-                </a>
+                <a class="btn btn--ghost" href="iniciar-sesion.html" th:href="@{/iniciar-sesion}">¿Ya tienes cuenta? Inicia sesión</a>
             </div>
         </form>
     </section>
 </main>
 
-<footer class="container footer">
-    <small>© 2025 PizzUM &amp; BurgUM</small>
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
 </footer>
+
 </body>
 </html>

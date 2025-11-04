@@ -1,0 +1,116 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    color: #fff;
+    background: radial-gradient(circle at 20% 30%, #7a0000 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, #d18b00 0%, transparent 30%),
+                radial-gradient(circle at 50% 100%, #5a0000 0%, transparent 40%),
+                radial-gradient(circle at 0% 100%, #ffb300 0%, transparent 30%),
+                #330000; /* color base oscuro */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed
+}
+
+header {
+    background: none;
+    text-align: center;
+    padding: 16px;
+    margin: 20px auto;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* LOGO Y NOMBRE */
+.header-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+}
+
+.brand-title {
+    display: inline-block;
+    width: 220px; /* ajustá según el tamaño del logo */
+    height: 80px;
+    background: url('/images/title-white.png') center/contain no-repeat;
+    text-indent: -9999px; /* oculta el texto accesiblemente */
+    overflow: hidden;
+}
+
+/* BARRA DE NAVEGACIÓN */
+.nav-bar {
+    background-color: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: inline-flex;
+    gap: 20px;
+    padding: 12px 28px;
+}
+
+/* LINKS */
+.nav-bar a {
+    text-decoration: none;
+    color: #444;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 10px;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Hover */
+.nav-bar a:hover {
+    background-color: #f2f2f2;
+}
+
+/* Activo */
+.nav-bar a.active {
+    background-color: #ff6347;
+    color: #fff;
+}
+
+/* FOOTER */
+.footer {
+    background: transparent;
+    padding: 24px 0;
+    text-align: center;
+    color: #ffffff;
+    font-family: "Poppins", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* LOGO Y NOMBRE */
+.footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-logo {
+    height: 30px;
+    width: auto;
+}
+
+.footer-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Derechos reservados*/
+.footer small {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Bienvenida - PizzUM & BurgUM</title>
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/inicio/bienvenida.css" th:href="@{/css/inicio/bienvenida.css}">
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+            <a class="active" href="../templates/bienvenida.html" th:href="@{/static}">Inicio</a>
+            <a href="crear-cuenta.html" th:href="@{/crear-cuenta}">Crear cuenta</a>
+            <a href="iniciar-sesion.html" th:href="@{/iniciar-sesion}">Iniciar sesión</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1 class="title">
+        Bienvenido a PizzUM & BurgUM
+    </h1>
+    <p class="hero-slogan">"Donde cada bocado cuenta"</p>
+    <ul class="list">
+        <li>Arma tu pizza o burger a tu gusto</li>
+        <li>Guarda tus combinaciones favoritas</li>
+        <li>Haz tus pedidos en un clic</li>
+    </ul>
+</section>
+
+<div class="main-section">
+    <section class="hero">
+        <div class="hero-box">
+            <h2>
+                Elige cómo quieres continuar:
+            </h2>
+            <div class="btn-container">
+                <a class="btn" href="crear-cuenta.html" th:href="@{/crear-cuenta}">Crear cuenta</a>
+                <a class="btn" href="iniciar-sesion.html" th:href="@{/iniciar-sesion}">Iniciar sesión</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-brand">
+            <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+            <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+        </div>
+        <small>© 2025 — Todos los derechos reservados</small>
+    </footer>
+</div>
+
+</body>
+</html>

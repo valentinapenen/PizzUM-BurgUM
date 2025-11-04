@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - PizzUM & BurgUM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/inicio/iniciar-sesion.css" th:href="@{/css/inicio/iniciar-sesion.css}">
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="bienvenida.html" th:href="@{/static}">Inicio</a>
+        <a href="crear-cuenta.html" th:href="@{/crear-cuenta}">Crear cuenta</a>
+        <a class="active" href="../templates/iniciar-sesion.html" th:href="@{/iniciar-sesion}">Iniciar sesión</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="card hero">
+        <h1 class="title">Iniciar sesión</h1>
+
+      <!-- Mensaje de error -->
+        <div th:if="${error}" class="error-banner" th:text="${error}"></div>
+
+        <form class="form-grid" th:action="@{/iniciar-sesion}" method="post">
+            <div class="field">
+                <label class="label" for="email">Email</label>
+                <input class="input" id="email" name="email" type="email"
+                       placeholder="tucorreo@ejemplo.com" required>
+            </div>
+
+            <div class="field">
+                <label class="label" for="contrasena">Contraseña</label>
+                <input class="input" id="contrasena" name="contrasena" type="password"
+                       placeholder="Tu contraseña" required>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn--primary" type="submit">Entrar</button>
+                <a class="btn btn--ghost" href="crear-cuenta.html" th:href="@{/crear-cuenta}">¿Aún no tienes una cuenta? Crear cuenta</a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>
