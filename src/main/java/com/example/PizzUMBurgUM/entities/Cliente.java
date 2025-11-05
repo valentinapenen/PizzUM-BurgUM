@@ -17,12 +17,12 @@ import java.util.List;
 
 public class Cliente extends Usuario{
 
-    @NotEmpty(message = "Debe de guardarse por lo menos un domicilio")
+    @NotNull(message = "Debe de guardarse por lo menos un domicilio")
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "cliente_domicilio", joinColumns = @JoinColumn(name = "cliente_correo"), inverseJoinColumns = @JoinColumn(name = "domicilio_id"))
     private List<Domicilio> domicilios = new ArrayList<>();
 
-    @NotEmpty(message = "Debe de guardarse por lo menos una tarjeta")
+    @NotNull(message = "Debe de guardarse por lo menos una tarjeta")
     @OneToMany(mappedBy= "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Tarjeta> tarjetas = new ArrayList<>();
 

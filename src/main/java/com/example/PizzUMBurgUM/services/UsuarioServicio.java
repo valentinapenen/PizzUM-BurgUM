@@ -83,14 +83,6 @@ public class UsuarioServicio {
             throw new IllegalArgumentException("La contrasena es obligatorio.");
         }
 
-        if(cliente.getDomicilios() == null || cliente.getDomicilios().isEmpty()){
-            throw new IllegalArgumentException("El agregar un domicilio es obligatorio.");
-        }
-
-        if(cliente.getTarjetas() == null || cliente.getTarjetas().isEmpty()){
-            throw new IllegalArgumentException("El agregar una tarjeta es obligatorio.");
-        }
-
         if(usuarioRepositorio.existsByCorreo(cliente.getCorreo())){
             throw new IllegalArgumentException("El correo ya está registrado en el sistema.");
         }

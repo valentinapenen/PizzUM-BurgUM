@@ -42,12 +42,13 @@ public class AdministradorServicio {
         if (!nuevosDatos.getCorreo().equals(admin.getCorreo())){
             throw new IllegalArgumentException("No se puede cambiar el correo.");
         }
+        //if (!nuevosDatos.getDomicilio_facturacion().equals(admin.getDomicilio_facturacion())){
+        //    throw new IllegalArgumentException("No se puede cambiar el domicilio de facturación.");
+        //}
 
         admin.setNombre(nuevosDatos.getNombre());
         admin.setApellido(nuevosDatos.getApellido());
-        admin.setCedula(nuevosDatos.getCedula());
         admin.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
-        admin.setCorreo(nuevosDatos.getCorreo());
         admin.setTelefono(nuevosDatos.getTelefono());
         admin.setContrasena(nuevosDatos.getContrasena());
         admin.setDomicilio_facturacion(nuevosDatos.getDomicilio_facturacion());

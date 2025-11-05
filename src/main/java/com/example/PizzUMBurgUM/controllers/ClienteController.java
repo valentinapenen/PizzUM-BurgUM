@@ -40,7 +40,7 @@ public class ClienteController {
     @PostMapping("/registro")
     public String procesarRegistroCliente(@Valid @ModelAttribute("registroCliente") RegistroClienteRequest registroRequest, Model model, RedirectAttributes redirectAttributes){
         try{
-            clienteServicio.regisatrarCliente(registroRequest);
+            clienteServicio.registrarCliente(registroRequest);
             redirectAttributes.addFlashAttribute("exito","Cuenta creada exitosamente, ahora puede iniciar sesión.");
             return "redirect:/login";
 

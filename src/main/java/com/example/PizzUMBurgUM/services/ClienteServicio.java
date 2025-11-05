@@ -21,9 +21,18 @@ public class ClienteServicio {
     private UsuarioServicio usuarioServicio;
     @Autowired
     private DomicilioService domicilioService;
+    @Autowired
+    private TarjetaService tarjetaService;
 
 
-    public Cliente regisatrarCliente(RegistroClienteRequest registroClienteRequest){
+    public Cliente registrarCliente(RegistroClienteRequest registroClienteRequest){
+
+        if (registroClienteRequest.getDomicilio() == null){
+            throw new IllegalArgumentException("Debe de ingresar al menos un domicilio.");
+        }
+        if (registroClienteRequest.getTarjeta() == null){
+            throw new IllegalArgumentException("Debe de ingresar al menos una tarjeta.");
+        }
 
         Cliente cliente = new Cliente();
         cliente.setNombre(registroClienteRequest.getNombre());
@@ -34,26 +43,27 @@ public class ClienteServicio {
         cliente.setTelefono(registroClienteRequest.getTelefono());
         cliente.setContrasena(registroClienteRequest.getContrasena());
 
-        Domicilio domicilio = new Domicilio();
-        domicilio.setCalle(registroClienteRequest.getDomicilio().getCalle());
-        domicilio.setNumero(registroClienteRequest.getDomicilio().getNumero());
-        domicilio.setDepartamento(registroClienteRequest.getDomicilio().getDepartamento());
-        domicilio.setCiudad(registroClienteRequest.getDomicilio().getCiudad());
-        domicilio.setApartamento(registroClienteRequest.getDomicilio().getApartamento());
-        domicilio.setPredeterminado(true);
-        domicilio.setCliente(cliente);
-        cliente.getDomicilios().add(domicilio);
 
-        Tarjeta tarjeta = new Tarjeta();
-        tarjeta.setNumeroEnmascarado(registroClienteRequest.getTarjeta().getNumero());
-        tarjeta.setNombreTitular(registroClienteRequest.getTarjeta().getNombreTitular());
-        tarjeta.setCliente(cliente);
-        tarjeta.setTipoTarjeta(registroClienteRequest.getTarjeta().getTipoTarjeta());
-        tarjeta.setFecha_vencimiento(registroClienteRequest.getTarjeta().getFechaVencimiento());
-        tarjeta.setPredeterminada(true);
-        cliente.getTarjetas().add(tarjeta);
 
-        return usuarioServicio.registrarCliente(cliente);
+        Cliente clienteGuardado = usuarioServicio.registrarCliente(cliente);
+
+
+        domicilioService.crearDomicilio(clienteGuardado.getCorreo(),
+                registroClienteRequest.getDomicilio().getNumero(),
+                registroClienteRequest.getDomicilio().getCalle(),
+                registroClienteRequest.getDomicilio().getDepartamento(),
+                registroClienteRequest.getDomicilio().getCiudad(),
+                registroClienteRequest.getDomicilio().getApartamento(),
+                true);
+
+        tarjetaService.crearTarjeta(registroClienteRequest.getTarjeta().getNumero(),
+                registroClienteRequest.getTarjeta().getNombreTitular(),
+                clienteGuardado.getCorreo(), registroClienteRequest.getTarjeta().getTipoTarjeta(),
+                registroClienteRequest.getTarjeta().getFechaVencimiento(), true);
+
+
+
+        return clienteGuardado;
         
     }
 
@@ -63,7 +73,7 @@ public class ClienteServicio {
         Cliente cliente = clienteRepositorio.findById(correoCliente).orElse(null);
 
         if(cliente == null){
-            throw new IllegalArgumentException("No existe un administrador con este cedula.");
+            throw new IllegalArgumentException("No existe un administrador con este correo.");
         }
 
         if (!nuevosDatos.getCedula().equals(correoCliente)){
