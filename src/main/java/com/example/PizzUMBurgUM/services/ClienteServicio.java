@@ -19,6 +19,8 @@ public class ClienteServicio {
     private ClienteRepositorio clienteRepositorio;
     @Autowired
     private UsuarioServicio usuarioServicio;
+    @Autowired
+    private DomicilioService domicilioService;
 
 
     public Cliente regisatrarCliente(RegistroClienteRequest registroClienteRequest){
@@ -53,6 +55,35 @@ public class ClienteServicio {
 
         return usuarioServicio.registrarCliente(cliente);
         
+    }
+
+
+    public Cliente actualizarCliente(String correoCliente,  Cliente nuevosDatos){
+
+        Cliente cliente = clienteRepositorio.findById(correoCliente).orElse(null);
+
+        if(cliente == null){
+            throw new IllegalArgumentException("No existe un administrador con este cedula.");
+        }
+
+        if (!nuevosDatos.getCedula().equals(correoCliente)){
+            throw new IllegalArgumentException("No se puede cambiar la cedula.");
+        }
+        if (!nuevosDatos.getCorreo().equals(cliente.getCorreo())){
+            throw new IllegalArgumentException("No se puede cambiar el correo.");
+        }
+
+        cliente.setNombre(nuevosDatos.getNombre());
+        cliente.setApellido(nuevosDatos.getApellido());
+        cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
+        cliente.setTelefono(nuevosDatos.getTelefono());
+        cliente.setContrasena(nuevosDatos.getContrasena());
+
+        return clienteRepositorio.save(cliente);
+    }
+
+    public Cliente buscarPorId(String correoCliente){
+        return clienteRepositorio.findById(correoCliente).orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
     }
 
 }

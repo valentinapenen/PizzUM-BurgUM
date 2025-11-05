@@ -3,6 +3,7 @@ package com.example.PizzUMBurgUM.services;
 import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Domicilio;
 import com.example.PizzUMBurgUM.entities.Tarjeta;
+import com.example.PizzUMBurgUM.repositories.ClienteRepositorio;
 import com.example.PizzUMBurgUM.repositories.DomicilioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,27 +15,29 @@ public class DomicilioService {
     @Autowired
     private DomicilioRepository domicilioRepository;
 
-    //@Autowired
-    //private ClienteRepository clienteRepository;
+    @Autowired
+    private ClienteRepositorio clienteRepositorio;
 
-    //public Domicilio crearDomicilio(String numero, String calle, String departamento, String ciudad, String apartamento, boolean predeterminado, long clienteId) {
-    //    Cliente cliente = clienteRepository.findById(clienteId)
-    //            .orElseThrow(new RuntimeException("Cliente no encontrado."));
-    //    Domicilio domicilio = new Domicilio(numero, calle, departamento, ciudad, apartamento, predeterminado);
-    //    domicilioRepository.save(domicilio);
-    //}
+    public Domicilio crearDomicilio(String clienteId, String numero, String calle, String departamento, String ciudad, String apartamento, boolean predeterminado) {
+        Cliente cliente = clienteRepositorio.findById(clienteId)
+                .orElseThrow(() ->new RuntimeException("Cliente no encontrado."));
+        Domicilio domicilio = new Domicilio(numero, calle, departamento, ciudad, apartamento, predeterminado);
+        cliente.getDomicilios().add(domicilio);
+        domicilio.setCliente(cliente);
+        return domicilioRepository.save(domicilio);
+    }
 
     public void eliminarDomicilio(long idDomicilio) {
         domicilioRepository.deleteById(idDomicilio);
     }
 
-    public Domicilio marcarPredeterminado(long clienteId, long domicilioId) {
+    public Domicilio marcarPredeterminado(String clienteId, long domicilioId) {
         Domicilio dom = buscarPorId(domicilioId);
         Cliente cliente = dom.getCliente();
 
-//        if (cliente.getId() != clienteId) {
-//            throw new RuntimeException("El domicilio no pertenece al cliente especificado");
-//        }
+        if (cliente.getCorreo() != clienteId) {
+           throw new RuntimeException("El domicilio no pertenece al cliente especificado");
+        }
 
         List<Domicilio> domicilios = domicilioRepository.findByClienteId(clienteId);
         for (Domicilio domicilio : domicilios) {

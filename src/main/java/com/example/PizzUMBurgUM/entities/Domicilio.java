@@ -29,4 +29,13 @@ public class Domicilio {
     @NotNull
     @ManyToOne
     private Cliente cliente;
+
+    public Domicilio(String numero, String calle, String departamento, String ciudad, String apartamento, boolean predeterminado) {
+        this.numero = numero;
+        this.calle = calle;
+        this.departamento = departamento;
+        this.ciudad = ciudad;
+        this.apartamento = apartamento;
+        this.predeterminado = predeterminado;
+    }
 }
