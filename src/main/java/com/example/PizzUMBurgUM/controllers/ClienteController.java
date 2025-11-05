@@ -40,36 +40,7 @@ public class ClienteController {
     @PostMapping("/registro")
     public String procesarRegistroCliente(@Valid @ModelAttribute("registroCliente") RegistroClienteRequest registroRequest, Model model, RedirectAttributes redirectAttributes){
         try{
-            Cliente cliente = new Cliente();
-            cliente.setNombre(registroRequest.getNombre());
-            cliente.setApellido(registroRequest.getApellido());
-            cliente.setCedula(registroRequest.getCedula());
-            cliente.setFechaNacimiento(registroRequest.getFechaNacimiento());
-            cliente.setCorreo(registroRequest.getCorreo());
-            cliente.setTelefono(registroRequest.getTelefono());
-            cliente.setContrasena(registroRequest.getContrasena());
-
-            Domicilio domicilio = new Domicilio();
-            domicilio.setCalle(registroRequest.getDomicilio().getCalle());
-            domicilio.setNumero(registroRequest.getDomicilio().getNumero());
-            domicilio.setDepartamento(registroRequest.getDomicilio().getDepartamento());
-            domicilio.setCiudad(registroRequest.getDomicilio().getCiudad());
-            domicilio.setApartamento(registroRequest.getDomicilio().getApartamento());
-            domicilio.setPredeterminado(true);
-            domicilio.setCliente(cliente);
-            cliente.getDomicilios().add(domicilio);
-
-            Tarjeta tarjeta = new Tarjeta();
-            tarjeta.setNumeroEnmascarado(registroRequest.getTarjeta().getNumero());
-            tarjeta.setNombreTitular(registroRequest.getTarjeta().getNombreTitular());
-            tarjeta.setCliente(cliente);
-            tarjeta.setTipoTarjeta(registroRequest.getTarjeta().getTipoTarjeta());
-            tarjeta.setFecha_vencimiento(registroRequest.getTarjeta().getFechaVencimiento());
-            tarjeta.setPredeterminada(true);
-            cliente.getTarjetas().add(tarjeta);
-
-            usuarioServicio.registrarCliente(cliente);
-
+            clienteServicio.regisatrarCliente(registroRequest);
             redirectAttributes.addFlashAttribute("exito","Cuenta creada exitosamente, ahora puede iniciar sesión.");
             return "redirect:/login";
 

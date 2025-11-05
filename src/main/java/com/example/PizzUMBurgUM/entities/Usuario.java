@@ -30,7 +30,7 @@ public abstract class Usuario {
     @Column(nullable = false)
     private String apellido;
 
-    @Column(length = 8, nullable = false, unique = true)
+    @Column(length = 8, nullable = false)
     @NotNull
     private Long cedula;
 

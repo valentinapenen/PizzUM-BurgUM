@@ -1,10 +1,9 @@
 package com.example.PizzUMBurgUM.controllers.DTOS;
 
-import com.example.PizzUMBurgUM.entities.Domicilio;
-import com.example.PizzUMBurgUM.entities.Tarjeta;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 
 @Setter
 @Getter
-public class RegistroClienteRequest {
+public class CreacionAdministradorRequest {
 
     @NotBlank(message = "El nombre es obligatorio.")
     private String nombre;
@@ -36,9 +35,6 @@ public class RegistroClienteRequest {
     @NotBlank(message = "La contraseña es obligatoria.")
     private String contrasena;
 
-    @NotNull(message = "Debe ingresar su dirección principal.")
-    private DomicilioRequest domicilio;
-
-    @NotNull(message = "Debe ingresar el número de su tarjeta.")
-    private TarjetaRequest Tarjeta;
+    @NotNull(message = "Debe ingresar la dirección de facturacion.")
+    private DomicilioRequest domicilio_facturacion;
 }
