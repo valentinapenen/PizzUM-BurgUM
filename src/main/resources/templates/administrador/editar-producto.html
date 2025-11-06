@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio administrador - PizzUM & BurgUM</title>
+  <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+    <h1 class="brand-title">PizzUM & BurgUM</h1>
+  </div>
+
+  <nav class="nav-bar">
+    <a href="inicio-administrador.html" th:href="@{/inicio-administrador.html}">Inicio</a>
+    <a href="editar-estado.html" th:href="@{/editar-estado}">Editar estado</a>
+    <a href="crear-producto.html" th:href="@{/crear-producto}">Crear producto</a>
+    <a href="crear-administrador.html" th:href="@{/crear-administrador}">Crear administrador</a>
+    <a class="active" href="editar-producto.html" th:href="@{/editar-producto}">Editar producto</a>
+    <a href="eliminar-producto.html" th:href="@{/eliminar-producto}">Eliminar producto</a>
+  </nav>
+</header>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+    <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+  </div>
+  <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>
