@@ -73,21 +73,27 @@ public class ClienteServicio {
         Cliente cliente = clienteRepositorio.findById(correoCliente).orElse(null);
 
         if(cliente == null){
-            throw new IllegalArgumentException("No existe un administrador con este correo.");
+            throw new IllegalArgumentException("No existe un cliente con este correo.");
         }
 
-        if (!nuevosDatos.getCedula().equals(correoCliente)){
+        if (!nuevosDatos.getCedula().equals(cliente.getCedula())){
             throw new IllegalArgumentException("No se puede cambiar la cedula.");
         }
         if (!nuevosDatos.getCorreo().equals(cliente.getCorreo())){
             throw new IllegalArgumentException("No se puede cambiar el correo.");
         }
 
-        cliente.setNombre(nuevosDatos.getNombre());
-        cliente.setApellido(nuevosDatos.getApellido());
-        cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
-        cliente.setTelefono(nuevosDatos.getTelefono());
-        cliente.setContrasena(nuevosDatos.getContrasena());
+        if(nuevosDatos.getNombre() != null ){
+            cliente.setNombre(nuevosDatos.getNombre());}
+
+        if(nuevosDatos.getApellido() != null ){
+            cliente.setApellido(nuevosDatos.getApellido());}
+        if(nuevosDatos.getFechaNacimiento() != null ){
+            cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());}
+        if(nuevosDatos.getTelefono() != null ){
+            cliente.setTelefono(nuevosDatos.getTelefono());}
+        if(nuevosDatos.getContrasena() != null ){
+            cliente.setContrasena(nuevosDatos.getContrasena());}
 
         return clienteRepositorio.save(cliente);
     }
