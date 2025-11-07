@@ -143,3 +143,49 @@ main.container {
         flex-direction: column;
     }
 }
+
+/* Selects y datalists (coinciden con el estilo de los inputs) */
+.select,
+input[list] {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background-color: rgba(255,255,255,0.1);
+    color: #fff;
+    outline: none;
+    transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+    appearance: none; /* elimina estilo por defecto del sistema */
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Placeholder del select */
+.select option[disabled] {
+    color: rgba(255,255,255,0.6);
+}
+
+/* Hover y focus coherentes */
+.select:hover,
+input[list]:hover {
+    background-color: rgba(255,255,255,0.15);
+}
+
+.select:focus,
+input[list]:focus {
+    border-color: #ff6347;
+    background-color: rgb(255, 99, 71);
+    box-shadow: 0 0 6px rgba(255,99,71,0.4);
+}
+
+/* Flecha personalizada para select */
+.select {
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+}
+
+/* Evita que el texto quede tapado por la flecha */
+.select::-ms-expand {
+    display: none;
+}
