@@ -7,6 +7,7 @@ import com.example.PizzUMBurgUM.entities.Usuario;
 import com.example.PizzUMBurgUM.services.UsuarioServicio;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ import org.springframework.web.context.request.WebRequest;
 @RequestMapping("/usuario")
 
 public class UsuarioController {
-
+    @Autowired
     private UsuarioServicio usuarioServicio;
 
     @GetMapping("/login")

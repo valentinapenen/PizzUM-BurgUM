@@ -6,6 +6,7 @@ import com.example.PizzUMBurgUM.entities.Domicilio;
 import com.example.PizzUMBurgUM.entities.Tarjeta;
 import com.example.PizzUMBurgUM.services.ClienteServicio;
 import com.example.PizzUMBurgUM.services.UsuarioServicio;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/cliente")
-@SessionAttributes("usuarioLogueado")
 public class ClienteController {
 
     @Autowired
@@ -25,7 +25,11 @@ public class ClienteController {
     private ClienteServicio clienteServicio;
 
     @GetMapping("/home")
-    public String paginaInicioCliente(@SessionAttribute("usuarioLogueado") Cliente cliente, Model model){
+    public String paginaInicioCliente(HttpSession session, Model model){
+        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
+        if(cliente == null){
+            return "redirect:/usuario/login";
+        }
         model.addAttribute("cliente", cliente);
         return "paginaPrincipalCliente";
 
@@ -40,9 +44,10 @@ public class ClienteController {
     @PostMapping("/registro")
     public String procesarRegistroCliente(@Valid @ModelAttribute("registroCliente") RegistroClienteRequest registroRequest, Model model, RedirectAttributes redirectAttributes){
         try{
+
             clienteServicio.registrarCliente(registroRequest);
             redirectAttributes.addFlashAttribute("exito","Cuenta creada exitosamente, ahora puede iniciar sesión.");
-            return "redirect:/cliente/login";
+            return "redirect:/usuario/login";
 
 
         }
