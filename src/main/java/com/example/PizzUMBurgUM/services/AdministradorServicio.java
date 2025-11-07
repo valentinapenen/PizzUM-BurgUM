@@ -21,6 +21,8 @@ public class AdministradorServicio {
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private UsuarioServicio usuarioServicio;
+    @Autowired
+    private DomicilioService domicilioService;
 
 
     public Administrador encontrarAdminPorCorreo(String correo) {
@@ -67,13 +69,14 @@ public class AdministradorServicio {
         admin.setTelefono(creacionAdministradorRequest.getTelefono());
         admin.setContrasena(creacionAdministradorRequest.getContrasena());
 
-        Domicilio domicilio = new Domicilio();
-        domicilio.setCalle(creacionAdministradorRequest.getDomicilio_facturacion().getCalle());
-        domicilio.setNumero(creacionAdministradorRequest.getDomicilio_facturacion().getNumero());
-        domicilio.setDepartamento(creacionAdministradorRequest.getDomicilio_facturacion().getDepartamento());
-        domicilio.setCiudad(creacionAdministradorRequest.getDomicilio_facturacion().getCiudad());
-        domicilio.setApartamento(creacionAdministradorRequest.getDomicilio_facturacion().getApartamento());
-        domicilio.setPredeterminado(true);
+        Domicilio domicilio = new Domicilio(
+                creacionAdministradorRequest.getDomicilio_facturacion().getNumero(),
+                creacionAdministradorRequest.getDomicilio_facturacion().getCalle(),
+                creacionAdministradorRequest.getDomicilio_facturacion().getDepartamento(),
+                creacionAdministradorRequest.getDomicilio_facturacion().getCiudad(),
+                creacionAdministradorRequest.getDomicilio_facturacion().getApartamento(),
+                true);
+        domicilio.setCliente(null);
         admin.setDomicilio_facturacion(domicilio);
         return usuarioServicio.crearAdministrador(admin);
     }

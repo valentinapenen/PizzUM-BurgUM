@@ -5,6 +5,7 @@ import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Usuario;
 import com.example.PizzUMBurgUM.services.UsuarioServicio;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.request.WebRequest;
 
 
 @Controller
@@ -30,9 +32,10 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public String procesarLogin(@Valid @ModelAttribute("loginRequest") LoginRequest loginRequest, Model model){
+    public String procesarLogin(@Valid @ModelAttribute("loginRequest") LoginRequest loginRequest, Model model, HttpSession session){
         try{
             Usuario usuario = usuarioServicio.login(loginRequest.getCorreo(), loginRequest.getPassword());
+            session.setAttribute("usuarioLogueado",  usuario);
             if(usuario instanceof Cliente){
                 return ("redirect:/cliente/home");
             }
@@ -47,11 +50,11 @@ public class UsuarioController {
         }
     }
 
-    //@GetMapping("/logout")
-    //public String logout(SessionStatus sesion){
-    //    sesion.setComplete();
-    //    return "redirect:/inicio";
-    //}
+    @GetMapping("/logout")
+    public String logout(HttpSession sesion){
+        sesion.invalidate();
+        return "redirect:/inicio";
+    }
 
 
 }

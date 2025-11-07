@@ -1,10 +1,10 @@
 package com.example.PizzUMBurgUM.services;
 
-import com.example.PizzUMBurgUM.entities.Cliente;
-import com.example.PizzUMBurgUM.entities.Domicilio;
-import com.example.PizzUMBurgUM.entities.Tarjeta;
+import com.example.PizzUMBurgUM.entities.*;
+import com.example.PizzUMBurgUM.repositories.AdministradorRepositorio;
 import com.example.PizzUMBurgUM.repositories.ClienteRepositorio;
 import com.example.PizzUMBurgUM.repositories.DomicilioRepository;
+import com.example.PizzUMBurgUM.repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,10 @@ public class DomicilioService {
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
+    @Autowired
+    private UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private AdministradorRepositorio administradorRepositorio;
 
     public Domicilio crearDomicilio(String clienteId, String numero, String calle, String departamento, String ciudad, String apartamento, boolean predeterminado) {
         Cliente cliente = clienteRepositorio.findById(clienteId)

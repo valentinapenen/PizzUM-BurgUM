@@ -14,7 +14,8 @@ import lombok.experimental.SuperBuilder;
 
 public class Administrador extends Usuario{
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @JoinColumn(name = "domicilio_facturacion_id")
     @NotNull
     private Domicilio domicilio_facturacion;
 

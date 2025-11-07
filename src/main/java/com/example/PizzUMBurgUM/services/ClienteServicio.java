@@ -83,16 +83,16 @@ public class ClienteServicio {
             throw new IllegalArgumentException("No se puede cambiar el correo.");
         }
 
-        if(nuevosDatos.getNombre() != null ){
+        if(nuevosDatos.getNombre() != null && nuevosDatos.getNombre().isBlank()){
             cliente.setNombre(nuevosDatos.getNombre());}
 
-        if(nuevosDatos.getApellido() != null ){
+        if(nuevosDatos.getApellido() != null && nuevosDatos.getApellido().isBlank()){
             cliente.setApellido(nuevosDatos.getApellido());}
         if(nuevosDatos.getFechaNacimiento() != null ){
             cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());}
-        if(nuevosDatos.getTelefono() != null ){
+        if(nuevosDatos.getTelefono() != null && nuevosDatos.getTelefono().isBlank()){
             cliente.setTelefono(nuevosDatos.getTelefono());}
-        if(nuevosDatos.getContrasena() != null ){
+        if(nuevosDatos.getContrasena() != null && nuevosDatos.getContrasena().isBlank()){
             cliente.setContrasena(nuevosDatos.getContrasena());}
 
         return clienteRepositorio.save(cliente);

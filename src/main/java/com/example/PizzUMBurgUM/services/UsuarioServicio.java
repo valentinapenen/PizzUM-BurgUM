@@ -20,6 +20,7 @@ public class UsuarioServicio {
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
 
+
     public Usuario login(String correo, String password){
 
         Administrador admin = administradorRepositorio.findById(correo).orElse(null);

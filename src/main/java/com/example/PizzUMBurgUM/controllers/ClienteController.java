@@ -42,7 +42,7 @@ public class ClienteController {
         try{
             clienteServicio.registrarCliente(registroRequest);
             redirectAttributes.addFlashAttribute("exito","Cuenta creada exitosamente, ahora puede iniciar sesión.");
-            return "redirect:/login";
+            return "redirect:/cliente/login";
 
 
         }
