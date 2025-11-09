@@ -21,6 +21,9 @@ import java.util.Date;
 @SuperBuilder
 
 public abstract class Usuario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @NotNull
     @Column(nullable = false)
@@ -32,13 +35,12 @@ public abstract class Usuario {
 
     @Column(length = 8, nullable = false)
     @NotNull
-    private Long cedula;
+    private String cedula;
 
     @NotNull
     @Column(nullable = false)
     private LocalDate fechaNacimiento;
 
-    @Id
     @NotNull
     @Email
     @Column(unique = true, nullable = false)

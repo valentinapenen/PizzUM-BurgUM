@@ -2,9 +2,7 @@ package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.controllers.DTOS.RegistroClienteRequest;
 import com.example.PizzUMBurgUM.entities.Cliente;
-import com.example.PizzUMBurgUM.entities.Domicilio;
-import com.example.PizzUMBurgUM.entities.Tarjeta;
-import com.example.PizzUMBurgUM.services.ClienteServicio;
+import com.example.PizzUMBurgUM.services.ClienteService;
 import com.example.PizzUMBurgUM.services.UsuarioServicio;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -14,15 +12,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 @Controller
 @RequestMapping("/cliente")
 public class ClienteController {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
+
     @Autowired
-    private ClienteServicio clienteServicio;
+    private ClienteService clienteService;
 
     @GetMapping("/home")
     public String paginaInicioCliente(HttpSession session, Model model){
@@ -31,25 +29,23 @@ public class ClienteController {
             return "redirect:/usuario/login";
         }
         model.addAttribute("cliente", cliente);
-        return "paginaPrincipalCliente";
 
+        return "paginaPrincipalCliente";
     }
 
     @GetMapping("/registro")
     public String mostrarRegistroCliente(Model model){
         model.addAttribute("registroCliente", new RegistroClienteRequest());
-        return "registrarse";
 
+        return "registrarse";
     }
+
     @PostMapping("/registro")
     public String procesarRegistroCliente(@Valid @ModelAttribute("registroCliente") RegistroClienteRequest registroRequest, Model model, RedirectAttributes redirectAttributes){
         try{
-
-            clienteServicio.registrarCliente(registroRequest);
+            clienteService.registrarCliente(registroRequest);
             redirectAttributes.addFlashAttribute("exito","Cuenta creada exitosamente, ahora puede iniciar sesión.");
             return "redirect:/usuario/login";
-
-
         }
         catch (IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());

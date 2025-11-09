@@ -3,20 +3,18 @@ package com.example.PizzUMBurgUM.services;
 
 import com.example.PizzUMBurgUM.controllers.DTOS.RegistroClienteRequest;
 import com.example.PizzUMBurgUM.entities.Cliente;
-import com.example.PizzUMBurgUM.entities.Domicilio;
-import com.example.PizzUMBurgUM.entities.Tarjeta;
-import com.example.PizzUMBurgUM.repositories.ClienteRepositorio;
-import com.example.PizzUMBurgUM.repositories.UsuarioRepositorio;
+import com.example.PizzUMBurgUM.repositories.ClienteRepository;
+import com.example.PizzUMBurgUM.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClienteServicio {
+public class ClienteService {
 
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepository usuarioRepository;
     @Autowired
-    private ClienteRepositorio clienteRepositorio;
+    private ClienteRepository clienteRepository;
     @Autowired
     private UsuarioServicio usuarioServicio;
     @Autowired
@@ -26,7 +24,6 @@ public class ClienteServicio {
 
 
     public Cliente registrarCliente(RegistroClienteRequest registroClienteRequest){
-
         if (registroClienteRequest.getDomicilio() == null){
             throw new IllegalArgumentException("Debe de ingresar al menos un domicilio.");
         }
@@ -43,12 +40,10 @@ public class ClienteServicio {
         cliente.setTelefono(registroClienteRequest.getTelefono());
         cliente.setContrasena(registroClienteRequest.getContrasena());
 
-
-
         Cliente clienteGuardado = usuarioServicio.registrarCliente(cliente);
 
-
-        domicilioService.crearDomicilio(clienteGuardado.getCorreo(),
+        domicilioService.crearDomicilioCliente(
+                clienteGuardado.getId(),
                 registroClienteRequest.getDomicilio().getNumero(),
                 registroClienteRequest.getDomicilio().getCalle(),
                 registroClienteRequest.getDomicilio().getDepartamento(),
@@ -56,24 +51,24 @@ public class ClienteServicio {
                 registroClienteRequest.getDomicilio().getApartamento(),
                 true);
 
-        tarjetaService.crearTarjeta(registroClienteRequest.getTarjeta().getNumero(),
+        tarjetaService.crearTarjeta(
+                registroClienteRequest.getTarjeta().getNumero(),
                 registroClienteRequest.getTarjeta().getNombreTitular(),
-                clienteGuardado.getCorreo(), registroClienteRequest.getTarjeta().getTipoTarjeta(),
-                registroClienteRequest.getTarjeta().getFechaVencimiento(), true);
-
-
+                clienteGuardado.getId(),
+                registroClienteRequest.getTarjeta().getTipoTarjeta(),
+                registroClienteRequest.getTarjeta().getFechaVencimiento(),
+                true);
 
         return clienteGuardado;
-        
     }
 
 
-    public Cliente actualizarCliente(String correoCliente,  Cliente nuevosDatos){
+    public Cliente actualizarCliente(long idCliente,  Cliente nuevosDatos){
 
-        Cliente cliente = clienteRepositorio.findById(correoCliente).orElse(null);
+        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new RuntimeException("Domicilio no encontrado con ID: " + idCliente));
 
         if(cliente == null){
-            throw new IllegalArgumentException("No existe un cliente con este correo.");
+            throw new IllegalArgumentException("No existe este cliente.");
         }
 
         if (!nuevosDatos.getCedula().equals(cliente.getCedula())){
@@ -84,22 +79,30 @@ public class ClienteServicio {
         }
 
         if(nuevosDatos.getNombre() != null && nuevosDatos.getNombre().isBlank()){
-            cliente.setNombre(nuevosDatos.getNombre());}
+            cliente.setNombre(nuevosDatos.getNombre());
+        }
 
         if(nuevosDatos.getApellido() != null && nuevosDatos.getApellido().isBlank()){
-            cliente.setApellido(nuevosDatos.getApellido());}
-        if(nuevosDatos.getFechaNacimiento() != null ){
-            cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());}
-        if(nuevosDatos.getTelefono() != null && nuevosDatos.getTelefono().isBlank()){
-            cliente.setTelefono(nuevosDatos.getTelefono());}
-        if(nuevosDatos.getContrasena() != null && nuevosDatos.getContrasena().isBlank()){
-            cliente.setContrasena(nuevosDatos.getContrasena());}
+            cliente.setApellido(nuevosDatos.getApellido());
+        }
 
-        return clienteRepositorio.save(cliente);
+        if(nuevosDatos.getFechaNacimiento() != null ){
+            cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
+        }
+
+        if(nuevosDatos.getTelefono() != null && nuevosDatos.getTelefono().isBlank()){
+            cliente.setTelefono(nuevosDatos.getTelefono());
+        }
+
+        if(nuevosDatos.getContrasena() != null && nuevosDatos.getContrasena().isBlank()){
+            cliente.setContrasena(nuevosDatos.getContrasena());
+        }
+
+        return clienteRepository.save(cliente);
     }
 
-    public Cliente buscarPorId(String correoCliente){
-        return clienteRepositorio.findById(correoCliente).orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
+    public Cliente buscarPorId(long clienteId){
+        return clienteRepository.findById(clienteId).orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
     }
 
 }

@@ -21,7 +21,7 @@ public class RegistroClienteRequest {
     private String apellido;
 
     @NotNull(message = "La cédula es obligatoria.")
-    private Long cedula;
+    private String cedula;
 
     @NotNull(message = "La fecha de nacimiento es obligatoria.")
     private LocalDate fechaNacimiento;

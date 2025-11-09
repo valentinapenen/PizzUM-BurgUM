@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface TarjetaRepository extends JpaRepository<Tarjeta, Long> {
-    List<Tarjeta> findByClienteId(String clienteId);
+    List<Tarjeta> findByClienteId(long clienteId);
+
     void deleteById(long id);
 }

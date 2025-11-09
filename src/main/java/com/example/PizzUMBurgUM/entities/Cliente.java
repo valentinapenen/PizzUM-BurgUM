@@ -19,13 +19,13 @@ public class Cliente extends Usuario{
 
     @NotNull(message = "Debe de guardarse por lo menos un domicilio")
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    private List<Domicilio> domicilios = new ArrayList<>();
+    private List<Domicilio> domicilios;
 
     @NotNull(message = "Debe de guardarse por lo menos una tarjeta")
     @OneToMany(mappedBy= "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Tarjeta> tarjetas = new ArrayList<>();
+    private List<Tarjeta> tarjetas;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Pedido> pedidos = new ArrayList<>();
+    private List<Pedido> pedidos;
     
 }

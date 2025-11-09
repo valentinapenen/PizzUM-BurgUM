@@ -1,6 +1,6 @@
 package com.example.PizzUMBurgUM.entities.enums;
 
-public enum TipoTopping {
+public enum TipoProducto {
     ADEREZO,
     BEBIDA,
     PAN,

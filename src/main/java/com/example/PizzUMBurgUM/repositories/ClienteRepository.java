@@ -8,14 +8,12 @@ import java.util.List;
 
 
 @Repository
-public interface ClienteRepositorio extends JpaRepository<Cliente, String> {
-
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     List<Cliente> findByNombreContaining(String nombre);
 
     List<Cliente> findByApellidoContaining(String apellido);
 
-    Cliente findByCedula(Long cedula);
+    boolean existsByCedula(String cedula);
 
-    boolean existsByCedula(Long cedula);
-
+    Cliente findByCorreo(String correo);
 }

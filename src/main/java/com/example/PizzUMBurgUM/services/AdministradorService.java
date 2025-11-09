@@ -4,36 +4,35 @@ package com.example.PizzUMBurgUM.services;
 import com.example.PizzUMBurgUM.controllers.DTOS.CreacionAdministradorRequest;
 import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Domicilio;
-import com.example.PizzUMBurgUM.entities.Usuario;
-import com.example.PizzUMBurgUM.repositories.AdministradorRepositorio;
-import com.example.PizzUMBurgUM.repositories.UsuarioRepositorio;
+import com.example.PizzUMBurgUM.repositories.AdministradorRepository;
+import com.example.PizzUMBurgUM.repositories.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 
 @Service
-public class AdministradorServicio {
+public class AdministradorService {
 
     @Autowired
-    private AdministradorRepositorio administradorRepositorio;
+    private AdministradorRepository administradorRepository;
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepository usuarioRepository;
     @Autowired
     private UsuarioServicio usuarioServicio;
     @Autowired
     private DomicilioService domicilioService;
 
 
-    public Administrador encontrarAdminPorCorreo(String correo) {
-        return administradorRepositorio.findById(correo).orElseThrow(() -> new IllegalArgumentException("No existe un administrador con este correo."));
+    public Administrador encontrarAdminPorCorreo(long adminId) {
+        return administradorRepository.findById(adminId).orElseThrow(() -> new IllegalArgumentException("No existe un administrador con este correo."));
     }
 
 
 
-    public Administrador actualizarDatosAdmin(long cedula, Administrador nuevosDatos){
+    public Administrador actualizarDatosAdmin(String cedula, Administrador nuevosDatos){
 
-        Administrador admin = administradorRepositorio.findByCedula(cedula);
+        Administrador admin = administradorRepository.findByCedula(cedula);
         if(admin == null){
             throw new IllegalArgumentException("No existe un administrador con este cedula.");
         }
@@ -53,8 +52,8 @@ public class AdministradorServicio {
         admin.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
         admin.setTelefono(nuevosDatos.getTelefono());
         admin.setContrasena(nuevosDatos.getContrasena());
-        admin.setDomicilio_facturacion(nuevosDatos.getDomicilio_facturacion());
-        return administradorRepositorio.save(admin);
+        admin.setDomicilioFacturacion(nuevosDatos.getDomicilioFacturacion());
+        return administradorRepository.save(admin);
 
     }
 
@@ -75,9 +74,10 @@ public class AdministradorServicio {
                 creacionAdministradorRequest.getDomicilio_facturacion().getDepartamento(),
                 creacionAdministradorRequest.getDomicilio_facturacion().getCiudad(),
                 creacionAdministradorRequest.getDomicilio_facturacion().getApartamento(),
-                true);
+                false,
+                admin);
         domicilio.setCliente(null);
-        admin.setDomicilio_facturacion(domicilio);
+        admin.setDomicilioFacturacion(domicilio);
         return usuarioServicio.crearAdministrador(admin);
     }
 

@@ -1,10 +1,9 @@
 package com.example.PizzUMBurgUM.services;
 
 import com.example.PizzUMBurgUM.entities.*;
-import com.example.PizzUMBurgUM.repositories.AdministradorRepositorio;
-import com.example.PizzUMBurgUM.repositories.ClienteRepositorio;
+import com.example.PizzUMBurgUM.repositories.AdministradorRepository;
+import com.example.PizzUMBurgUM.repositories.ClienteRepository;
 import com.example.PizzUMBurgUM.repositories.DomicilioRepository;
-import com.example.PizzUMBurgUM.repositories.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +15,32 @@ public class DomicilioService {
     private DomicilioRepository domicilioRepository;
 
     @Autowired
-    private ClienteRepositorio clienteRepositorio;
-    @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
-    @Autowired
-    private AdministradorRepositorio administradorRepositorio;
+    private ClienteRepository clienteRepository;
 
-    public Domicilio crearDomicilio(String clienteId, String numero, String calle, String departamento, String ciudad, String apartamento, boolean predeterminado) {
-        Cliente cliente = clienteRepositorio.findById(clienteId)
-                .orElseThrow(() ->new RuntimeException("Cliente no encontrado."));
-        Domicilio domicilio = new Domicilio(numero, calle, departamento, ciudad, apartamento, predeterminado);
+    @Autowired
+    private AdministradorRepository administradorRepository;
+
+    public Domicilio crearDomicilioCliente(long clienteId, String numero, String calle, String departamento, String ciudad, String apartamento, boolean predeterminado) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
+
+        Domicilio domicilio = new Domicilio(numero, calle, departamento, ciudad, apartamento, predeterminado, cliente);
         cliente.getDomicilios().add(domicilio);
-        domicilio.setCliente(cliente);
+
+        return domicilioRepository.save(domicilio);
+    }
+
+    public Domicilio crearDomicilioAdministrador(long adminId, String numero, String calle, String departamento, String ciudad, String apartamento) {
+        Administrador administrador = administradorRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("Administrador no encontrado."));
+
+        if (administrador.getDomicilioFacturacion() != null) {
+            throw new RuntimeException("El administrador ya tiene un domicilio asignado.");
+        }
+
+        Domicilio domicilio = new Domicilio(numero, calle, departamento, ciudad, apartamento, false, administrador);
+        administrador.setDomicilioFacturacion(domicilio);
+
         return domicilioRepository.save(domicilio);
     }
 
@@ -35,20 +48,20 @@ public class DomicilioService {
         domicilioRepository.deleteById(idDomicilio);
     }
 
-    public Domicilio marcarPredeterminado(String clienteId, long domicilioId) {
-        Domicilio dom = buscarPorId(domicilioId);
+    public Domicilio marcarPredeterminado(long clienteId, long idDomicilio) {
+        Domicilio dom = buscarPorId(idDomicilio);
         Cliente cliente = dom.getCliente();
 
-        if (cliente.getCorreo() != clienteId) {
+        if (cliente.getId() != clienteId) {
            throw new RuntimeException("El domicilio no pertenece al cliente especificado");
         }
 
         List<Domicilio> domicilios = domicilioRepository.findByClienteId(clienteId);
         for (Domicilio domicilio : domicilios) {
-            domicilio.setPredeterminado(domicilio.getId() == domicilioId);
+            domicilio.setPredeterminado(domicilio.getId() == idDomicilio);
             domicilioRepository.save(domicilio);
         }
-        return domicilioRepository.findById(domicilioId).get();
+        return domicilioRepository.findById(idDomicilio).orElseThrow(() -> new RuntimeException("Domicilio no encontrado con ID: " + idDomicilio));
     }
 
     public Domicilio buscarPorId(Long id) {

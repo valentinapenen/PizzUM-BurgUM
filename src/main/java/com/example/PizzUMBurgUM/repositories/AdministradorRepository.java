@@ -7,13 +7,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AdministradorRepositorio extends JpaRepository<Administrador, String> {
-
+public interface AdministradorRepository extends JpaRepository<Administrador, Long> {
     List<Administrador> findByNombreContaining(String nombre);
 
-    Administrador findByCedula(Long cedula);
+    Administrador findByCedula(String cedula);
 
-    boolean existsByCedula(Long cedula);
+    boolean existsByCedula(String cedula);
 
-
+    Administrador findByCorreo(String correo);
 }

@@ -1,30 +1,25 @@
 package com.example.PizzUMBurgUM.services;
 
-
 import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Usuario;
-import com.example.PizzUMBurgUM.repositories.AdministradorRepositorio;
-import com.example.PizzUMBurgUM.repositories.ClienteRepositorio;
-import com.example.PizzUMBurgUM.repositories.UsuarioRepositorio;
+import com.example.PizzUMBurgUM.repositories.AdministradorRepository;
+import com.example.PizzUMBurgUM.repositories.ClienteRepository;
+import com.example.PizzUMBurgUM.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsuarioServicio {
-
     @Autowired
-    private AdministradorRepositorio administradorRepositorio;
+    private AdministradorRepository administradorRepository;
     @Autowired
-    private ClienteRepositorio clienteRepositorio;
+    private ClienteRepository clienteRepository;
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
-
+    private UsuarioRepository usuarioRepository;
 
     public Usuario login(String correo, String password){
-
-        Administrador admin = administradorRepositorio.findById(correo).orElse(null);
-
+        Administrador admin = administradorRepository.findByCorreo(correo); //Saque el orElse(null) porque si no lo encuentra ya retorna null
         if(admin != null){
             if(admin.getContrasena().equals(password)){
                 return admin;
@@ -32,8 +27,7 @@ public class UsuarioServicio {
             else throw new IllegalArgumentException("Contraseña incorrecta.");
         }
 
-        Cliente cliente = clienteRepositorio.findById(correo).orElse(null);
-
+        Cliente cliente = clienteRepository.findByCorreo(correo);  //Saque el orElse(null) porque si no lo encuentra ya retorna null
         if (cliente != null){
             if  (cliente.getContrasena().equals(password)){
                 return cliente;
@@ -44,18 +38,14 @@ public class UsuarioServicio {
         throw new  IllegalArgumentException("No existe un usuario con este correo.");
     }
 
-
-
     public boolean correoEnUso(String correo){
-        if (usuarioRepositorio.existsByCorreo(correo)){
+        if (usuarioRepository.existsByCorreo(correo)){
             return true;
         }
         else return false;
     }
 
-
     public Cliente registrarCliente(Cliente cliente){
-
         if (cliente.getNombre() == null || cliente.getNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre es obligatorio.");
         }
@@ -65,11 +55,11 @@ public class UsuarioServicio {
         }
 
         if (cliente.getCedula() == null){
-            throw new IllegalArgumentException("La cedula es obligatorio.");
+            throw new IllegalArgumentException("La cedula es obligatoria.");
         }
 
         if (cliente.getFechaNacimiento() == null){
-            throw new IllegalArgumentException("La fecha de nacimiento es obligatorio.");
+            throw new IllegalArgumentException("La fecha de nacimiento es obligatoria.");
         }
 
         if(cliente.getCorreo() ==  null || cliente.getCorreo().isBlank()){
@@ -81,23 +71,21 @@ public class UsuarioServicio {
         }
 
         if (cliente.getContrasena() == null || cliente.getContrasena().isBlank()){
-            throw new IllegalArgumentException("La contrasena es obligatorio.");
+            throw new IllegalArgumentException("La contraseña es obligatoria.");
         }
 
-        if(usuarioRepositorio.existsByCorreo(cliente.getCorreo())){
+        if(usuarioRepository.existsByCorreo(cliente.getCorreo())){
             throw new IllegalArgumentException("El correo ya está registrado en el sistema.");
         }
 
-        if(clienteRepositorio.existsByCedula(cliente.getCedula())){
+        if(clienteRepository.existsByCedula(cliente.getCedula())){
             throw new  IllegalArgumentException("Ya existe un cliente con esta cédula.");
         }
 
-        return clienteRepositorio.save(cliente);
+        return clienteRepository.save(cliente);
     }
 
-
     public Administrador crearAdministrador(Administrador admin) {
-
         if (admin.getNombre() == null || admin.getNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre es obligatorio.");
         }
@@ -126,23 +114,20 @@ public class UsuarioServicio {
             throw new IllegalArgumentException("La contrasena es obligatorio.");
         }
 
-        if (admin.getDomicilio_facturacion() == null){
+        if (admin.getDomicilioFacturacion() == null){
             throw new IllegalArgumentException("El domicilio de facturación es obligatorio.");
         }
 
-        if(usuarioRepositorio.existsByCorreo(admin.getCorreo())){
+        if(usuarioRepository.existsByCorreo(admin.getCorreo())){
             throw new IllegalArgumentException("El correo ya está registrado en el sistema.");
         }
 
-        if(administradorRepositorio.existsByCedula(admin.getCedula())){
+        if(administradorRepository.existsByCedula(admin.getCedula())){
             throw new IllegalArgumentException("Ya existe un administrador con esta cédula.");
         }
 
-        return administradorRepositorio.save(admin);
+        return administradorRepository.save(admin);
     }
 
-
-
     // Falta agregar lo de la actualizacion de datos de los usuarios (preguntar si los admins pueden actualizar sus datos o no)
-
 }

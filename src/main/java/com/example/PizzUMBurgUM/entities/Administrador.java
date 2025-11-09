@@ -13,11 +13,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 
 public class Administrador extends Usuario{
-
-    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
-    @JoinColumn(name = "domicilio_facturacion_id")
     @NotNull
-    private Domicilio domicilio_facturacion;
-
-
+    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @JoinColumn(name = "domicilio_id")
+    private Domicilio domicilioFacturacion;
 }

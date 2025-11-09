@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio cliente - PizzUM & BurgUM</title>
+  <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+  <link rel="stylesheet" href="../../static/css/paneles-cliente.css" th:href="@{/css/paneles-cliente.css}">
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+    <h1 class="brand-title">PizzUM & BurgUM</h1>
+  </div>
+
+  <nav class="nav-bar">
+    <a class="active" href="inicio-cliente.html" th:href="@{/inicio-cliente.html}">Inicio</a>
+    <a href="hacer-creacion.html" th:href="@{/hacer-creacion}">Crear</a>
+    <a href="carrito.html" th:href="@{/carrito}">Carrito</a>
+  </nav>
+</header>
+
+<main class="client-container">
+  <div class="client-panel">
+    <a href="hacer-creacion.html" class="client-item large">
+      <h2>Crear</h2>
+      <p>Agrega un nuevo producto al carrito.</p>
+    </a>
+
+    <a href="carrito.html" class="client-item medium">
+      <h2>Ver carrito</h2>
+      <p>Visualiza tu carrito y pide.</p>
+    </a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+    <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+  </div>
+  <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

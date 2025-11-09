@@ -1,0 +1,193 @@
+body {
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+
+/* Hero principal */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 20px;
+    color: #fff;
+    position: relative;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero .hero-box {
+    padding: 40px 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 1200px; /* o el ancho máximo que quieras */
+    box-sizing: border-box; /* para que el padding no sume al ancho total */
+    text-align: center;
+}
+
+/* Títulos */
+.hero .title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* Lista de beneficios */
+.hero .list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+}
+
+.hero .list li {
+    position: relative;
+    font-size: 1.5rem;
+    margin: 15px 0;
+    padding-left: 30px;
+}
+
+.hero .list li::before {
+    position: relative;
+    left: 0;
+    color: #fff;
+    font-weight: bold;
+}
+
+.hero .hero-slogan {
+    font-size: 1.9rem;
+    font-family: 'Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+}
+
+/* Sub-hero*/
+.hero h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+/* contenedor de botones */
+.hero .btn-container {
+    display: flex;
+    justify-content: center; /* centra los botones horizontalmente */
+    gap: 20px; /* espacio entre botones */
+    margin-top: 20px; /* separación con el título */
+}
+
+/* botones estilo hero */
+.hero .btn {
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 10px;
+    transition: background 0.2s, color 0.2s;
+    display: inline-block;
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+}
+
+/* hover */
+.hero .btn:hover {
+    background-color: #ff8163;
+}
+
+/* activo */
+.hero .btn.active {
+    background-color: #ff6347;
+    color: #fff;
+}
+
+.main-section {
+    background-color: #440c0c; /* rojo oscuro profundo */
+    padding-top: 10px;
+    padding-bottom: 40px;
+}
+
+html, body {
+    overflow-x: hidden;
+}
+
+.client-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    color: #fff;
+}
+
+.client-panel {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(14px);
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 50px 40px;
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-auto-rows: 180px;
+    gap: 25px;
+}
+
+/* Rectángulos */
+.client-item {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    text-decoration: none;
+    color: #fff;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.25s ease;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.client-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* Tamaños distintos */
+.client-item.large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.client-item.medium {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.client-item.small {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+/* Textos */
+.client-item h2 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.client-item p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.85);
+}
+
+/* Responsivo */
+@media (max-width: 800px) {
+    .client-item.large {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+}
