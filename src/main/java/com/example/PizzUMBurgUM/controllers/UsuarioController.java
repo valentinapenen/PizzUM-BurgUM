@@ -22,14 +22,15 @@ import org.springframework.web.context.request.WebRequest;
 @RequestMapping("/usuario")
 
 public class UsuarioController {
+
     @Autowired
     private UsuarioServicio usuarioServicio;
 
     @GetMapping("/login")
     public String mostrarLogin(Model model){
         model.addAttribute("loginRequest", new LoginRequest());
-        return "IniciarSesion";
 
+        return "IniciarSesion";
     }
 
     @PostMapping("/login")
@@ -37,16 +38,20 @@ public class UsuarioController {
         try{
             Usuario usuario = usuarioServicio.login(loginRequest.getCorreo(), loginRequest.getPassword());
             session.setAttribute("usuarioLogueado",  usuario);
+
             if(usuario instanceof Cliente){
                 return ("redirect:/cliente/home");
             }
+
             if(usuario instanceof Administrador){
                 return("redirect:/administrador/home");
             }
+
             return("redirect:/");
         }
         catch(IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
+
             return "IniciarSesion";
         }
     }
@@ -54,8 +59,7 @@ public class UsuarioController {
     @GetMapping("/logout")
     public String logout(HttpSession sesion){
         sesion.invalidate();
+
         return "redirect:/inicio";
     }
-
-
 }

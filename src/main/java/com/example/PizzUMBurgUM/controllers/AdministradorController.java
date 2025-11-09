@@ -1,6 +1,5 @@
 package com.example.PizzUMBurgUM.controllers;
 
-
 import com.example.PizzUMBurgUM.entities.Administrador;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +16,7 @@ public class AdministradorController {
     @GetMapping("/home")
     public String mostrarInicioAdministrador(@SessionAttribute("usuarioLogueado") Administrador administrador, Model model){
         model.addAttribute("administrador", administrador);
+
         return "paginaInicioAdministrador";
     }
-
-
-
 }
