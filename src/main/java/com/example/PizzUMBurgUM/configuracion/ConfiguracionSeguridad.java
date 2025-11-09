@@ -11,41 +11,54 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class ConfiguracionSeguridad {
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Autorización: define quién puede acceder a qué rutas
+                // Permisos por tipo de ruta
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")   // Solo admins
-                        .requestMatchers("/usuario/**").hasRole("USER")  // Solo clientes logueados
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/", "/iniciar-sesion", "/registrarse").permitAll() // Acceso libre
-                        .anyRequest().authenticated() // El resto requiere login
+                        // Rutas accesibles solo para administradores
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // Rutas accesibles solo para usuarios registrados
+                        .requestMatchers("/usuario/**").hasRole("USER")
+
+                        // Rutas públicas (no requieren autenticación)
+                        .requestMatchers(
+                                "/",                   // raíz → bienvenida
+                                "/bienvenida",         // página de bienvenida
+                                "/iniciar-sesion",     // login
+                                "/crear-cuenta",       // registro
+                                "/css/**", "/js/**", "/images/**" // archivos estáticos
+                        ).permitAll()
+
+                        // To do lo demás requiere estar logueado
+                        .anyRequest().authenticated()
                 )
 
-                // Login
+                // Configurar el login
                 .formLogin(form -> form
-                        .loginPage("/iniciar-sesion")   // URL de tu formulario de login (Thymeleaf)
-                        .loginProcessingUrl("/procesar-login") // donde se envía el form
-                        .defaultSuccessUrl("/", true)   // a dónde redirige al iniciar sesión correctamente
+                        .loginPage("/iniciar-sesion")       // Página del formulario de login
+                        .loginProcessingUrl("/procesar-login") // Acción del formulario
+                        .defaultSuccessUrl("/cliente/inicio-cliente", false) // Redirige después del login exitoso
                         .permitAll()
                 )
 
-                // Logout
+                // Configurar logout
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")          // vuelve al inicio
+                        .logoutSuccessUrl("/bienvenida")     // Volver a bienvenida al salir
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
 
-                // ⚠️ Protección CSRF (por ahora simple)
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
 
-    // Cifrado de contraseñas (obligatorio)
+    // Bean para cifrar contraseñas (obligatorio para Spring Security)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
