@@ -46,7 +46,6 @@ public abstract class Usuario {
     @Column(unique = true, nullable = false)
     private String correo;
 
-
     @NotNull
     @Column(nullable = false)
     private String telefono;

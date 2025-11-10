@@ -28,6 +28,7 @@ public class Domicilio {
 
     @NotNull
     private String ciudad;
+
     private String apartamento;
 
     @NotNull
