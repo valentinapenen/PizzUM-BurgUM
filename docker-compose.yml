@@ -6,8 +6,8 @@ services:
     container_name: pizzeria-db
     environment:
       POSTGRES_DB: pizzeria_db
-      POSTGRES_USER: pizzeria_user
-      POSTGRES_PASSWORD: pizzeria_password
+      POSTGRES_USER: pizzumburgum_user
+      POSTGRES_PASSWORD: pizzumburgum_pass
     ports:
       - "5432:5432"
     volumes:
