@@ -1,7 +1,9 @@
 package com.example.PizzUMBurgUM.controllers.DTOS;
 
+import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Cliente;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +25,8 @@ public class DomicilioRequest {
     private String apartamento;
     @NotNull
     private Boolean predeterminado;
-    @NotNull
     @ManyToMany
     private List<Cliente> clientes;
+    @OneToMany
+    private Administrador administrador;
 }

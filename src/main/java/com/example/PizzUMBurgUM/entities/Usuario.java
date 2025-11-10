@@ -1,33 +1,57 @@
 package com.example.PizzUMBurgUM.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import lombok.*;
+import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 
-public class Usuario {
-    @NotNull
-    private String nombre;
-    @NotNull
-    private String apellido;
+public abstract class Usuario {
     @Id
-    @Column(length = 8)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     @NotNull
-    private int cedula;
+    @Column(nullable = false)
+    private String nombre;
+
     @NotNull
-    private Date fechaNacimiento;
+    @Column(nullable = false)
+    private String apellido;
+
+    @Column(length = 8, nullable = false)
     @NotNull
+    private String cedula;
+
+    @NotNull
+    @Column(nullable = false)
+    private LocalDate fechaNacimiento;
+
+    @NotNull
+    @Email
+    @Column(unique = true, nullable = false)
     private String correo;
+
     @NotNull
+    @Column(nullable = false)
     private String telefono;
+
+    @NotNull
+    @Column(nullable = false)
+    private String contrasena;
+
 }

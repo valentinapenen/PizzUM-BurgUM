@@ -1,7 +1,6 @@
 package com.example.PizzUMBurgUM.entities.enums;
 
-public enum CategoriaTopping {
+public enum TipoCreacion {
     PIZZA,
-    HAMBURGUESA,
-    AMBOS
+    HAMBURGUESA
 }

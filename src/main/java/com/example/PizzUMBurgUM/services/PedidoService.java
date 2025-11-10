@@ -6,8 +6,11 @@ import com.example.PizzUMBurgUM.entities.Domicilio;
 import com.example.PizzUMBurgUM.entities.Pedido;
 import com.example.PizzUMBurgUM.entities.enums.EstadoPedido;
 import com.example.PizzUMBurgUM.entities.enums.MedioDePago;
+import com.example.PizzUMBurgUM.repositories.ClienteRepository;
 import com.example.PizzUMBurgUM.repositories.CreacionRepository;
+import com.example.PizzUMBurgUM.repositories.DomicilioRepository;
 import com.example.PizzUMBurgUM.repositories.PedidoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,6 @@ import java.util.List;
 
 @Service
 public class PedidoService {
-
     @Autowired
     private PedidoRepository pedidoRepository;
 
@@ -24,33 +26,37 @@ public class PedidoService {
     private CreacionRepository creacionRepository;
 
     @Autowired
-    private DomicilioService domicilioService;
+    private ClienteRepository clienteRepository;
 
-//    @Autowired
-//    private ClienteRepository clienteRepository;
-//
-//    public Pedido crearPedido(long clienteId, List<Long> idsCreaciones, long idDomicilio, String medioDePago) {
-//        Pedido pedido = new Pedido();
-//        pedido.setCliente(clienteRepository.buscarPorId(clienteId));
-//        pedido.setDomicilio(domicilioService.buscarPorId(idDomicilio));
-//        pedido.setEstado(EstadoPedido.EN_COLA);
-//        pedido.setFecha(LocalDateTime.now());
-//        pedido.setMedioDePago(MedioDePago.valueOf(medioDePago.toUpperCase()));
-//
-//        List<Creacion> creaciones = creacionRepository.findAllById(idsCreaciones);
-//
-//        double total = 0.0;
-//        for (Creacion creacion : creaciones) {
-//            total += creacion.getPrecioTotal();
-//            creacion.setPedido(pedido);
-//        }
-//
-//        pedido.setCreaciones(creaciones);
-//        pedido.setTotal(total);
-//
-//        return pedidoRepository.save(pedido);
-//    }
+    @Autowired
+    private DomicilioRepository domicilioRepository;
 
+    @Transactional
+    public Pedido crearPedido(long clienteId, List<Long> idsCreaciones, long domicilioId, MedioDePago medioPago) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+        Domicilio domicilio = domicilioRepository.findById(domicilioId)
+                .orElseThrow(() -> new RuntimeException("Domicilio no encontrado"));
+
+        List<Creacion> creaciones = creacionRepository.findAllById(idsCreaciones);
+
+        double total = creaciones.stream().mapToDouble(Creacion::getPrecioTotal).sum();
+
+        Pedido pedido = Pedido.builder()
+                .cliente(cliente)
+                .creaciones(creaciones)
+                .domicilio(domicilio)
+                .medioDePago(medioPago)
+                .estado(EstadoPedido.EN_PREPARACION)
+                .fecha(LocalDateTime.now())
+                .total(total)
+                .build();
+
+        return pedidoRepository.save(pedido);
+    }
+
+    @Transactional
     public Pedido cambiarEstado(long id, EstadoPedido nuevoEstado) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
@@ -58,11 +64,8 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public List<Pedido> listarPorCliente(Cliente cliente) {
-        return pedidoRepository.findByClienteId(cliente.getCedula());
+    public List<Pedido> listarPorCliente(long clienteId) {
+        return pedidoRepository.findByClienteId(clienteId);
     }
 
-    public List<Pedido> listarTodos() {
-        return pedidoRepository.findAll();
-    }
 }

@@ -1,17 +1,20 @@
 package com.example.PizzUMBurgUM.entities;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 
 public class Administrador extends Usuario{
     @NotNull
-    private String domicilio_facturacion;
+    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @JoinColumn(name = "domicilio_id")
+    private Domicilio domicilioFacturacion;
 }

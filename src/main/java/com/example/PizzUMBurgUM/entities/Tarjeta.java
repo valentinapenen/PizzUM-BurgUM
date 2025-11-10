@@ -20,24 +20,26 @@ public class Tarjeta {
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @NotNull
-    private String numeroEnmascarado;
+    private String numero;
+
     @NotNull
     private String nombreTitular; // Porque el titular de la tarjeta puede no ser el mismo que quien la usa
+
     @ManyToOne
-    @JoinColumn(name = "cliente_cedula")
+    @JoinColumn(name = "cliente_id")
     @NotNull
     private Cliente cliente;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private TipoTarjeta tipoTarjeta;
+
     @NotNull
     @DateTimeFormat
     private Date fecha_vencimiento;
+
     @NotNull
     private boolean predeterminada;
-
-    public static String enmascarar(String numero) {
-        return "**** **** **** " + numero.substring(numero.length() - 4);
-    }
 }

@@ -22,28 +22,30 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private long idPedido;
+
     @NotNull
     private EstadoPedido estado;
+
     @NotNull
     private LocalDateTime fecha;
+
     @NotNull
     private double total;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private MedioDePago medioDePago;
+
     @NotNull
     @OneToMany
+    @JoinTable(name = "pedido_creaciones", joinColumns = @JoinColumn(name = "pedido_id"), inverseJoinColumns = @JoinColumn(name = "creacion_id"))
     private List<Creacion> creaciones;
-    @NotNull
-    @ManyToOne
-    private Cliente cliente;
+
     @ManyToOne
     @NotNull
     private Domicilio domicilio;
 
-    public double calcularTotal() {
-        return creaciones.stream()
-                .mapToDouble(Creacion::getPrecioTotal)
-                .sum();
-    }
+    @ManyToOne
+    @NotNull
+    private Cliente cliente;
 }

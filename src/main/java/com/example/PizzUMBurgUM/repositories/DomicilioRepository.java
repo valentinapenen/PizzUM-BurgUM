@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface DomicilioRepository extends JpaRepository<Domicilio, Long> {
     List<Domicilio> findByClienteId(long clienteId);
+
     List<Domicilio> findByCliente(Cliente cliente);
+
     void deleteById(long id);
 }

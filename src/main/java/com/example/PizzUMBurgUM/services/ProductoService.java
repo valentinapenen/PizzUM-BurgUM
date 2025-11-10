@@ -13,30 +13,36 @@ public class ProductoService {
     private ProductoRepository productoRepository;
 
     public List<Producto> listarActivos() {
-        return productoRepository.findByActivoTrue();
+        return productoRepository.findByDisponibleTrue();
     }
 
     public Producto crear(Producto producto) {
         if (producto.getNombre() == null || producto.getNombre().isBlank()) {
             throw new IllegalArgumentException("El producto debe tener nombre");
         }
-        if (producto.getPrecioBase() <= 0) {
+
+        if (producto.getPrecio() <= 0) {
             throw new IllegalArgumentException("El producto debe tener un precio válido");
         }
+
         return productoRepository.save(producto);
     }
 
     public Producto actualizarPrecio(long id, double nuevoPrecio) {
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("El producto no existe"));
-        producto.setPrecioBase(nuevoPrecio);
+
+        producto.setPrecio(nuevoPrecio);
+
         return productoRepository.save(producto);
     }
 
     public void desactivar(long id) {
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("El producto no existe"));
+
         producto.setDisponible(false);
+
         productoRepository.save(producto);
     }
 

@@ -1,5 +1,6 @@
 package com.example.PizzUMBurgUM.entities;
 
+import com.example.PizzUMBurgUM.entities.enums.TipoCreacion;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -17,24 +18,21 @@ public class Creacion {
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private TipoCreacion tipo; // PIZZA o HAMBURGUESA
+
+    @OneToMany
+    private List<Producto> productos;
+
     @NotNull
     private double precioTotal;
-    @NotNull
-    @OneToOne
-    @JoinColumn(name = "producto_base_id")
-    private BaseProducto productoBase;
-    @OneToMany
-    private List<Topping> toppings;
+
     @NotNull
     private boolean favorito;
+
     @NotNull
     @ManyToOne
-    private Pedido pedido;
-
-    public void calcularTotal() { //calculo el precioTotal directamente en la clase ya que utiliza datos que guarda, por lo que no es necesario buscarlos en la bd
-        double precioToppings = toppings.stream()
-                .mapToDouble(Topping::getPrecioBase)
-                .sum();
-        precioTotal = precioToppings + productoBase.getPrecioBase();
-    }
+    private Cliente cliente;
 }

@@ -1,7 +1,11 @@
 package com.example.PizzUMBurgUM.entities;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -9,11 +13,19 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 
 public class Cliente extends Usuario{
-    private List<Domicilio> domicilios;
-    private List<Tarjeta> tarjetas;
-    private List<Pedido> pedidos;
 
+    @NotNull(message = "Debe de guardarse por lo menos un domicilio")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Domicilio> domicilios;
+
+    @NotNull(message = "Debe de guardarse por lo menos una tarjeta")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Tarjeta> tarjetas;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Pedido> pedidos;
+    
 }
