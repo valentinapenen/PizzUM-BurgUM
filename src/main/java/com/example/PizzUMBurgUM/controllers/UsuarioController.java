@@ -30,7 +30,7 @@ public class UsuarioController {
     public String mostrarLogin(Model model){
         model.addAttribute("loginRequest", new LoginRequest());
 
-        return "IniciarSesion";
+        return "inicio/iniciar-sesion";
     }
 
     @PostMapping("/login")
