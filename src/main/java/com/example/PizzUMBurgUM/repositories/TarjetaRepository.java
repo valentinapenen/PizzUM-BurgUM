@@ -8,7 +8,13 @@ import java.util.List;
 
 @Repository
 public interface TarjetaRepository extends JpaRepository<Tarjeta, Long> {
+
+    // Buscar todas las tarjetas de un cliente
     List<Tarjeta> findByClienteId(long clienteId);
+
+    // Buscar una tarjeta por su número
+    Tarjeta findByNumero(String numero);
 
     void deleteById(long id);
 }
+

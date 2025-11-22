@@ -68,4 +68,9 @@ public class PedidoService {
         return pedidoRepository.findByClienteId(clienteId);
     }
 
+    public List<Pedido> listarPedidosPorFecha(LocalDateTime desde, LocalDateTime hasta) {
+        return pedidoRepository.findByFechaBetween(desde, hasta);
+    }
+
+
 }
