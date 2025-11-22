@@ -24,13 +24,13 @@ public class ConfiguracionSeguridad {
 
                         .requestMatchers("/usuario/**").hasRole("USER")
 
-                        // Webservice BPS (libre)
+
                         .requestMatchers("/api/bps/**").permitAll()
 
-                        //Webservice TARJETAS (libre)
+
                         .requestMatchers("/api/tarjetas/**").permitAll()
 
-                        // Webservice DGI
+
                         .requestMatchers("/api/dgi/**").permitAll()
 
 
@@ -46,7 +46,7 @@ public class ConfiguracionSeguridad {
                         .anyRequest().authenticated()
                 )
 
-                // CONFIGURACIÓN DEL LOGIN
+
                 .formLogin(form -> form
                         .loginPage("/iniciar-sesion")
                         .loginProcessingUrl("/procesar-login")
@@ -54,7 +54,7 @@ public class ConfiguracionSeguridad {
                         .permitAll()
                 )
 
-                // CONFIGURACIÓN DEL LOGOUT
+
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/bienvenida")
@@ -63,13 +63,12 @@ public class ConfiguracionSeguridad {
                         .permitAll()
                 )
 
-                // Desactivar CSRF para permitir usar Postman / webservices externos
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
 
-    // Password encoder obligatorio para Spring Security
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

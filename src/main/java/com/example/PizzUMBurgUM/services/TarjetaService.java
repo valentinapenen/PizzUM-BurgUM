@@ -20,7 +20,7 @@ public class TarjetaService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    // Crear tarjeta (ya lo tenías)
+
     public Tarjeta crearTarjeta(String numero, String nombreTitular, long clienteId,
                                 TipoTarjeta tipoTarjeta, Date fechaVencimiento, boolean predeterminada) {
 
@@ -40,17 +40,17 @@ public class TarjetaService {
         return tarjetaRepository.save(tarjeta);
     }
 
-    // Listar tarjetas por cliente (ya lo tenías)
+
     public List<Tarjeta> listarTarjetasPorCliente(long clienteId) {
         return tarjetaRepository.findByClienteId(clienteId);
     }
 
-    // Eliminar tarjeta (ya lo tenías)
+
     public void eliminarTarjeta(long tarjetaId) {
         tarjetaRepository.deleteById(tarjetaId);
     }
 
-    // Marcar una tarjeta como predeterminada (ya lo tenías)
+
     public Tarjeta marcarPredeterminada(long clienteId, long tarjetaId) {
         List<Tarjeta> tarjetas = tarjetaRepository.findByClienteId(clienteId);
 
@@ -62,7 +62,7 @@ public class TarjetaService {
         return tarjetaRepository.findById(tarjetaId).orElse(null);
     }
 
-    //Buscar tarjeta por número (para el webservice REST)
+
     public Tarjeta buscarTarjetaPorNumero(String numero) {
         return tarjetaRepository.findByNumero(numero);
     }

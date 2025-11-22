@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/tarjetas")   // Prefijo de la API de tarjetas
+@RequestMapping("/api/tarjetas")
 public class TarjetaRestController {
 
     @Autowired
