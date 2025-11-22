@@ -52,7 +52,7 @@ public class UsuarioController {
         catch(IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
 
-            return "IniciarSesion";
+            return "inicio/iniciar-sesion";
         }
     }
 

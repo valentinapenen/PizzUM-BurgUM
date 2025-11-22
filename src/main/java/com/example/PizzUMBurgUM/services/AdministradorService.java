@@ -24,8 +24,8 @@ public class AdministradorService {
     private DomicilioService domicilioService;
 
 
-    public Administrador encontrarAdminPorCorreo(long adminId) {
-        return administradorRepository.findById(adminId).orElseThrow(() -> new IllegalArgumentException("No existe un administrador con este correo."));
+    public Administrador encontrarAdminPorCorreo(String adminCorreo) {
+        return administradorRepository.findByCorreo(adminCorreo);
     }
 
 
@@ -74,7 +74,7 @@ public class AdministradorService {
                 creacionAdministradorRequest.getDomicilio_facturacion().getDepartamento(),
                 creacionAdministradorRequest.getDomicilio_facturacion().getCiudad(),
                 creacionAdministradorRequest.getDomicilio_facturacion().getApartamento(),
-                false,
+                true,
                 admin);
         domicilio.setCliente(null);
         admin.setDomicilioFacturacion(domicilio);

@@ -2,7 +2,9 @@ package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.controllers.DTOS.CreacionAdministradorRequest;
 import com.example.PizzUMBurgUM.entities.Administrador;
+import com.example.PizzUMBurgUM.entities.Usuario;
 import com.example.PizzUMBurgUM.services.AdministradorService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/administrador")
-@SessionAttributes("usuarioLogueado")
 public class AdministradorController {
 
     private final AdministradorService administradorService;
@@ -22,14 +23,25 @@ public class AdministradorController {
     }
 
     @GetMapping("/home")
-    public String mostrarInicioAdministrador(@SessionAttribute("usuarioLogueado") Administrador administrador, Model model){
-        model.addAttribute("administrador", administrador);
+    public String mostrarInicioAdministrador(HttpSession session, Model model){
 
+        Usuario usuario = (Usuario)  session.getAttribute("usuarioLogueado");
+
+        if(usuario == null || !(usuario instanceof Administrador)){
+            return "redirect:/usuario/login";
+        }
+        Administrador administrador = (Administrador) usuario;
+        model.addAttribute("administrador", administrador);
         return "administrador/inicio-administrador";
     }
 
     @GetMapping("/crearAdministrador")
-    public String mostrarCrearAdministrador(Model model){
+    public String mostrarCrearAdministrador(HttpSession session, Model model){
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Administrador)){
+            return "redirect:/usuario/login";
+        }
 
         model.addAttribute("creacionAdmin", new CreacionAdministradorRequest());
 
@@ -37,12 +49,17 @@ public class AdministradorController {
     }
 
     @PostMapping("/crearAdministrador")
-    public String procesarCreacionAdministrador(@Valid @ModelAttribute("creacionAdmin") CreacionAdministradorRequest creacionAdministradorRequest, Model model, RedirectAttributes redirectAttributes){
+    public String procesarCreacionAdministrador(@Valid @ModelAttribute("creacionAdmin") CreacionAdministradorRequest creacionAdministradorRequest, HttpSession session, Model model, RedirectAttributes redirectAttributes){
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Administrador)){
+            return "redirect:/usuario/login";
+        }
 
         try{
             administradorService.crearAdministrador(creacionAdministradorRequest);
             redirectAttributes.addFlashAttribute("exito", "Creación de administrador exitosa.");
-            return "redirect:/administrador";
+            return "redirect:/administrador/home";
         }
         catch(IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
