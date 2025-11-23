@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Gestión de Pedidos</title>
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/admin.css}">
 </head>
 <body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../administrador/inicio-administrador.html" th:href="@{/administrador/inicio-administrador}">Inicio</a>
+        <a class="active" href="lista.html" th:href="@{/lista}">Pedidos</a>
+        <a href="../producto/lista.html" th:href="@{/productos/lista}">Productos</a>
+        <a href="../administrador/lista.html" th:href="@{/administrador/lista}">Administradores</a>
+    </nav>
+</header>
+
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
 
 </body>
 </html>
