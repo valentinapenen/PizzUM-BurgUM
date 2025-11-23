@@ -1,109 +1,77 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PizzUM & BurgUM — Página principal cliente</title>
-
-  <link rel="stylesheet" href="../../static/css/base.css" th:href="@{/css/base.css}">
-  <link rel="stylesheet" href="../../static/css/menu.css" th:href="@{/css/menu.css}">
-
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio cliente - PizzUM & BurgUM</title>
+  <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+  <link rel="stylesheet" href="../../static/css/paneles-cliente.css" th:href="@{/css/paneles-cliente.css}">
 </head>
-
 <body>
-<header>
-  <div class="container nav">
-    <div class="nav__brand">
-      <img class="logo" alt="PizzUM & BurgUM"
-           src="https://i.postimg.cc/qMLhFSwz/Logo-final-removebg-preview.png" />
-      <strong>PizzUM &amp; BurgUM</strong>
-    </div>
 
-    <nav class="nav__links">
-      <!-- Usá siempre class="pill" y marcá el activo con .active -->
-      <a class="pill active" href="#pizza">Pizza</a>
-      <a class="pill active" href="#burger">Burger</a>
-      <a class="pill" href="favoritos.html">Favoritos</a>
-      <a class="pill" href="historial.html">Historial</a>
-      <a class="pill" href="usuario.html">Usuario</a>
-      <a class="pill" href="pedido.html">Pedido</a>
-    </nav>
+<header>
+  <div class="header-brand">
+    <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+    <h1 class="brand-title">PizzUM & BurgUM</h1>
   </div>
+
+  <nav class="nav-bar">
+    <a class="active" th:href="@{/cliente/home}">Inicio</a>
+    <a href="hacer-creacion.html" th:href="@{/hacer-creacion}">Crear</a>
+    <a href="carrito.html" th:href="@{/carrito}">Carrito</a>
+    <a href="favoritos.html" th:href="@{/favoritos}">Favoritos</a>
+    <a href="../historial/lista.html" th:href="@{/historial/lista}">Historial</a>
+    <a href="perfil.html" th:href="@{/perfil}">Perfil</a>
+  </nav>
 </header>
 
 
-<!-- PIZZA -->
-<main class="container hero" id="pizza">
-  <section class="hero__media">
-    <img class="photo" alt="Pizza"
-         src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?q=80&w=1600&auto=format&fit=crop" />
-    <span class="badge">Pizza personalizada</span>
-  </section>
+<main class="client-container">
+  <div class="client-panel">
+    <a href="hacer-creacion.html" class="client-item large">
+      <h2>Crear</h2>
+      <p>Agrega un nuevo producto al carrito.</p>
+    </a>
 
-  <section class="hero__content">
-    <p class="eyebrow">Creá tu pedido</p>
-    <h1>Armá tu <span class="marca">pizza</span></h1>
-    <p class="lead">Elegí tamaño, masa, salsa, queso y toppings.</p>
+    <a href="carrito.html" class="client-item medium">
+      <h2>Ver carrito</h2>
+      <p>Visualiza tu carrito y pide.</p>
+    </a>
 
-    <div class="steps">
-      <div class="step step--active"><span class="dot">1</span> Tamaño</div>
-      <div class="step"><span class="dot">2</span> Masa</div>
-      <div class="step"><span class="dot">3</span> Salsa</div>
-      <div class="step"><span class="dot">4</span> Queso</div>
-      <div class="step"><span class="dot">5</span> Toppings</div>
-      <div class="step"><span class="dot">6</span> Acompañamientos</div>
-    </div>
+    <a href="favoritos.html" class="client-item medium">
+      <h2>Favoritos</h2>
+      <p>Accede a tus productos guardados.</p>
+    </a>
 
-    <div class="actions">
-      <button class="btn btn--primario">Armar mi pizza</button>
-    </div>
-    <p class="disclaimer">Los precios varían según los ingredientes seleccionados.</p>
-  </section>
-</main>
 
-<!-- BURGER -->
-<main class="container hero" id="burger">
-  <section class="hero__media">
-    <img class="photo" alt="Burger"
-         src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1600&auto=format&fit=crop" />
-    <span class="badge">Burger personalizada</span>
-  </section>
+    <a href="historial.html" class="client-item medium">
+      <h2>Historial</h2>
+      <p>Consulta tus pedidos anteriores.</p>
+    </a>
 
-  <section class="hero__content">
-    <p class="eyebrow">Creá tu pedido</p>
-    <h1>Armá tu <span class="marca">burger</span></h1>
-    <p class="lead">Elegí pan, carne, queso, extras y acompañamientos.</p>
 
-    <div class="steps">
-      <div class="step step--active"><span class="dot">1</span> Pan</div>
-      <div class="step"><span class="dot">2</span> Carne</div>
-      <div class="step"><span class="dot">3</span> Queso</div>
-      <div class="step"><span class="dot">4</span> Extras</div>
-      <div class="step"><span class="dot">5</span> Acompañamientos</div>
-    </div>
+    <a href="perfil.html" class="client-item medium">
+      <h2>Perfil</h2>
+      <p>Revisa o edita tus datos personales.</p>
+    </a>
 
-    <div class="actions">
-      <button class="btn btn--primario">Armar mi burger</button>
-    </div>
-    <p class="disclaimer">Los precios varían según los ingredientes seleccionados.</p>
-  </section>
-</main>
-
-<footer>
-  <div class="container footer__inner">
-    <div class="nav__brand">
-      <img class="logo" alt="PizzUM & BurgUM"
-           src="https://i.postimg.cc/qMLhFSwz/Logo-final-removebg-preview.png" />
-      <strong>PizzUM &amp; BurgUM</strong>
-    </div>
-    <div class="social" aria-label="Redes">
-      <a href="#" aria-label="Instagram">IG</a>
-      <a href="#" aria-label="Facebook">FB</a>
-      <a href="#" aria-label="X">X</a>
-    </div>
   </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+    <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+  </div>
+  <small>© 2025 — Todos los derechos reservados</small>
 </footer>
+
 </body>
 </html>
+
+
+
+//return "cliente/paginaPrincipalCliente"; (falta actualizar el controlador)
+//background-header-footer.css
+//paneles-cliente.css
