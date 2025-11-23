@@ -2,8 +2,9 @@ package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.controllers.DTOS.RegistroClienteRequest;
 import com.example.PizzUMBurgUM.entities.Cliente;
+import com.example.PizzUMBurgUM.entities.Usuario;
 import com.example.PizzUMBurgUM.services.ClienteService;
-import com.example.PizzUMBurgUM.services.UsuarioServicio;
+import com.example.PizzUMBurgUM.services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +17,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cliente")
 public class ClienteController {
 
-    @Autowired
-    private UsuarioServicio usuarioServicio;
 
     @Autowired
     private ClienteService clienteService;
 
     @GetMapping("/home")
     public String paginaInicioCliente(HttpSession session, Model model){
-        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-        if(cliente == null){
+
+        Usuario usuario = (Usuario)  session.getAttribute("usuarioLogueado");
+
+        if(usuario == null || !(usuario instanceof Cliente)){
             return "redirect:/usuario/login";
         }
+        Cliente cliente = (Cliente) usuario;
         model.addAttribute("cliente", cliente);
 
-        return "paginaPrincipalCliente";
+        return "cliente/inicio-cliente";
     }
 
     @GetMapping("/registro")
     public String mostrarRegistroCliente(Model model){
         model.addAttribute("registroCliente", new RegistroClienteRequest());
 
-        return "registrarse";
+        return "inicio/crear-cuenta";
     }
 
     @PostMapping("/registro")
@@ -49,7 +51,7 @@ public class ClienteController {
         }
         catch (IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
-            return "registrarse";
+            return "inicio/crear-cuenta";
         }
     }
 }
