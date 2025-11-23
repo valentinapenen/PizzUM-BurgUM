@@ -1,6 +1,7 @@
 package com.example.PizzUMBurgUM.repositories;
 
 import com.example.PizzUMBurgUM.entities.Pedido;
+import com.example.PizzUMBurgUM.entities.enums.EstadoPedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,5 @@ import java.util.List;
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findByClienteId(long clienteId);
     List<Pedido> findByFechaBetween(LocalDateTime desde, LocalDateTime hasta);
+    List<Pedido> findByEstadoNot(EstadoPedido estado);
 }

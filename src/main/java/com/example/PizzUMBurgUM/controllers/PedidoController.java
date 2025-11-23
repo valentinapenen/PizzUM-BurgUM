@@ -40,7 +40,7 @@ public class PedidoController {
         Pedido pedido = pedidoService.cambiarEstado(id, estado);
         model.addAttribute("pedido", pedido);
 
-        return "pedido/form";
+        return "pedido/lista";
     }
 
 }
