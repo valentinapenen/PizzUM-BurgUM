@@ -45,7 +45,7 @@ public class AdministradorController {
 
         model.addAttribute("creacionAdmin", new CreacionAdministradorRequest());
 
-        return "administrador/crear-administrador";
+        return "administrador/form";
     }
 
     @PostMapping("/crearAdministrador")
@@ -63,7 +63,7 @@ public class AdministradorController {
         }
         catch(IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
-            return "administrador/crear-administrador";
+            return "administrador/form";
 
         }
     }
