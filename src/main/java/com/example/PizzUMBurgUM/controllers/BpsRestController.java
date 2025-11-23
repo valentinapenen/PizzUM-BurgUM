@@ -1,6 +1,6 @@
 package com.example.PizzUMBurgUM.controllers;
 
-import com.example.PizzUMBurgUM.services.UsuarioServicio;
+import com.example.PizzUMBurgUM.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,14 +14,14 @@ import java.util.Map;
 public class BpsRestController {
 
     @Autowired
-    private UsuarioServicio usuarioServicio;
+    private UsuarioService usuarioService;
 
     @GetMapping("/funcionarios")
     public Map<String, Long> getCantidadFuncionarios() {
 
-        long cantidadAdmins = usuarioServicio.contarAdministradores();
-        long cantidadClientes = usuarioServicio.contarClientes();
-        long cantidadTotal = usuarioServicio.contarUsuarios();
+        long cantidadAdmins = usuarioService.contarAdministradores();
+        long cantidadClientes = usuarioService.contarClientes();
+        long cantidadTotal = usuarioService.contarUsuarios();
 
         Map<String, Long> respuesta = new HashMap<>();
         respuesta.put("cantidadTotal", cantidadTotal);

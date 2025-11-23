@@ -1,11 +1,10 @@
 package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.controllers.DTOS.RegistroClienteRequest;
-import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Usuario;
 import com.example.PizzUMBurgUM.services.ClienteService;
-import com.example.PizzUMBurgUM.services.UsuarioServicio;
+import com.example.PizzUMBurgUM.services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cliente")
 public class ClienteController {
 
-    @Autowired
-    private UsuarioServicio usuarioServicio;
 
     @Autowired
     private ClienteService clienteService;

@@ -4,7 +4,7 @@ import com.example.PizzUMBurgUM.controllers.DTOS.LoginRequest;
 import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Usuario;
-import com.example.PizzUMBurgUM.services.UsuarioServicio;
+import com.example.PizzUMBurgUM.services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.context.request.WebRequest;
 
 
 @Controller
@@ -24,7 +22,7 @@ import org.springframework.web.context.request.WebRequest;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioServicio usuarioServicio;
+    private UsuarioService usuarioService;
 
     @GetMapping("/login")
     public String mostrarLogin(Model model){
@@ -36,7 +34,7 @@ public class UsuarioController {
     @PostMapping("/login")
     public String procesarLogin(@Valid @ModelAttribute("loginRequest") LoginRequest loginRequest, Model model, HttpSession session){
         try{
-            Usuario usuario = usuarioServicio.login(loginRequest.getCorreo(), loginRequest.getPassword());
+            Usuario usuario = usuarioService.login(loginRequest.getCorreo(), loginRequest.getPassword());
             session.setAttribute("usuarioLogueado",  usuario);
 
             if(usuario instanceof Cliente){
