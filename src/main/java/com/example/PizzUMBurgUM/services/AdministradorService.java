@@ -57,6 +57,50 @@ public class AdministradorService {
 
     }
 
+    public Administrador verificarDatosAdmin(Administrador admin){
+        if (admin.getNombre() == null || admin.getNombre().isBlank()) {
+            throw new IllegalArgumentException("El nombre es obligatorio.");
+        }
+
+        if (admin.getApellido() == null || admin.getApellido().isBlank()) {
+            throw new IllegalArgumentException("El apellido es obligatorio.");
+        }
+
+        if (admin.getCedula() == null){
+            throw new IllegalArgumentException("La cedula es obligatorio.");
+        }
+
+        if (admin.getFechaNacimiento() == null){
+            throw new IllegalArgumentException("La fecha de nacimiento es obligatorio.");
+        }
+
+        if(admin.getCorreo() ==  null || admin.getCorreo().isBlank()){
+            throw new IllegalArgumentException("El correo es obligatorio.");
+        }
+
+        if (admin.getTelefono() == null || admin.getTelefono().isBlank()){
+            throw new IllegalArgumentException("El teléfono es obligatorio.");
+        }
+
+        if (admin.getContrasena() == null || admin.getContrasena().isBlank()){
+            throw new IllegalArgumentException("La contrasena es obligatorio.");
+        }
+
+        if (admin.getDomicilioFacturacion() == null){
+            throw new IllegalArgumentException("El domicilio de facturación es obligatorio.");
+        }
+
+        if(usuarioRepository.existsByCorreo(admin.getCorreo())){
+            throw new IllegalArgumentException("El correo ya está registrado en el sistema.");
+        }
+
+        if(administradorRepository.existsByCedula(admin.getCedula())){
+            throw new IllegalArgumentException("Ya existe un administrador con esta cédula.");
+        }
+
+        return administradorRepository.save(admin);
+    }
+
 
     public Administrador crearAdministrador(CreacionAdministradorRequest creacionAdministradorRequest){
         Administrador admin = new Administrador();
@@ -78,7 +122,7 @@ public class AdministradorService {
                 admin);
         domicilio.setCliente(null);
         admin.setDomicilioFacturacion(domicilio);
-        return usuarioServicio.crearAdministrador(admin);
+        return verificarDatosAdmin(admin);
     }
 
 
