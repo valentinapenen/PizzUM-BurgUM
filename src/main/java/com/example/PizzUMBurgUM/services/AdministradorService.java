@@ -47,6 +47,9 @@ public class AdministradorService {
         //    throw new IllegalArgumentException("No se puede cambiar el domicilio de facturación.");
         //}
 
+
+
+
         admin.setNombre(nuevosDatos.getNombre());
         admin.setApellido(nuevosDatos.getApellido());
         admin.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
@@ -57,7 +60,7 @@ public class AdministradorService {
 
     }
 
-    public Administrador verificarDatosAdmin(Administrador admin){
+    public void verificarDatosAdmin(Administrador admin){
         if (admin.getNombre() == null || admin.getNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre es obligatorio.");
         }
@@ -98,7 +101,7 @@ public class AdministradorService {
             throw new IllegalArgumentException("Ya existe un administrador con esta cédula.");
         }
 
-        return administradorRepository.save(admin);
+
     }
 
 
@@ -122,7 +125,9 @@ public class AdministradorService {
                 admin);
         domicilio.setCliente(null);
         admin.setDomicilioFacturacion(domicilio);
-        return verificarDatosAdmin(admin);
+        verificarDatosAdmin(admin);
+
+        return administradorRepository.save(admin);
     }
 
 

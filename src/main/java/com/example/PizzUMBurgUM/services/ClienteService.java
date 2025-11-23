@@ -16,12 +16,50 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
     @Autowired
-    private UsuarioServicio usuarioServicio;
-    @Autowired
     private DomicilioService domicilioService;
     @Autowired
     private TarjetaService tarjetaService;
 
+    public void verificarDatosCliente( Cliente cliente){
+
+        if (cliente.getNombre() == null || cliente.getNombre().isBlank()) {
+            throw new IllegalArgumentException("El nombre es obligatorio.");
+        }
+
+        if (cliente.getApellido() == null || cliente.getApellido().isBlank()) {
+            throw new IllegalArgumentException("El apellido es obligatorio.");
+        }
+
+        if (cliente.getCedula() == null){
+            throw new IllegalArgumentException("La cedula es obligatoria.");
+        }
+
+        if (cliente.getFechaNacimiento() == null){
+            throw new IllegalArgumentException("La fecha de nacimiento es obligatoria.");
+        }
+
+        if(cliente.getCorreo() ==  null || cliente.getCorreo().isBlank()){
+            throw new IllegalArgumentException("El correo es obligatorio.");
+        }
+
+        if (cliente.getTelefono() == null || cliente.getTelefono().isBlank()){
+            throw new IllegalArgumentException("El teléfono es obligatorio.");
+        }
+
+        if (cliente.getContrasena() == null || cliente.getContrasena().isBlank()){
+            throw new IllegalArgumentException("La contraseña es obligatoria.");
+        }
+
+        if(usuarioRepository.existsByCorreo(cliente.getCorreo())){
+            throw new IllegalArgumentException("El correo ya está registrado en el sistema.");
+        }
+
+        if(clienteRepository.existsByCedula(cliente.getCedula())){
+            throw new  IllegalArgumentException("Ya existe un cliente con esta cédula.");
+        }
+
+
+    }
 
     public Cliente registrarCliente(RegistroClienteRequest registroClienteRequest){
         if (registroClienteRequest.getDomicilio() == null){
@@ -40,9 +78,11 @@ public class ClienteService {
         cliente.setTelefono(registroClienteRequest.getTelefono());
         cliente.setContrasena(registroClienteRequest.getContrasena());
 
-        Cliente clienteGuardado = usuarioServicio.registrarCliente(cliente);
+        verificarDatosCliente(cliente);
 
-        domicilioService.crearDomicilioCliente(
+        Cliente clienteGuardado = clienteRepository.save(cliente);
+
+                domicilioService.crearDomicilioCliente(
                 clienteGuardado.getId(),
                 registroClienteRequest.getDomicilio().getNumero(),
                 registroClienteRequest.getDomicilio().getCalle(),
@@ -65,7 +105,7 @@ public class ClienteService {
 
     public Cliente actualizarCliente(long idCliente,  Cliente nuevosDatos){
 
-        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new RuntimeException("Domicilio no encontrado con ID: " + idCliente));
+        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + idCliente));
 
         if(cliente == null){
             throw new IllegalArgumentException("No existe este cliente.");
@@ -78,11 +118,11 @@ public class ClienteService {
             throw new IllegalArgumentException("No se puede cambiar el correo.");
         }
 
-        if(nuevosDatos.getNombre() != null && nuevosDatos.getNombre().isBlank()){
+        if(nuevosDatos.getNombre() != null && !nuevosDatos.getNombre().isBlank()){
             cliente.setNombre(nuevosDatos.getNombre());
         }
 
-        if(nuevosDatos.getApellido() != null && nuevosDatos.getApellido().isBlank()){
+        if(nuevosDatos.getApellido() != null && !nuevosDatos.getApellido().isBlank()){
             cliente.setApellido(nuevosDatos.getApellido());
         }
 
@@ -90,11 +130,11 @@ public class ClienteService {
             cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
         }
 
-        if(nuevosDatos.getTelefono() != null && nuevosDatos.getTelefono().isBlank()){
+        if(nuevosDatos.getTelefono() != null && !nuevosDatos.getTelefono().isBlank()){
             cliente.setTelefono(nuevosDatos.getTelefono());
         }
 
-        if(nuevosDatos.getContrasena() != null && nuevosDatos.getContrasena().isBlank()){
+        if(nuevosDatos.getContrasena() != null && !nuevosDatos.getContrasena().isBlank()){
             cliente.setContrasena(nuevosDatos.getContrasena());
         }
 
