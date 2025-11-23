@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Pedidos</title>
-    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
-    <link rel="stylesheet" href="../../../static/css/administrador/admin.css" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/admin.css}">
 </head>
 <body>
 
@@ -15,17 +15,16 @@
     </div>
 
     <nav class="nav-bar">
-        <a href="../inicio-administrador.html" th:href="@{/templates/administrador/inicio-administrador.html}">Inicio</a>
-        <a class="active" href="lista-pedidos.html" th:href="@{/lista-pedidos}">Pedidos</a>
-        <a href="../productos/producto.html" th:href="@{/producto}">Productos</a>
-        <a href="../crear-administrador.html" th:href="@{/crear-administrador}">Administradores</a>
+        <a href="../administrador/inicio-administrador.html" th:href="@{/templates/administrador/inicio-administrador.html}">Inicio</a>
+        <a class="active" href="pedidos.html" th:href="@{/pedidos}">Pedidos</a>
+        <a href="productos.html" th:href="@{/templates/producto}">Productos</a>
+        <a href="../administrador/administradores.html" th:href="@{/administradores}">Administradores</a>
     </nav>
 </header>
 
 <div class="admin-container">
     <div class="admin-panel">
 
-        <!-- Tarjeta por cada pedido -->
         <div class="admin-item medium" th:each="p : ${pedidos}">
 
             <h2>Pedido #<span th:text="${p.id}"></span></h2>
@@ -44,7 +43,6 @@
                 <strong>Total:</strong> $<span th:text="${p.total}"></span>
             </p>
 
-            <!-- Cambiar estado -->
             <form th:action="@{'/admin/pedidos/' + ${p.id} + '/cambiar-estado'}" method="post" style="margin-top: 10px;">
                 <select name="nuevoEstado">
                     <option th:each="e : ${T(com.example.PizzUMBurgUM.entities.enums.EstadoPedido).values()}"
@@ -56,7 +54,6 @@
                 <button type="submit">Actualizar</button>
             </form>
 
-            <!-- Botón eliminar (solo si EN_COLA) -->
             <form th:if="${p.estado.name() == 'EN_COLA'}"
                   th:action="@{'/admin/pedidos/' + ${p.id} + '/eliminar'}"
                   method="post"
