@@ -20,12 +20,19 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
+    // Listar todos los pedidos
+    @GetMapping
+    public String listarPedidos(Model model) {
+        model.addAttribute("pedidos", pedidoService.listarActivos());
+        return "pedido/lista";
+    }
+
     @PostMapping
     public String crearPedido(@RequestParam Long clienteId, @RequestParam List<Long> creaciones, @RequestParam Long domicilioId, @RequestParam MedioDePago medioPago, Model model) {
         Pedido pedido = pedidoService.crearPedido(clienteId, creaciones, domicilioId, medioPago);
         model.addAttribute("pedido", pedido);
 
-        return "confirmacion-pedido";
+        return "pedido/form";
     }
 
     @PutMapping("/{id}/estado")
@@ -33,14 +40,7 @@ public class PedidoController {
         Pedido pedido = pedidoService.cambiarEstado(id, estado);
         model.addAttribute("pedido", pedido);
 
-        return "detalle-pedido";
+        return "pedido/form";
     }
 
-    @GetMapping("/cliente/{idCliente}")
-    public String listarPedidosPorCliente(@PathVariable Long idCliente, Model model) {
-        List<Pedido> pedidos = pedidoService.listarPorCliente(idCliente);
-        model.addAttribute("pedidos", pedidos);
-
-        return "historial-pedidos";
-    }
 }

@@ -15,10 +15,10 @@
     </div>
 
     <nav class="nav-bar">
-        <a href="../administrador/inicio-administrador.html" th:href="@{/templates/administrador/inicio-administrador.html}">Inicio</a>
-        <a class="active" href="pedidos.html" th:href="@{/pedidos}">Pedidos</a>
-        <a href="productos.html" th:href="@{/templates/producto}">Productos</a>
-        <a href="../administrador/administradores.html" th:href="@{/administradores}">Administradores</a>
+        <a href="../administrador/inicio-administrador.html" th:href="@{/administrador/inicio-administrador}">Inicio</a>
+        <a class="active" href="lista.html" th:href="@{/lista}">Pedidos</a>
+        <a href="../producto/lista.html" th:href="@{/productos/lista}">Productos</a>
+        <a href="../administrador/lista.html" th:href="@{/administrador/lista}">Administradores</a>
     </nav>
 </header>
 
@@ -33,12 +33,10 @@
                 <strong>Cliente:</strong>
                 <span th:text="${p.cliente.nombre}"></span>
             </p>
-
             <p>
                 <strong>Estado:</strong>
                 <span th:text="${p.estado}"></span>
             </p>
-
             <p>
                 <strong>Total:</strong> $<span th:text="${p.total}"></span>
             </p>
