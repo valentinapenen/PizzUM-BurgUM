@@ -60,6 +60,4 @@ public class UsuarioController {
     public String logout(HttpSession sesion){
         sesion.invalidate();
 
-        return "redirect:/inicio";
-    }
-}
+        return "redirect:/i
