@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Armar burger — PizzUM & BurgUM</title>
 
-  <link rel="stylesheet" href="../static/css/base.css"       th:href="@{/css/base.css}">
-  <link rel="stylesheet" href="../static/css/creaciones.css" th:href="@{/css/creaciones.css}">
+  <link rel="stylesheet" href="../../static/css/base.css" th:href="@{/css/base.css}">
+  <link rel="stylesheet" href="../../static/css/creaciones.css" th:href="@{/css/creaciones.css}">
 </head>
 <body>
 
@@ -17,8 +17,8 @@
       <strong>PizzUM &amp; BurgUM</strong>
     </div>
     <nav class="nav__links">
-      <a class="pill" href="../templates/paginaPrincipalCliente.html" th:href="@{/}">Menú</a>
-      <a class="pill" href="../templates/pedido.html"                 th:href="@{/pedido}">Pedido</a>
+      <a class="pill" href="paginaPrincipalCliente.html" th:href="@{/static}">Menú</a>
+      <a class="pill" href="pedido.html" th:href="@{/templates/pedido}">Pedido</a>
     </nav>
   </div>
 </header>
@@ -90,8 +90,8 @@
       <div class="actions">
         <button type="button" id="favBtn" class="fav-toggle"><span class="heart"></span> Favorito</button>
         <button type="button" id="addBtn" class="btn btn--primary">Agregar al pedido</button>
-        <a class="btn btn--ghost" href="../templates/paginaPrincipalCliente.html" th:href="@{/}">Volver al menú</a>
-        <a class="btn btn--ghost" href="../templates/pedido.html" th:href="@{/pedido}">Ir al pedido</a>
+        <a class="btn btn--ghost" href="paginaPrincipalCliente.html" th:href="@{/static}">Volver al menú</a>
+        <a class="btn btn--ghost" href="pedido.html" th:href="@{/templates/pedido}">Ir al pedido</a>
       </div>
     </form>
 

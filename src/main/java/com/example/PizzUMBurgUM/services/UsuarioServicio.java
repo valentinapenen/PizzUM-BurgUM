@@ -129,5 +129,20 @@ public class UsuarioServicio {
         return administradorRepository.save(admin);
     }
 
+    public long contarAdministradores() {
+        return administradorRepository.count();
+    }
+
+    public long contarClientes() {
+        return clienteRepository.count();
+    }
+
+    public long contarUsuarios() {
+        return administradorRepository.count() + clienteRepository.count();
+    }
+
+
+
+
     // Falta agregar lo de la actualizacion de datos de los usuarios (preguntar si los admins pueden actualizar sus datos o no)
 }

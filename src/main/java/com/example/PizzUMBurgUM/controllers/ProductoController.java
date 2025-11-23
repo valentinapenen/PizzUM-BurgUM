@@ -19,48 +19,55 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
+    // Listado de productos
     @GetMapping
-    public String listarActivos(Model model) {
-        List<Producto> productos = productoService.listarActivos();
-        model.addAttribute("productos", productos);
-
-        return "productos/lista"; // → templates/productos/lista.html
+    public String listarProductos(Model model) {
+        model.addAttribute("productos", productoService.listarTodos());
+        return "producto/lista";
     }
 
-
+    // Formulario de creación
     @GetMapping("/nuevo")
-    public String mostrarFormularioCrear(Model model) {
+    public String nuevoProducto(Model model) {
         model.addAttribute("producto", new Producto());
-
-        return "productos/formulario"; // → templates/productos/formulario.html
+        return "producto/form";
     }
 
+    // Crear producto
     @PostMapping
-    public String crear(@ModelAttribute("producto") @Valid Producto producto) {
+    public String crearProducto(@Valid @ModelAttribute("producto") Producto producto) {
+        // disponible = true por defecto
+        producto.setDisponible(true);
         productoService.crear(producto);
-
-        return "redirect:/admin/productos"; // redirige a la lista después de guardar
-    }
-
-    @GetMapping("/{id}/editar")
-    public String mostrarFormularioEditar(@PathVariable long id, Model model) {
-        Producto producto = productoService.buscarPorId(id);
-        model.addAttribute("producto", producto);
-
-        return "productos/editar"; // → templates/productos/editar.html
-    }
-
-    @PostMapping("/{id}/actualizar-precio")
-    public String actualizarPrecio(@PathVariable long id, @RequestParam double precio) {
-        productoService.actualizarPrecio(id, precio);
-
         return "redirect:/admin/productos";
     }
 
-    @PostMapping("/{id}/desactivar")
-    public String desactivar(@PathVariable long id) {
-        productoService.desactivar(id);
+    //Formulario de edición
+    @GetMapping("/{id}/editar")
+    public String editarProducto(@PathVariable long id, Model model) {
+        Producto producto = productoService.buscarPorId(id);
+        model.addAttribute("producto", producto);
+        return "producto/form";
+    }
 
+    // Actualizar precio
+    @PostMapping("/{id}/actualizar-precio")
+    public String actualizarPrecio(@PathVariable long id, @RequestParam double precio) {
+        productoService.actualizarPrecio(id, precio);
+        return "redirect:/admin/productos";
+    }
+
+    // Desactivar producto
+    @PostMapping("/{id}/desactivar")
+    public String desactivarProducto(@PathVariable long id) {
+        productoService.desactivar(id);
+        return "redirect:/admin/productos";
+    }
+
+    // Activar producto
+    @PostMapping("/{id}/activar")
+    public String activarProducto(@PathVariable long id) {
+        productoService.activar(id);
         return "redirect:/admin/productos";
     }
 }

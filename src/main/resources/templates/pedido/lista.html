@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Pedidos</title>
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../administrador/inicio-administrador.html" th:href="@{/administrador/inicio-administrador}">Inicio</a>
+        <a class="active" href="lista.html" th:href="@{/pedidos}">Pedidos</a>
+        <a href="../producto/lista.html" th:href="@{/admin/productos}">Productos</a>
+        <a href="../administrador/lista.html" th:href="@{/administrador/lista}">Administradores</a>
+    </nav>
+</header>
+
+<div class="admin-container">
+    <div class="admin-panel">
+
+        <!-- Cada pedido -->
+        <div class="admin-item medium" th:each="p : ${pedidos}">
+            <h2>Pedido #<span th:text="${p.id}"></span></h2>
+
+            <p>
+                <strong>Cliente:</strong>
+                <span th:text="${p.cliente.nombre}"></span>
+            </p>
+            <p>
+                <strong>Estado:</strong>
+                <span th:text="${p.estado}"></span>
+            </p>
+            <p>
+                <strong>Total:</strong> $<span th:text="${p.total}"></span>
+            </p>
+
+            <!-- Form para cambiar estado con validación de avance -->
+            <form th:action="@{'/admin/pedidos/' + ${p.id} + '/cambiar-estado'}" method="post" style="margin-top: 10px;">
+                <select name="nuevoEstado">
+                    <option th:each="e : ${T(com.example.PizzUMBurgUM.entities.enums.EstadoPedido).values()}"
+                            th:if="${p.estado.name() == 'EN_COLA' or e.ordinal() >= p.estado.ordinal()}"
+                            th:value="${e}"
+                            th:text="${e}">
+                    </option>
+                </select>
+                <button type="submit">Actualizar</button>
+            </form>
+
+            <!-- Eliminar solo si está en EN_COLA -->
+            <form th:if="${p.estado.name() == 'EN_COLA'}"
+                  th:action="@{'/admin/pedidos/' + ${p.id} + '/eliminar'}"
+                  method="post"
+                  style="margin-top: 10px;">
+                <button type="submit" style="background:#c0392b; color:white;">Eliminar</button>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="footer-logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer-title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

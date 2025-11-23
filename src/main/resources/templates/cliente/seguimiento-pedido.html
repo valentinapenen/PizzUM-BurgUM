@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title th:text="'Pedido #' + ${pedido.idPedido} + ' — PizzUM & BurgUM'">Pedido — PizzUM & BurgUM</title>
 
-    <link rel="stylesheet" href="../static/css/base.css"   th:href="@{/css/base.css}">
-    <link rel="stylesheet" href="../static/css/pedido.css" th:href="@{/css/pedido.css}">
+    <link rel="stylesheet" href="../../static/css/base.css" th:href="@{/css/base.css}">
+    <link rel="stylesheet" href="../../static/css/pedido.css" th:href="@{/css/pedido.css}">
 </head>
 <body>
 
@@ -18,11 +18,11 @@
             <strong>PizzUM &amp; BurgUM</strong>
         </div>
         <nav class="nav__links">
-            <a class="pill" th:href="@{/}">Inicio</a>
+            <a class="pill" th:href="@{/static}">Inicio</a>
             <a class="pill" th:href="@{/favoritos}">Favoritos</a>
             <a class="pill" th:href="@{/historial}">Historial</a>
             <a class="pill" th:href="@{/usuario}">Usuario</a>
-            <a class="pill active" th:href="@{/pedido}">Pedido</a>
+            <a class="pill active" th:href="@{/templates/pedido}">Pedido</a>
         </nav>
     </div>
 </header>

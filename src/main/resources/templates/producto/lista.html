@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos</title>
+  <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+  <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+    <h1 class="brand-title">PizzUM & BurgUM</h1>
+  </div>
+  <nav class="nav-bar">
+    <a href="../administrador/inicio-administrador.html" th:href="@{/administrador/inicio-administrador}">Inicio</a>
+    <a href="../pedido/lista.html" th:href="@{/pedidos/lista}">Pedidos</a>
+    <a class="active" href="lista.html" th:href="@{/productos/lista}">Productos</a>
+    <a href="../administrador/lista.html" th:href="@{/administrador/lista}">Administradores</a>
+  </nav>
+</header>
+
+<div class="admin-container">
+  <div class="admin-panel">
+
+    <!-- Cada producto -->
+    <div class="admin-item medium" th:each="p : ${productos}">
+      <h2 th:text="${p.nombre}">Nombre Producto</h2>
+
+      <p><strong>Precio:</strong> $<span th:text="${p.precio}">0.00</span></p>
+      <p><strong>Tipo:</strong> <span th:text="${p.tipo}">Tipo</span></p>
+      <p><strong>Categoría:</strong> <span th:text="${p.categoria}">Categoría</span></p>
+      <p><strong>Disponible:</strong> <span th:text="${p.disponible}">true</span></p>
+
+      <!-- Editar precio-->
+      <form th:action="@{'/admin/productos/' + ${p.id} + '/editar'}" method="get" style="margin-top:10px;">
+        <button type="submit">Editar Precio</button>
+      </form>
+
+      <!-- Desactivar -->
+      <form th:if="${p.disponible}" th:action="@{'/admin/productos/' + ${p.id} + '/desactivar'}" method="post" style="margin-top:5px;">
+        <button type="submit" style="background:#c0392b; color:white;">Desactivar</button>
+      </form>
+
+      <!-- Reactivar -->
+      <form th:if="${!p.disponible}" th:action="@{'/admin/productos/' + ${p.id} + '/activar'}" method="post" style="margin-top:5px;">
+        <button type="submit" style="background:#27ae60; color:white;">Reactivar</button>
+      </form>
+    </div>
+
+    <!-- Nuevo producto -->
+    <div class="admin-item medium">
+      <h2>Crear nuevo producto</h2>
+      <a class="admin-link" th:href="@{/admin/productos/nuevo}">
+        <button type="button">Nuevo Producto</button>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img class="footer-logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+    <strong class="footer-title">PizzUM & BurgUM</strong>
+  </div>
+  <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>
