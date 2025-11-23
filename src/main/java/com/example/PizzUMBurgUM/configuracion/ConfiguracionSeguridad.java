@@ -14,40 +14,50 @@ public class ConfiguracionSeguridad {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
-                // Permisos por tipo de ruta
                 .authorizeHttpRequests(auth -> auth
-                        // Rutas accesibles solo para administradores
+
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        // Rutas accesibles solo para usuarios registrados
+
                         .requestMatchers("/usuario/**").hasRole("USER")
 
-                        // Rutas públicas (no requieren autenticación)
+
+                        .requestMatchers("/api/bps/**").permitAll()
+
+
+                        .requestMatchers("/api/tarjetas/**").permitAll()
+
+
+                        .requestMatchers("/api/dgi/**").permitAll()
+
+
                         .requestMatchers(
-                                "/",                   // raíz → bienvenida
-                                "/bienvenida",         // página de bienvenida
-                                "/iniciar-sesion",     // login
-                                "/crear-cuenta",       // registro
-                                "/css/**", "/js/**", "/images/**" // archivos estáticos
+                                "/",
+                                "/bienvenida",
+                                "/iniciar-sesion",
+                                "/crear-cuenta",
+                                "/css/**", "/js/**", "/images/**"
                         ).permitAll()
 
-                        // To do lo demás requiere estar logueado
+
                         .anyRequest().authenticated()
                 )
 
-                // Configurar el login
+
                 .formLogin(form -> form
-                        .loginPage("/iniciar-sesion")       // Página del formulario de login
-                        .loginProcessingUrl("/procesar-login") // Acción del formulario
-                        .defaultSuccessUrl("/cliente/inicio-cliente", false) // Redirige después del login exitoso
+                        .loginPage("/iniciar-sesion")
+                        .loginProcessingUrl("/procesar-login")
+                        .defaultSuccessUrl("/cliente/inicio-cliente", false)
                         .permitAll()
                 )
 
-                // Configurar logout
+
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/bienvenida")     // Volver a bienvenida al salir
+                        .logoutSuccessUrl("/bienvenida")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
@@ -58,7 +68,7 @@ public class ConfiguracionSeguridad {
         return http.build();
     }
 
-    // Bean para cifrar contraseñas (obligatorio para Spring Security)
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

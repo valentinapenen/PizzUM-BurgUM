@@ -31,11 +31,6 @@ public class PedidoService {
     @Autowired
     private DomicilioRepository domicilioRepository;
 
-    public List<Pedido> listarActivos() {
-        List<Pedido> pendientes = pedidoRepository.findByEstadoNot(EstadoPedido.ENTREGADO);
-        return pendientes;
-    }
-
     @Transactional
     public Pedido crearPedido(long clienteId, List<Long> idsCreaciones, long domicilioId, MedioDePago medioPago) {
         Cliente cliente = clienteRepository.findById(clienteId)
@@ -68,5 +63,14 @@ public class PedidoService {
         pedido.setEstado(nuevoEstado);
         return pedidoRepository.save(pedido);
     }
+
+    public List<Pedido> listarPorCliente(long clienteId) {
+        return pedidoRepository.findByClienteId(clienteId);
+    }
+
+    public List<Pedido> listarPedidosPorFecha(LocalDateTime desde, LocalDateTime hasta) {
+        return pedidoRepository.findByFechaBetween(desde, hasta);
+    }
+
 
 }
