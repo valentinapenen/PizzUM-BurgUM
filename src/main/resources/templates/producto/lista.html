@@ -14,10 +14,10 @@
     <h1 class="brand-title">PizzUM & BurgUM</h1>
   </div>
   <nav class="nav-bar">
-    <a href="../administrador/inicio-administrador.html" th:href="@{/templates/administrador/inicio-administrador.html}">Inicio</a>
-    <a href="../pedido/lista.html" th:href="@{/templates/pedido/lista}">Pedidos</a>
-    <a class="active" href="lista.html" th:href="@{/templates/producto/lista}">Productos</a>
-    <a href="../administrador/lista.html" th:href="@{/templates/administrador/lista}">Administradores</a>
+    <a href="../administrador/inicio-administrador.html" th:href="@{/administrador/inicio-administrador}">Inicio</a>
+    <a href="../pedido/lista.html" th:href="@{/pedidos/lista}">Pedidos</a>
+    <a class="active" href="lista.html" th:href="@{/productos/lista}">Productos</a>
+    <a href="../administrador/lista.html" th:href="@{/administrador/lista}">Administradores</a>
   </nav>
 </header>
 
@@ -33,7 +33,7 @@
       <p><strong>Categoría:</strong> <span th:text="${p.categoria}">Categoría</span></p>
       <p><strong>Disponible:</strong> <span th:text="${p.disponible}">true</span></p>
 
-      <!-- Editar precio -->
+      <!-- Editar precio-->
       <form th:action="@{'/admin/productos/' + ${p.id} + '/editar'}" method="get" style="margin-top:10px;">
         <button type="submit">Editar Precio</button>
       </form>
@@ -49,7 +49,7 @@
       </form>
     </div>
 
-    <!-- Botón para crear nuevo producto -->
+    <!-- Nuevo producto -->
     <div class="admin-item medium">
       <h2>Crear nuevo producto</h2>
       <a class="admin-link" th:href="@{/admin/productos/nuevo}">
