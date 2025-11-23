@@ -25,8 +25,4 @@ public class DomicilioRequest {
     private String apartamento;
     @NotNull
     private Boolean predeterminado;
-    @ManyToMany
-    private List<Cliente> clientes;
-    @OneToMany
-    private Administrador administrador;
 }

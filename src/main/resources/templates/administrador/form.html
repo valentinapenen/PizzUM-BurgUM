@@ -13,11 +13,12 @@
     <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png"/>
     <h1 class="brand-title">PizzUM & BurgUM</h1>
   </div>
+
   <nav class="nav-bar">
-    <a href="../administrador/inicio-administrador.html" th:href="@{/administrador/home}">Inicio</a>
-    <a href="../pedidos" th:href="@{/pedidos}">Pedidos</a>
-    <a href="../productos" th:href="@{/admin/productos}">Productos</a>
-    <a class="active" href="#" th:href="@{/administradores}">Administradores</a>
+    <a href="inicio-administrador.html" th:href="@{inicio-administrador}">Inicio</a>
+    <a href="../pedido/lista.html" th:href="@{/pedidos/lista}">Pedidos</a>
+    <a href="../producto/lista.html" th:href="@{/productos/lista}">Productos</a>
+    <a class="active" href="lista.html" th:href="@{lista}">Administradores</a>
   </nav>
 </header>
 
@@ -25,10 +26,12 @@
   <div class="admin-panel">
 
     <div class="admin-item large">
-      <h2>Formulario para nuevo administrador</h2>
+      <h2>Nuevo administrador</h2>
 
-      <!-- Formulario -->
-      <form th:action="@{/administradores}" th:object="${administrador}" method="post">
+      <!-- ✔️ FORM corregido: coincide con tu Controller y DTO -->
+      <form th:action="@{/administrador/crearAdministrador}"
+            th:object="${creacionAdmin}"
+            method="post">
 
         <!-- Datos personales -->
         <input type="text" th:field="*{nombre}" placeholder="Nombre" required>
@@ -37,22 +40,25 @@
         <input type="date" th:field="*{fechaNacimiento}" placeholder="Fecha de nacimiento" required>
         <input type="email" th:field="*{correo}" placeholder="Correo" required>
         <input type="tel" th:field="*{telefono}" placeholder="Teléfono" required>
-        <input type="password" th:field="*{password}" placeholder="Contraseña" required>
+        <input type="password" th:field="*{contrasena}" placeholder="Contraseña" required>
 
         <!-- Domicilio de facturación -->
         <h3>Domicilio de facturación</h3>
-        <input type="text" th:field="*{domicilio.numero}" placeholder="Número" required>
-        <input type="text" th:field="*{domicilio.calle}" placeholder="Calle" required>
-        <input type="text" th:field="*{domicilio.departamento}" placeholder="Departamento" required>
-        <input type="text" th:field="*{domicilio.ciudad}" placeholder="Ciudad" required>
-        <input type="text" th:field="*{domicilio.apartamento}" placeholder="Apartamento (opcional)">
-        <input type="hidden" th:field="*{domicilio.predeterminado}" value="true">
+
+        <input type="text" th:field="*{domicilio_facturacion.numero}" placeholder="Número" required>
+        <input type="text" th:field="*{domicilio_facturacion.calle}" placeholder="Calle" required>
+        <input type="text" th:field="*{domicilio_facturacion.departamento}" placeholder="Departamento" required>
+        <input type="text" th:field="*{domicilio_facturacion.ciudad}" placeholder="Ciudad" required>
+        <input type="text" th:field="*{domicilio_facturacion.apartamento}" placeholder="Apartamento (opcional)">
+
+        <input type="hidden" th:field="*{domicilio_facturacion.predeterminado}" value="true">
 
         <button type="submit">Crear Administrador</button>
       </form>
 
       <!-- Mensaje de error -->
-      <p th:if="${error}" th:text="${error}" style="color:#e74c3c; margin-top:10px;"></p>
+      <p th:if="${error}" th:text="${error}"
+         style="color:#e74c3c; margin-top:10px;"></p>
     </div>
 
   </div>

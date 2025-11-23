@@ -1,6 +1,7 @@
 package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.controllers.DTOS.CreacionAdministradorRequest;
+import com.example.PizzUMBurgUM.controllers.DTOS.DomicilioRequest;
 import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Usuario;
 import com.example.PizzUMBurgUM.services.AdministradorService;
@@ -30,9 +31,16 @@ public class AdministradorController {
         if(usuario == null || !(usuario instanceof Administrador)){
             return "redirect:/usuario/login";
         }
-        Administrador administrador = (Administrador) usuario;
-        model.addAttribute("administrador", administrador);
+
+        model.addAttribute("administrador", usuario);
         return "administrador/inicio-administrador";
+    }
+
+    // Listado de administradores
+    @GetMapping("/lista")
+    public String listarAdministradores(Model model) {
+        model.addAttribute("administradores", administradorService.listarTodos());
+        return "administrador/lista";
     }
 
     @GetMapping("/crearAdministrador")
@@ -43,10 +51,14 @@ public class AdministradorController {
             return "redirect:/usuario/login";
         }
 
-        model.addAttribute("creacionAdmin", new CreacionAdministradorRequest());
+        CreacionAdministradorRequest dto = new CreacionAdministradorRequest();
+        dto.setDomicilio_facturacion(new DomicilioRequest());
+
+        model.addAttribute("creacionAdmin", dto);
 
         return "administrador/form";
     }
+
 
     @PostMapping("/crearAdministrador")
     public String procesarCreacionAdministrador(@Valid @ModelAttribute("creacionAdmin") CreacionAdministradorRequest creacionAdministradorRequest, HttpSession session, Model model, RedirectAttributes redirectAttributes){
@@ -60,11 +72,9 @@ public class AdministradorController {
             administradorService.crearAdministrador(creacionAdministradorRequest);
             redirectAttributes.addFlashAttribute("exito", "Creación de administrador exitosa.");
             return "redirect:/administrador/home";
-        }
-        catch(IllegalArgumentException e){
+        } catch(IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
             return "administrador/form";
-
         }
     }
 

@@ -8,6 +8,7 @@ import com.example.PizzUMBurgUM.repositories.AdministradorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 
 
 @Service
@@ -20,12 +21,14 @@ public class AdministradorService {
     @Autowired
     private DomicilioService domicilioService;
 
+    public List<Administrador> listarTodos() {
+        List<Administrador> administradores = administradorRepository.findAll();
+        return administradores;
+    }
 
     public Administrador encontrarAdminPorCorreo(String adminCorreo) {
         return administradorRepository.findByCorreo(adminCorreo);
     }
-
-
 
     public Administrador actualizarDatosAdmin(String cedula, Administrador nuevosDatos){
 
@@ -121,7 +124,6 @@ public class AdministradorService {
 
     }
 
-
     public Administrador crearAdministrador(CreacionAdministradorRequest creacionAdministradorRequest){
         Administrador admin = new Administrador();
         admin.setNombre(creacionAdministradorRequest.getNombre());
@@ -146,6 +148,5 @@ public class AdministradorService {
 
         return administradorRepository.save(admin);
     }
-
 
 }
