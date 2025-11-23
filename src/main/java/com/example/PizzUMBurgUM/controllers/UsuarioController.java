@@ -34,7 +34,7 @@ public class UsuarioController {
     @PostMapping("/login")
     public String procesarLogin(@Valid @ModelAttribute("loginRequest") LoginRequest loginRequest, Model model, HttpSession session){
         try{
-            Usuario usuario = usuarioService.login(loginRequest.getCorreo(), loginRequest.getPassword());
+            Usuario usuario = usuarioService.login(loginRequest.getCorreo(), loginRequest.getContrasena());
             session.setAttribute("usuarioLogueado",  usuario);
 
             if(usuario instanceof Cliente){
