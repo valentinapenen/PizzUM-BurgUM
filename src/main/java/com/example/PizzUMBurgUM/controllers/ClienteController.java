@@ -50,4 +50,11 @@ public class ClienteController {
         try{
             clienteService.registrarCliente(registroRequest);
             redirectAttributes.addFlashAttribute("exito","Cuenta creada exitosamente, ahora puede iniciar sesión.");
-            re
+            return "redirect:/usuario/login";
+        }
+        catch (IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+            return "inicio/crear-cuenta";
+        }
+    }
+}

@@ -49,4 +49,23 @@ public class AdministradorController {
     }
 
     @PostMapping("/crearAdministrador")
-    public String procesarCreacionAdministrador(@Valid @ModelAttribute("creacionAdmin") CreacionAdministradorRequest creacionAdmi
+    public String procesarCreacionAdministrador(@Valid @ModelAttribute("creacionAdmin") CreacionAdministradorRequest creacionAdministradorRequest, HttpSession session, Model model, RedirectAttributes redirectAttributes){
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Administrador)){
+            return "redirect:/usuario/login";
+        }
+
+        try{
+            administradorService.crearAdministrador(creacionAdministradorRequest);
+            redirectAttributes.addFlashAttribute("exito", "Creación de administrador exitosa.");
+            return "redirect:/administrador/home";
+        }
+        catch(IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+            return "administrador/crear-administrador";
+
+        }
+    }
+
+}
