@@ -4,6 +4,7 @@ import com.example.PizzUMBurgUM.controllers.DTOS.LoginRequest;
 import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Usuario;
+import com.example.PizzUMBurgUM.services.ClienteService;
 import com.example.PizzUMBurgUM.services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,6 +24,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private ClienteService clienteService;
 
     // Mostrar página de login
     @GetMapping("/login")
@@ -70,5 +73,34 @@ public class UsuarioController {
         sesion.invalidate();
 
         return "redirect:/usuario/login";
+    }
+
+    // FALTA LA PAGINA DE INICIO DE CLIENTE AUN, POR ESO NO IDENTIFICA LAS RUTAS
+    @GetMapping("/cuenta/cliente")
+    public String mostrarCuentaCliente(Model model, HttpSession session){
+        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
+        model.addAttribute("cliente", cliente);
+        return "cuenta/cuenta-cliente";
+    }
+
+    @PostMapping("/cuenta/cliente")
+    public String actualizarCuentaCliente(@ModelAttribute Cliente nuevosDatos, HttpSession session, Model model){
+        Cliente clienteActual = (Cliente) session.getAttribute("usuarioLogueado");
+
+        try {
+            Cliente actualizado = clienteService.actualizarCliente(clienteActual.getId(), nuevosDatos);
+
+            // Actualizar sesión:
+            session.setAttribute("usuarioLogueado", actualizado);
+
+            model.addAttribute("success", "Datos actualizados correctamente.");
+            model.addAttribute("cliente", actualizado);
+            return "cliente/inicio-cliente";
+
+        } catch (IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("cliente", clienteActual);
+            return "cliente/inicio-cliente";
+        }
     }
 }
