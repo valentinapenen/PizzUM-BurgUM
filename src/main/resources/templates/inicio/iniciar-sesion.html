@@ -29,7 +29,7 @@
         <!-- Banner de error -->
         <div th:if="${error}" class="error-banner" th:text="${error}"></div>
 
-        <form class="form-grid" th:action="@{/usuario/login}" th:object="${loginRequest}" method="post">
+        <form class="form-grid" th:action="@{/procesar-login}" th:object="${loginRequest}" method="post">
 
             <div class="field">
                 <label class="label" for="correo">Email</label>

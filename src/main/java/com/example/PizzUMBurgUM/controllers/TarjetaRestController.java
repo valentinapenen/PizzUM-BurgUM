@@ -30,7 +30,9 @@ public class TarjetaRestController {
         dto.setNombreTitular(tarjeta.getNombreTitular());
         dto.setClienteId(tarjeta.getCliente().getId());
         dto.setTipoTarjeta(tarjeta.getTipoTarjeta());
-        dto.setFechaVencimiento(tarjeta.getFecha_vencimiento());
+        // Convert Date to String in format YYYY-MM
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM");
+        dto.setFechaVencimiento(sdf.format(tarjeta.getFecha_vencimiento()));
         dto.setPredeterminada(tarjeta.isPredeterminada());
 
         return ResponseEntity.ok(dto);
