@@ -36,9 +36,12 @@ public class RegistroClienteRequest {
     @NotBlank(message = "La contraseña es obligatoria.")
     private String contrasena;
 
+    @NotBlank(message = "Debe repetir la contraseña.")
+    private String contrasena2;
+
     @NotNull(message = "Debe ingresar su dirección principal.")
     private DomicilioRequest domicilio;
 
     @NotNull(message = "Debe ingresar el número de su tarjeta.")
-    private TarjetaRequest Tarjeta;
+    private TarjetaRequest tarjeta;
 }

@@ -23,13 +23,13 @@ public class AdministradorController {
         this.administradorService = administradorService;
     }
 
-    @GetMapping("/home")
+    @GetMapping("/inicio")
     public String mostrarInicioAdministrador(HttpSession session, Model model){
 
         Usuario usuario = (Usuario)  session.getAttribute("usuarioLogueado");
 
         if(usuario == null || !(usuario instanceof Administrador)){
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         model.addAttribute("administrador", usuario);
@@ -48,7 +48,7 @@ public class AdministradorController {
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null || !(usuario instanceof Administrador)){
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         CreacionAdministradorRequest dto = new CreacionAdministradorRequest();
@@ -65,13 +65,13 @@ public class AdministradorController {
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null || !(usuario instanceof Administrador)){
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         try{
             administradorService.crearAdministrador(creacionAdministradorRequest);
             redirectAttributes.addFlashAttribute("exito", "Creación de administrador exitosa.");
-            return "redirect:/administrador/home";
+            return "redirect:/administrador/inicio";
         } catch(IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
             return "administrador/form";
