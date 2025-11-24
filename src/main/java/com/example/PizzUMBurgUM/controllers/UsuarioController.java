@@ -24,25 +24,35 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    // Mostrar página de login
     @GetMapping("/login")
     public String mostrarLogin(Model model){
         model.addAttribute("loginRequest", new LoginRequest());
-
         return "inicio/iniciar-sesion";
     }
 
+    // Procesar login
     @PostMapping("/login")
     public String procesarLogin(@Valid @ModelAttribute("loginRequest") LoginRequest loginRequest, Model model, HttpSession session){
         try{
             Usuario usuario = usuarioService.login(loginRequest.getCorreo(), loginRequest.getContrasena());
+
+            // Usuario incorrecto
+            if (usuario == null) {
+                model.addAttribute("error", "Correo o contraseña incorrectos.");
+                return "inicio/iniciar-sesion";
+            }
+
+            // Guardar usuario en sesión
             session.setAttribute("usuarioLogueado",  usuario);
 
+            // Redirigir al inicio correspondiente para cada tipo de usuario
             if(usuario instanceof Cliente){
-                return ("redirect:/cliente/home");
+                return ("redirect:/cliente/inicio-cliente");
             }
 
             if(usuario instanceof Administrador){
-                return("redirect:/administrador/home");
+                return("redirect:/administrador/inicio-administrador");
             }
 
             return("redirect:/");
@@ -54,10 +64,11 @@ public class UsuarioController {
         }
     }
 
+    // Logout: redirige al login
     @GetMapping("/logout")
     public String logout(HttpSession sesion){
         sesion.invalidate();
 
-        return "redirect:/inicio";
+        return "redirect:/usuario/login";
     }
 }
