@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CreacionRepository extends JpaRepository<Creacion, Long> {
     List<Creacion> findByClienteId(long clienteId);
+
+    List<Creacion> findByClienteIdAndFavoritoTrue(long clienteId);
 }

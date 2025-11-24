@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del pedido - PizzUM & BurgUM</title>
+
+    <link rel="stylesheet"
+          href="../../../static/css/background-header-footer.css"
+          th:href="@{/css/background-header-footer.css}">
+
+    <style>
+        .detalle-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px 60px;
+            color: #fff;
+        }
+
+        .detalle-grid {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Tarjeta del pedido principal - COMPACTA */
+        .pedido-header {
+            background: rgba(0, 0, 0, 0.18);
+            border-radius: 20px;
+            padding: 20px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(18px);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .pedido-header h2 {
+            grid-column: 1 / -1;
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+        }
+
+        .pedido-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .pedido-info p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Grid de creaciones */
+        .creaciones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .detalle-card {
+            background: rgba(0, 0, 0, 0.18);
+            border-radius: 18px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(18px);
+            transition: transform 0.2s ease;
+        }
+
+        .detalle-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+        }
+
+        .detalle-card h4 {
+            margin: 0 0 12px 0;
+            font-size: 1.3rem;
+        }
+
+        .detalle-card p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+        }
+
+        .detalle-card ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .detalle-card li {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .detalle-empty {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .detalle-actions {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 999px;
+            border: none;
+            background: #ffffff;
+            color: #7f1d1d;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        .btn-volver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+            background: #f9fafb;
+        }
+
+        @media (max-width: 768px) {
+            .pedido-header {
+                grid-template-columns: 1fr;
+            }
+
+            .creaciones-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo"
+             src="/images/logo.png" th:src="@{/images/logo.png}" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html"
+           th:href="@{/cliente/home}">Inicio</a>
+
+        <a href="../hacer-creacion.html"
+           th:href="@{/cliente/hacer-creacion}">Crear</a>
+
+        <a href="../carrito.html"
+           th:href="@{/cliente/carrito}">Carrito</a>
+
+        <a href="../favoritos/lista.html"
+           th:href="@{/cliente/favoritos}">Favoritos</a>
+
+        <a class="active"
+           href="lista.html"
+           th:href="@{/cliente/historial}">Historial</a>
+
+        <a href="../perfil.html"
+           th:href="@{/cliente/perfil}">Perfil</a>
+    </nav>
+</header>
+
+<main class="detalle-container">
+    <div class="detalle-grid">
+
+        <!-- HEADER DEL PEDIDO - COMPACTO -->
+        <div class="pedido-header">
+            <h2>Pedido #<span th:text="${pedido.id}">1</span></h2>
+
+            <div class="pedido-info">
+                <p><strong>Fecha:</strong>
+                    <span th:text="${#temporals.format(pedido.fecha, 'dd/MM/yyyy HH:mm')}">
+                        01/01/2025 20:30
+                    </span>
+                </p>
+                <p><strong>Estado:</strong>
+                    <span th:text="${pedido.estado}">EN_PREPARACION</span>
+                </p>
+            </div>
+
+            <div class="pedido-info">
+                <p><strong>Total:</strong> $
+                    <span th:text="${pedido.total}">0.00</span>
+                </p>
+                <p><strong>Pago:</strong>
+                    <span th:text="${pedido.medioDePago}">TARJETA</span>
+                </p>
+            </div>
+
+            <div class="pedido-info" th:if="${pedido.domicilio != null}">
+                <p><strong>Enviado a:</strong></p>
+                <p>
+                    <span th:text="${pedido.domicilio.calle}">Calle</span>
+                    <span th:text="${pedido.domicilio.numero}">1234</span>,
+                    <span th:text="${pedido.domicilio.ciudad}">Ciudad</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- GRID DE CREACIONES -->
+        <div class="creaciones-grid"
+             th:if="${not #lists.isEmpty(pedido.creaciones)}">
+            <div class="detalle-card" th:each="creacion, stat : ${pedido.creaciones}">
+                <h4>
+                    Creación <span th:text="${stat.index + 1}">1</span>
+                    — <span th:text="${creacion.tipo}">PIZZA</span>
+                </h4>
+                <p><strong>Favorito:</strong>
+                    <span th:text="${creacion.favorito ? 'Sí' : 'No'}">No</span>
+                </p>
+                <p><strong>Precio:</strong> $
+                    <span th:text="${creacion.precioTotal}">0.00</span>
+                </p>
+                <div>
+                    <strong>Productos:</strong>
+                    <ul>
+                        <li th:each="prod : ${creacion.productos}">
+                            <span th:text="${prod.nombre}">Nombre producto</span>
+                            — $<span th:text="${prod.precio}">0.00</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje si no hay creaciones -->
+        <p class="detalle-empty"
+           th:if="${#lists.isEmpty(pedido.creaciones)}">
+            Este pedido no contiene creaciones.
+        </p>
+
+        <!-- BOTÓN VOLVER -->
+        <div class="detalle-actions">
+            <a href="lista.html"
+               th:href="@{/cliente/historial}"
+               class="btn-volver">← Volver al historial</a>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo"
+             src="/images/logo.png" th:src="@{/images/logo.png}" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

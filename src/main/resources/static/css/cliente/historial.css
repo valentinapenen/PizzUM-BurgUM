@@ -1,0 +1,66 @@
+
+
+.historial-container {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #fff;
+}
+
+.historial-panel {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(14px);
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Tarjeta de pedido */
+.historial-item {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    padding: 25px;
+    color: #fff;
+    transition: background 0.25s ease;
+}
+
+.historial-item:hover {
+    background: rgba(255, 255, 255, 0.20);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.historial-item h2 {
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+}
+
+/* Campos del pedido */
+.historial-item p {
+    margin: 6px 0;
+    font-size: 1rem;
+}
+
+/* Lista de creaciones */
+.historial-item ul {
+    margin: 8px 0 0 15px;
+    padding: 0;
+}
+
+.historial-item ul li {
+    margin-bottom: 6px;
+}
+
+
+.historial-empty {
+    text-align: center;
+    margin-top: 10px;
+    opacity: 0.9;
+    font-size: 1.2rem;
+}

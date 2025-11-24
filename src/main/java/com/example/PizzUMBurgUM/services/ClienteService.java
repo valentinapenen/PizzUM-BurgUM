@@ -111,12 +111,18 @@ public class ClienteService {
             throw new IllegalArgumentException("No existe este cliente.");
         }
 
-        if (!nuevosDatos.getCedula().equals(cliente.getCedula())){
+
+        if (nuevosDatos.getCedula() != null &&
+                !nuevosDatos.getCedula().equals(cliente.getCedula())) {
             throw new IllegalArgumentException("No se puede cambiar la cedula.");
         }
-        if (!nuevosDatos.getCorreo().equals(cliente.getCorreo())){
+
+
+        if (nuevosDatos.getCorreo() != null &&
+                !nuevosDatos.getCorreo().equals(cliente.getCorreo())) {
             throw new IllegalArgumentException("No se puede cambiar el correo.");
         }
+
 
         if(nuevosDatos.getNombre() != null && !nuevosDatos.getNombre().isBlank()){
             cliente.setNombre(nuevosDatos.getNombre());
@@ -144,6 +150,8 @@ public class ClienteService {
     public Cliente buscarPorId(long clienteId){
         return clienteRepository.findById(clienteId).orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
     }
+
+
 
 
 }

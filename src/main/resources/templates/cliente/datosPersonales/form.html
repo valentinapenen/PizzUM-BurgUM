@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar datos personales - PizzUM & BurgUM</title>
+
+    <!-- CSS base -->
+    <link rel="stylesheet"
+          href="../../../static/css/background-header-footer.css"
+          th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet"
+          href="../../../static/css/cliente/paneles-cliente.css"
+          th:href="@{/css/paneles-cliente.css}">
+
+    <style>
+        .client-panel {
+            max-width: 900px;
+            margin: 40px auto;
+            grid-template-columns: 1fr;
+            grid-auto-rows: auto;
+        }
+
+        .client-item.form-card {
+            grid-column: 1 / -1;
+            padding: 28px 26px;
+        }
+
+        .form-title {
+            margin-top: 0;
+            margin-bottom: 18px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 24px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .form-input {
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            padding: 10px 12px;
+            background: rgba(0, 0, 0, 0.18);
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-input:focus {
+            border-color: #ffb065;
+            box-shadow: 0 0 0 2px rgba(255, 176, 101, 0.3);
+        }
+
+        .form-actions {
+            margin-top: 22px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            border-radius: 999px;
+            padding: 9px 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #7f1d1d;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+        }
+
+        .btn-primary:hover {
+            background: #f9fafb;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .error-banner {
+            margin-bottom: 14px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(255, 0, 0, 0.18);
+            border: 1px solid rgba(255, 0, 0, 0.4);
+            font-size: 0.9rem;
+        }
+
+        .info-muted {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
+        <a href="../hacer-creacion.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a href="../carrito.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
+        <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
+        <a class="active" href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+    </nav>
+</header>
+
+<main class="client-container">
+    <div class="client-panel">
+
+        <div class="client-item form-card">
+
+            <h2 class="form-title">Editar datos personales</h2>
+
+            <!-- Mensaje de error si viene de redirect -->
+            <div class="error-banner" th:if="${error != null}" th:text="${error}">
+                Mensaje de error de ejemplo.
+            </div>
+
+            <!-- Formulario atado al objeto 'cliente' -->
+            <form th:object="${cliente}"
+                  action="#"
+                  th:action="@{/cliente/perfil/editar}"
+                  method="post">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre"
+                               class="form-input"
+                               type="text"
+                               th:field="*{nombre}"
+                               placeholder="Tu nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellido">Apellido</label>
+                        <input id="apellido"
+                               class="form-input"
+                               type="text"
+                               th:field="*{apellido}"
+                               placeholder="Tu apellido">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input id="telefono"
+                               class="form-input"
+                               type="text"
+                               th:field="*{telefono}"
+                               placeholder="Ej: 099 123 456">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaNacimiento">Fecha de nacimiento</label>
+                        <input id="fechaNacimiento"
+                               class="form-input"
+                               type="date"
+                               th:field="*{fechaNacimiento}">
+                    </div>
+
+                </div>
+
+                <p class="info-muted" style="margin-top: 14px;">
+                    La cédula y el correo no pueden modificarse desde este formulario.
+                </p>
+
+                <div class="form-actions">
+                    <a href="../perfil.html"
+                       th:href="@{/cliente/perfil}"
+                       class="btn-secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="btn-primary">
+                        Guardar cambios
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

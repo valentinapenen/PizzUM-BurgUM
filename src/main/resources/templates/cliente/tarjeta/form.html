@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta - PizzUM & BurgUM</title>
+
+    <link rel="stylesheet"
+          href="../../../static/css/background-header-footer.css"
+          th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet"
+          href="../../../static/css/cliente/paneles-cliente.css"
+          th:href="@{/css/paneles-cliente.css}">
+
+    <style>
+        .form-wrapper {
+            grid-column: 1 / -1;
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .tarjeta-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.25);
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 8px 18px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #7f1d1d;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #f9fafb;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html"
+           th:href="@{/cliente/home}">
+            Inicio
+        </a>
+
+        <a href="../hacer-creacion.html"
+           th:href="@{/cliente/hacer-creacion}">
+            Crear
+        </a>
+
+        <a href="../carrito.html"
+           th:href="@{/cliente/carrito}">
+            Carrito
+        </a>
+
+        <a href="../favoritos/lista.html"
+           th:href="@{/cliente/favoritos}">
+            Favoritos
+        </a>
+
+        <a href="../historial/lista.html"
+           th:href="@{/cliente/historial}">
+            Historial
+        </a>
+
+        <a class="active" href="../perfil.html"
+           th:href="@{/cliente/perfil}">
+            Perfil
+        </a>
+    </nav>
+</header>
+
+<main class="client-container">
+    <div class="client-panel">
+
+        <div class="client-item form-wrapper">
+            <h2 th:text="${tarjeta.id} == null ? 'Nueva tarjeta' : 'Editar tarjeta'">
+                Nueva tarjeta
+            </h2>
+
+            <form class="tarjeta-form"
+                  action="lista.html"
+                  th:action="@{/cliente/tarjetas/guardar}"
+                  method="post"
+                  th:object="${tarjeta}">
+
+                <!-- id oculto (para ediciones) -->
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="form-group">
+                    <label for="numero">Número de tarjeta</label>
+                    <input id="numero"
+                           type="text"
+                           placeholder="Ej: 4111 1111 1111 1111"
+                           th:field="*{numero}">
+                </div>
+
+                <div class="form-group">
+                    <label for="nombreTitular">Nombre del titular</label>
+                    <input id="nombreTitular"
+                           type="text"
+                           placeholder="Nombre en la tarjeta"
+                           th:field="*{nombreTitular}">
+                </div>
+
+                <div class="form-group">
+                    <label for="tipoTarjeta">Tipo de tarjeta</label>
+                    <select id="tipoTarjeta" th:field="*{tipoTarjeta}">
+                        <option value="" disabled
+                                th:selected="${tarjeta.tipoTarjeta} == null">
+                            Seleccionar...
+                        </option>
+                        <option th:each="tipo : ${tipos}"
+                                th:value="${tipo}"
+                                th:text="${tipo}">
+                            VISA
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_vencimiento">Fecha de vencimiento</label>
+                    <input id="fecha_vencimiento"
+                           type="date"
+                           th:field="*{fecha_vencimiento}">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        Guardar tarjeta
+                    </button>
+
+                    <a href="lista.html"
+                       th:href="@{/cliente/tarjetas}"
+                       class="btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

@@ -46,6 +46,12 @@ public class CreacionService {
         return creacionRepository.findByClienteId(clienteId);
     }
 
+
+    public List<Creacion> listarFavoritosPorCliente(Long clienteId) {
+        return creacionRepository.findByClienteIdAndFavoritoTrue(clienteId);
+    }
+
+
     // Marcar o desmarcar como favorita
     public Creacion marcarFavorito(Long creacionId, boolean favorito) {
         Creacion creacion = creacionRepository.findById(creacionId)
@@ -53,6 +59,8 @@ public class CreacionService {
         creacion.setFavorito(favorito);
         return creacionRepository.save(creacion);
     }
+
+
 
     // Eliminar una creación
     public void eliminarCreacion(Long creacionId) {

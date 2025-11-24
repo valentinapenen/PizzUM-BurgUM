@@ -88,4 +88,10 @@ public class PedidoService {
         return pedidoRepository.findByFechaBetween(desde, hasta);
     }
 
+    public Pedido obtenerPedido(long id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+    }
+
+
 }

@@ -66,4 +66,56 @@ public class TarjetaService {
     public Tarjeta buscarTarjetaPorNumero(String numero) {
         return tarjetaRepository.findByNumero(numero);
     }
+
+
+    public Tarjeta buscarPorId(long id) {
+        return tarjetaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tarjeta no encontrada."));
+    }
+
+    /** Obtiene una tarjeta y verifica que pertenezca al cliente */
+    public Tarjeta buscarPorIdDeCliente(long clienteId, long tarjetaId) {
+        Tarjeta t = buscarPorId(tarjetaId);
+
+        if (t.getCliente().getId() != clienteId) {
+            throw new IllegalArgumentException("La tarjeta no pertenece al cliente.");
+        }
+
+        return t;
+    }
+
+    /** Crea o edita una tarjeta del cliente */
+    public Tarjeta guardarTarjetaDeCliente(long clienteId, Tarjeta datos) {
+
+        // NUEVA tarjeta
+        if (datos.getId() == 0) {
+            return crearTarjeta(
+                    datos.getNumero(),
+                    datos.getNombreTitular(),
+                    clienteId,
+                    datos.getTipoTarjeta(),
+                    datos.getFecha_vencimiento(),
+                    false  // no predeterminada por defecto
+            );
+        }
+
+        // EDITAR tarjeta existente
+        Tarjeta existente = buscarPorIdDeCliente(clienteId, datos.getId());
+
+        existente.setNumero(datos.getNumero());
+        existente.setNombreTitular(datos.getNombreTitular());
+        existente.setTipoTarjeta(datos.getTipoTarjeta());
+        existente.setFecha_vencimiento(datos.getFecha_vencimiento());
+
+        return tarjetaRepository.save(existente);
+    }
+
+
+    // elimina tarjeta si pertenece al usuario logeado
+    public void eliminarTarjetaDeCliente(long clienteId, long tarjetaId) {
+        Tarjeta tarjeta = buscarPorIdDeCliente(clienteId, tarjetaId);
+        tarjetaRepository.delete(tarjeta);
+    }
+
+
 }
