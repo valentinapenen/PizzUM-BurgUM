@@ -3,7 +3,9 @@ package com.example.PizzUMBurgUM.controllers;
 import com.example.PizzUMBurgUM.controllers.DTOS.LoginRequest;
 import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.entities.Cliente;
+import com.example.PizzUMBurgUM.entities.Domicilio;
 import com.example.PizzUMBurgUM.entities.Usuario;
+import com.example.PizzUMBurgUM.services.AdministradorService;
 import com.example.PizzUMBurgUM.services.ClienteService;
 import com.example.PizzUMBurgUM.services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
@@ -79,8 +81,11 @@ public class UsuarioController {
     @GetMapping("/cuenta/cliente")
     public String mostrarCuentaCliente(Model model, HttpSession session){
         Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
+        if (cliente == null) {
+            return "redirect:/usuario/login";
+        }
         model.addAttribute("cliente", cliente);
-        return "cuenta/cuenta-cliente";
+        return "cliente/cuenta-cliente";
     }
 
     @PostMapping("/cuenta/cliente")
@@ -95,7 +100,7 @@ public class UsuarioController {
 
             model.addAttribute("success", "Datos actualizados correctamente.");
             model.addAttribute("cliente", actualizado);
-            return "cliente/inicio-cliente";
+            return "cliente/cuenta-cliente";
 
         } catch (IllegalArgumentException e){
             model.addAttribute("error", e.getMessage());
