@@ -48,6 +48,7 @@ public class CreacionService {
                 .tipo(tipo)
                 .productos(productos)
                 .favorito(favorito)
+                .enCarrito(true)
                 .precioTotal(total)
                 .build();
 
@@ -57,8 +58,8 @@ public class CreacionService {
 
     // Listar todas las creaciones de un cliente
     public List<Creacion> listarPorCliente(Long clienteId) {
-        // Mostrar solo las creaciones que siguen en el carrito (no asociadas a un Pedido)
-        return creacionRepository.findCarritoByClienteId(clienteId);
+        // Mostrar sólo las creaciones que están marcadas como enCarrito
+        return creacionRepository.findByClienteIdAndEnCarritoTrue(clienteId);
     }
 
 
@@ -79,10 +80,15 @@ public class CreacionService {
 
     // Eliminar una creación
     public void eliminarCreacion(Long creacionId) {
-        if (!creacionRepository.existsById(creacionId)) {
-            throw new EntityNotFoundException("Creación no encontrada con ID: " + creacionId);
+        Creacion c = creacionRepository.findById(creacionId)
+                .orElseThrow(() -> new EntityNotFoundException("Creación no encontrada con ID: " + creacionId));
+        if (c.isFavorito()) {
+            // Si es favorita, no la borramos; sólo la quitamos del carrito
+            c.setEnCarrito(false);
+            creacionRepository.save(c);
+        } else {
+            creacionRepository.delete(c);
         }
-        creacionRepository.deleteById(creacionId);
     }
 
 
@@ -174,8 +180,11 @@ public class CreacionService {
 
     @Transactional
     public void vaciarCarritoCliente(Long clienteId) {
-        List<Creacion> creaciones = creacionRepository.findByClienteId(clienteId);
-        creacionRepository.deleteAll(creaciones);
+        List<Creacion> creaciones = creacionRepository.findByClienteIdAndEnCarritoTrue(clienteId);
+        for (Creacion c : creaciones) {
+            c.setEnCarrito(false);
+        }
+        creacionRepository.saveAll(creaciones);
     }
 
 
@@ -184,8 +193,8 @@ public class CreacionService {
                                           Long domicilioId,
                                           Long tarjetaId) {
 
-        // 1) Ver creaciones del cliente (carrito)
-        List<Creacion> creaciones = creacionRepository.findByClienteId(cliente.getId());
+        // 1) Ver creaciones del cliente que están en carrito
+        List<Creacion> creaciones = creacionRepository.findByClienteIdAndEnCarritoTrue(cliente.getId());
         if (creaciones.isEmpty()) {
             throw new IllegalStateException("El carrito está vacío");
         }
@@ -217,8 +226,11 @@ public class CreacionService {
         // 6) Guardar pedido
         Pedido guardado = pedidoRepository.save(pedido);
 
-        // 7) Vaciar carrito del cliente
-        creacionRepository.deleteAll(creaciones);
+        // 7) Vaciar carrito del cliente sin borrar favoritos: marcar enCarrito = false
+        for (Creacion c : creaciones) {
+            c.setEnCarrito(false);
+        }
+        creacionRepository.saveAll(creaciones);
 
         return guardado;
     }

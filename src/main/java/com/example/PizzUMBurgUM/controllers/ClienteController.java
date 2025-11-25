@@ -276,7 +276,13 @@ public class ClienteController {
 
         Cliente cliente = obtenerClienteDesdeSesionOSeguridad(session);
         if (cliente == null) {
-            return "redirect:/iniciar-sesion";
+            // No mandamos al login para no romper el flujo si hay un desfasaje de sesión.
+            // Mostramos un mensaje y volvemos al menú de creación.
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "No pudimos identificar tu sesión. Intentá nuevamente. Si el problema persiste, iniciá sesión otra vez."
+            );
+            return "redirect:/cliente/hacer-creacion";
         }
 
         // 👉 delegamos la lógica de armar la pizza al service
