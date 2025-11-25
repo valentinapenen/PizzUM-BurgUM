@@ -1,6 +1,8 @@
 package com.example.PizzUMBurgUM.services;
 
 import com.example.PizzUMBurgUM.entities.Producto;
+import com.example.PizzUMBurgUM.entities.enums.CategoriaProducto;
+import com.example.PizzUMBurgUM.entities.enums.TipoProducto;
 import com.example.PizzUMBurgUM.repositories.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,4 +60,12 @@ public class ProductoService {
         producto.setDisponible(true);
         productoRepository.save(producto);
     }
+
+    public List<Producto> listarPorTipoYCategoria(TipoProducto tipo, CategoriaProducto categoria) {
+        return productoRepository.findByTipoAndCategoriaInAndDisponibleTrue(
+                tipo,
+                List.of(categoria, CategoriaProducto.AMBOS)
+        );
+    }
+
 }

@@ -31,6 +31,8 @@ public class PedidoService {
     @Autowired
     private DomicilioRepository domicilioRepository;
 
+
+
     @Transactional
     public Pedido crearPedido(long clienteId, List<Long> idsCreaciones, long domicilioId, MedioDePago medioPago) {
         Cliente cliente = clienteRepository.findById(clienteId)
@@ -92,6 +94,26 @@ public class PedidoService {
         return pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
     }
+
+
+    public java.util.Optional<Pedido> buscarPedidoEnCurso(Long clienteId) {
+        java.util.List<EstadoPedido> estadosEnCurso = java.util.List.of(
+                EstadoPedido.EN_COLA,
+                EstadoPedido.EN_PREPARACION,
+                EstadoPedido.EN_CAMINO
+        );
+
+        return pedidoRepository.findFirstByClienteIdAndEstadoInOrderByFechaDesc(
+                clienteId,
+                estadosEnCurso
+        );
+    }
+
+
+    public boolean clienteTienePedidoEnCurso(Long clienteId) {
+        return buscarPedidoEnCurso(clienteId).isPresent();
+    }
+
 
 
 }

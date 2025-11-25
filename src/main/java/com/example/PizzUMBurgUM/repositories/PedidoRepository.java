@@ -7,10 +7,18 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findByClienteId(long clienteId);
     List<Pedido> findByFechaBetween(LocalDateTime desde, LocalDateTime hasta);
     List<Pedido> findByEstadoNot(EstadoPedido estado);
+
+
+    //hay un valor T (por ejemplo un Pedido)
+    //o no hay nada (equivalente a null)
+    Optional<Pedido> findByClienteIdAndEstado(Long clienteId, EstadoPedido estado);
+
+    Optional<Pedido> findFirstByClienteIdAndEstadoInOrderByFechaDesc(Long clienteId, java.util.List<EstadoPedido> estados);
 }

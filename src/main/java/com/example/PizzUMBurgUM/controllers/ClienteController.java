@@ -1,10 +1,16 @@
 package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.entities.Cliente;
+import com.example.PizzUMBurgUM.entities.Creacion;
 import com.example.PizzUMBurgUM.entities.Pedido;
 import com.example.PizzUMBurgUM.entities.Usuario;
+import com.example.PizzUMBurgUM.entities.enums.CategoriaProducto;
+import com.example.PizzUMBurgUM.entities.enums.TamanoPizza;
+import com.example.PizzUMBurgUM.entities.enums.TipoCreacion;
+import com.example.PizzUMBurgUM.entities.enums.TipoProducto;
 import com.example.PizzUMBurgUM.services.ClienteService;
 import com.example.PizzUMBurgUM.services.CreacionService;
+import com.example.PizzUMBurgUM.services.ProductoService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +32,10 @@ public class ClienteController {
 
     @Autowired
     private CreacionService creacionService;
+
+    @Autowired
+    private ProductoService productoService;
+
 
     @GetMapping("/home")
     public String paginaInicioCliente(HttpSession session, Model model){
@@ -170,6 +180,309 @@ public class ClienteController {
         }
     }
 
+
+    @GetMapping("/hacer-creacion")
+    public String mostrarMenuCreaciones(HttpSession session, Model model) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login"; // igual que en favoritos / historial
+        }
+
+        model.addAttribute("cliente", cliente);
+
+
+        return "cliente/creaciones/CreacionesPrincipalMenu";
+    }
+
+
+    // form pizza
+    @GetMapping("/creaciones/pizza/nueva")
+    public String mostrarFormularioPizza(HttpSession session, Model model) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login";
+        }
+
+        model.addAttribute("cliente", cliente);
+
+        // Tamaños (enum)
+        model.addAttribute("tamanos", TamanoPizza.values());
+
+        // Productos para pizza (tipo + categoría PIZZA o AMBOS)
+        model.addAttribute("masas",
+                productoService.listarPorTipoYCategoria(TipoProducto.MASA, CategoriaProducto.PIZZA));
+
+        model.addAttribute("salsas",
+                productoService.listarPorTipoYCategoria(TipoProducto.SALSA, CategoriaProducto.PIZZA));
+
+        model.addAttribute("quesos",
+                productoService.listarPorTipoYCategoria(TipoProducto.QUESO, CategoriaProducto.PIZZA));
+
+        model.addAttribute("toppings",
+                productoService.listarPorTipoYCategoria(TipoProducto.TOPPING, CategoriaProducto.PIZZA));
+
+        model.addAttribute("bebidas",
+                productoService.listarPorTipoYCategoria(TipoProducto.BEBIDA, CategoriaProducto.AMBOS));
+        model.addAttribute("papas",
+                productoService.listarPorTipoYCategoria(TipoProducto.PAPAS, CategoriaProducto.AMBOS));
+
+
+        // va a templates/cliente/creaciones/formPizza.html
+        return "cliente/creaciones/formPizza";
+    }
+
+
+    @PostMapping("/creaciones/pizza/guardar")
+    public String guardarPizza(
+            @RequestParam("tamano") TamanoPizza tamano,   // por ahora solo lo recibimos
+            @RequestParam("masaId") Long masaId,
+            @RequestParam("salsaId") Long salsaId,
+            @RequestParam("quesoId") Long quesoId,
+            @RequestParam(value = "toppingIds", required = false) java.util.List<Long> toppingIds,
+            @RequestParam(value = "bebidaIds", required = false) java.util.List<Long> bebidaIds,
+            @RequestParam(value = "papasIds", required = false) java.util.List<Long> papasIds,
+            @RequestParam(value = "favorito", defaultValue = "false") boolean favorito,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login";
+        }
+
+        // 👉 delegamos la lógica de armar la pizza al service
+        Creacion creacion = creacionService.crearPizzaCompleta(
+                cliente.getId(),
+                masaId,
+                salsaId,
+                quesoId,
+                toppingIds,
+                bebidaIds,
+                papasIds,
+                favorito
+        );
+
+        redirectAttributes.addFlashAttribute(
+                "exito",
+                "Tu pizza se creó correctamente."
+        );
+
+        return "redirect:/cliente/hacer-creacion";
+    }
+
+
+    // form hamburguesa
+    @GetMapping("/creaciones/hamburguesa/nueva")
+    public String mostrarFormularioHamburguesa(HttpSession session, Model model) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login";
+        }
+
+        model.addAttribute("cliente", cliente);
+
+        // Productos para hamburguesa (tipo + categoría HAMBURGUESA o AMBOS)
+        model.addAttribute("panes",
+                productoService.listarPorTipoYCategoria(TipoProducto.PAN, CategoriaProducto.HAMBURGUESA));
+
+        model.addAttribute("carnes",
+                productoService.listarPorTipoYCategoria(TipoProducto.CARNE, CategoriaProducto.HAMBURGUESA));
+
+        model.addAttribute("quesosHamb",
+                productoService.listarPorTipoYCategoria(TipoProducto.QUESO, CategoriaProducto.HAMBURGUESA));
+
+        model.addAttribute("aderezos",
+                productoService.listarPorTipoYCategoria(TipoProducto.ADEREZO, CategoriaProducto.HAMBURGUESA));
+
+        model.addAttribute("toppingsHamb",
+                productoService.listarPorTipoYCategoria(TipoProducto.TOPPING, CategoriaProducto.HAMBURGUESA));
+
+        model.addAttribute("bebidasHamb",
+                productoService.listarPorTipoYCategoria(TipoProducto.BEBIDA, CategoriaProducto.AMBOS));
+
+        model.addAttribute("papasHamb",
+                productoService.listarPorTipoYCategoria(TipoProducto.PAPAS, CategoriaProducto.AMBOS));
+
+        // va a templates/cliente/creaciones/formHamburguesa.html
+        return "cliente/creaciones/formHamburguesa";
+    }
+
+    @GetMapping("/carrito")
+    public String verCarrito(HttpSession session, Model model) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login";
+        }
+
+        model.addAttribute("cliente", cliente);
+
+        // creaciones en carrito
+        java.util.List<Creacion> creaciones = creacionService.listarPorCliente(cliente.getId());
+        model.addAttribute("creaciones", creaciones);
+
+        double total = creaciones.stream()
+                .mapToDouble(Creacion::getPrecioTotal)
+                .sum();
+        model.addAttribute("totalCarrito", total);
+
+        // pedido en curso (para decidir qué botón mostrar)
+        java.util.Optional<Pedido> pedidoEnCursoOpt =
+                pedidoService.buscarPedidoEnCurso(cliente.getId());
+
+        model.addAttribute("tienePedidoEnCurso", pedidoEnCursoOpt.isPresent());
+        pedidoEnCursoOpt.ifPresent(p ->
+                model.addAttribute("pedidoEnCurso", p)
+        );
+
+
+        return "cliente/carrito/lista";
+    }
+
+
+    //eliminar una creacion del carrito
+    @PostMapping("/carrito/eliminar/{idCreacion}")
+    public String eliminarCreacionDelCarrito(
+            @PathVariable Long idCreacion,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login";
+        }
+
+        try {
+            creacionService.eliminarCreacion(idCreacion);
+
+            redirectAttributes.addFlashAttribute(
+                    "exito",
+                    "La creación fue eliminada del carrito."
+            );
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "No se pudo eliminar la creación."
+            );
+        }
+
+        return "redirect:/cliente/carrito";
+    }
+
+    @GetMapping("/pedido/seguimiento/{id}")
+    public String verSeguimientoPedido(@PathVariable Long id,
+                                       HttpSession session,
+                                       Model model) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login";
+        }
+
+        Pedido pedido = pedidoService.obtenerPedido(id);
+
+        // Seguridad básica: el pedido tiene que ser del cliente logueado
+        if (pedido.getCliente().getId() != cliente.getId()) {
+            return "redirect:/cliente/historial";
+        }
+
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("pedido", pedido);
+
+
+        return "cliente/carrito/botonSeguimientoPedido";
+    }
+
+
+    @GetMapping("/carrito/continuar")
+    public String continuarCompra(HttpSession session, Model model,
+                                  RedirectAttributes redirectAttributes) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login";
+        }
+
+        // Si el carrito está vacío → volver
+        java.util.List<Creacion> creaciones = creacionService.listarPorCliente(cliente.getId());
+        if (creaciones.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Tu carrito está vacío.");
+            return "redirect:/cliente/carrito";
+        }
+
+        // Si ya tiene pedido en curso → no dejar continuar
+        java.util.Optional<Pedido> pedidoEnCursoOpt =
+                pedidoService.buscarPedidoEnCurso(cliente.getId());
+        if (pedidoEnCursoOpt.isPresent()) {
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Ya tenés un pedido en curso. Podés ver el seguimiento desde el carrito."
+            );
+            return "redirect:/cliente/carrito";
+        }
+
+        // Mandamos datos al form
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("creaciones", creaciones);
+
+        double total = creaciones.stream()
+                .mapToDouble(Creacion::getPrecioTotal)
+                .sum();
+        model.addAttribute("totalCarrito", total);
+
+        // domicilios y tarjetas del cliente
+        model.addAttribute("domicilios", cliente.getDomicilios());
+        model.addAttribute("tarjetas", cliente.getTarjetas());
+
+        // va a templates/cliente/carrito/form.html
+        return "cliente/carrito/form";
+    }
+
+
+    @PostMapping("/carrito/confirmar")
+    public String confirmarPedido(
+            @RequestParam("domicilioId") Long domicilioId,
+            @RequestParam("tarjetaId") Long tarjetaId,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/usuario/login";
+        }
+
+        try {
+            // crear pedido desde carrito
+            Pedido pedido = creacionService.crearPedidoDesdeCarrito(
+                    cliente,
+                    domicilioId,
+                    tarjetaId
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "exito",
+                    "Tu pedido fue creado correctamente. Ahora está en cola."
+            );
+
+            // redirigimos al seguimiento de ese pedido
+            return "redirect:/cliente/pedido/seguimiento/" + pedido.getIdPedido();
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "No se pudo confirmar el pedido: " + e.getMessage()
+            );
+            return "cliente/carrito/botonConfirmarPedido";
+        }
+    }
 
 
 }

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear pizza - PizzUM & BurgUM</title>
+
+    <!-- CSS base -->
+    <link rel="stylesheet"
+          href="../../../static/css/background-header-footer.css"
+          th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet"
+          href="../../../static/css/cliente/paneles-cliente.css"
+          th:href="@{/css/cliente/paneles-cliente.css}">
+
+    <style>
+        /* --- 1) Asegurar que el header quede siempre arriba --- */
+        header {
+            position: relative;
+            z-index: 10;
+        }
+
+        .client-container {
+            position: relative;
+            z-index: 1;
+            padding: 70px 20px; /* un poco de espacio bajo el header */
+            color: #fff;
+        }
+
+        /* --- 2) Ajustar el panel para que sea UNO solo y autoaltura --- */
+        .client-panel {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(14px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 32px 28px;
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+            display: block;        /* acá dejamos de usar grid para esta pantalla */
+        }
+
+        .client-item.form-wrapper {
+            background: transparent;   /* que se funda con el panel */
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+        }
+
+        /* --- 3) Estilos propios del formulario --- */
+
+        .pizza-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .pizza-form h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+        }
+
+        .form-group select {
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.25);
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group select option {
+            color: #000;
+        }
+
+        .items-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 170px;
+            overflow-y: auto;
+            padding: 8px 12px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .item-row-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .item-price {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .section-title-small {
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .favorito-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        .total-row {
+            margin-top: 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .form-actions {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #7f1d1d;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+        }
+
+        .btn-primary:hover {
+            background: #f9fafb;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+        }
+    </style>
+
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png">
+        <h1 class="brand-title">PizzUM &amp; BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html"
+           th:href="@{/cliente/home}">
+            Inicio
+        </a>
+
+        <a class="active"
+           href="CreacionesPrincipalMenu.html"
+           th:href="@{/cliente/hacer-creacion}">
+            Crear
+        </a>
+
+        <a href="../carrito/lista.html"
+           th:href="@{/cliente/carrito}">
+            Carrito
+        </a>
+
+        <a href="../favoritos/lista.html"
+           th:href="@{/cliente/favoritos}">
+            Favoritos
+        </a>
+
+        <a href="../historial/lista.html"
+           th:href="@{/cliente/historial}">
+            Historial
+        </a>
+
+        <a href="../perfil.html"
+           th:href="@{/cliente/perfil}">
+            Perfil
+        </a>
+    </nav>
+</header>
+
+<main class="client-container">
+    <div class="client-panel">
+
+        <div class="client-item form-wrapper">
+            <h2>Crear pizza</h2>
+
+            <form class="pizza-form"
+                  action="/cliente/creaciones/pizza/guardar"
+                  th:action="@{/cliente/creaciones/pizza/guardar}"
+                  method="post">
+
+                <!-- Tamaño -->
+                <div class="form-group">
+                    <label for="tamano">Tamaño</label>
+                    <select id="tamano" name="tamano" required>
+                        <option value="" disabled selected>Seleccionar tamaño...</option>
+                        <option th:each="t : ${tamanos}"
+                                th:value="${t}"
+                                th:text="${t}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Masa -->
+                <div class="form-group">
+                    <label for="masaSelect">Masa</label>
+                    <select id="masaSelect" name="masaId" required>
+                        <option value="" disabled selected>Seleccionar masa...</option>
+                        <option th:each="m : ${masas}"
+                                th:value="${m.id}"
+                                th:data-precio="${m.precio}"
+                                th:text="${m.nombre + ' ($' + #numbers.formatDecimal(m.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Salsa -->
+                <div class="form-group">
+                    <label for="salsaSelect">Salsa</label>
+                    <select id="salsaSelect" name="salsaId" required>
+                        <option value="" disabled selected>Seleccionar salsa...</option>
+                        <option th:each="s : ${salsas}"
+                                th:value="${s.id}"
+                                th:data-precio="${s.precio}"
+                                th:text="${s.nombre + ' ($' + #numbers.formatDecimal(s.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Queso -->
+                <div class="form-group">
+                    <label for="quesoSelect">Queso</label>
+                    <select id="quesoSelect" name="quesoId" required>
+                        <option value="" disabled selected>Seleccionar queso...</option>
+                        <option th:each="q : ${quesos}"
+                                th:value="${q.id}"
+                                th:data-precio="${q.precio}"
+                                th:text="${q.nombre + ' ($' + #numbers.formatDecimal(q.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Toppings -->
+                <div class="form-group">
+                    <label class="section-title-small">Toppings</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="top : ${toppings}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="toppingIds"
+                                       th:id="'top-' + ${top.id}"
+                                       th:value="${top.id}"
+                                       th:attr="data-precio=${top.precio}">
+                                <label th:for="'top-' + ${top.id}">
+                                    <span th:text="${top.nombre}">Topping</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="'$' + #numbers.formatDecimal(top.precio,1,2)">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bebidas (extras) -->
+                <div class="form-group" th:if="${bebidas != null}">
+                    <label class="section-title-small">Bebidas</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="b : ${bebidas}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="bebidaIds"
+                                       th:id="'beb-' + ${b.id}"
+                                       th:value="${b.id}"
+                                       th:attr="data-precio=${b.precio}">
+                                <label th:for="'beb-' + ${b.id}">
+                                    <span th:text="${b.nombre}">Bebida</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="'$' + #numbers.formatDecimal(b.precio,1,2)">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Papas (extras) -->
+                <div class="form-group" th:if="${papas != null}">
+                    <label class="section-title-small">Papas</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="p : ${papas}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="papasIds"
+                                       th:id="'pap-' + ${p.id}"
+                                       th:value="${p.id}"
+                                       th:attr="data-precio=${p.precio}">
+                                <label th:for="'pap-' + ${p.id}">
+                                    <span th:text="${p.nombre}">Papas</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="'$' + #numbers.formatDecimal(p.precio,1,2)">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorito -->
+                <div class="favorito-checkbox">
+                    <input type="checkbox"
+                           id="favorito"
+                           name="favorito">
+                    <label for="favorito">Guardar esta pizza como favorito</label>
+                </div>
+
+                <!-- Total aproximado -->
+                <div class="total-row">
+                    Total aproximado: $<span id="total">0.00</span>
+                </div>
+
+                <!-- Acciones -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        Crear pizza
+                    </button>
+
+                    <a href="CreacionesPrincipalMenu.html"
+                       th:href="@{/cliente/hacer-creacion}"
+                       class="btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png">
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+<script>
+    function parsePrecio(el) {
+        if (!el) return 0;
+        const val = el.getAttribute("data-precio");
+        if (!val) return 0;
+        const n = parseFloat(val);
+        return isNaN(n) ? 0 : n;
+    }
+
+    function actualizarTotal() {
+        let total = 0;
+
+        const masa = document.querySelector("#masaSelect option:checked");
+        total += parsePrecio(masa);
+
+        const salsa = document.querySelector("#salsaSelect option:checked");
+        total += parsePrecio(salsa);
+
+        const queso = document.querySelector("#quesoSelect option:checked");
+        total += parsePrecio(queso);
+
+        document.querySelectorAll("input[name='toppingIds']:checked").forEach(cb => {
+            total += parsePrecio(cb);
+        });
+
+        document.querySelectorAll("input[name='bebidaIds']:checked").forEach(cb => {
+            total += parsePrecio(cb);
+        });
+
+        document.querySelectorAll("input[name='papasIds']:checked").forEach(cb => {
+            total += parsePrecio(cb);
+        });
+
+        const totalSpan = document.getElementById("total");
+        if (totalSpan) {
+            totalSpan.textContent = total.toFixed(2);
+        }
+    }
+
+    document.addEventListener("change", actualizarTotal);
+    window.addEventListener("load", actualizarTotal);
+</script>
+
+</body>
+</html>
