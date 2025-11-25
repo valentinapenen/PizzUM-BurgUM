@@ -4,42 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - PizzUM & BurgUM</title>
-
-    <link rel="stylesheet" href="../../static/css/background-header-footer.css"
-          th:href="@{/css/background-header-footer.css}">
-    <link rel="stylesheet" href="../../static/css/cliente/paneles-cliente.css"
-          th:href="@{/css/paneles-cliente.css}">
-
-    <style>
-        /* Mis datos ocupa dos columnas */
-        .perfil-datos {
-          grid-column: span 2;
-          grid-row: span 1;
-          padding: 25px;
-        }
-
-        /* Los paneles normales */
-        .perfil-item {
-          padding: 25px;
-        }
-
-        /* Ajuste de texto para que no se desborde */
-        .perfil-datos p, .perfil-item p {
-          margin: 6px 0;
-          font-size: 1rem;
-        }
-
-        /* Títulos de los paneles */
-        .perfil-item h2 {
-          margin-bottom: 8px;
-        }
-
-        /* Para que todo quede alineado como inicio-cliente */
-        .client-panel {
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-          grid-auto-rows: auto !important;
-        }
-    </style>
+    <link rel="stylesheet" href="../background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
 </head>
 
 <body>
@@ -59,7 +25,6 @@
         <a class="active" href="perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
     </nav>
 </header>
-
 
 <main class="client-container">
 
@@ -90,29 +55,25 @@
         </div>
 
         <!-- EDITAR DATOS -->
-        <a href="../cliente/datosPersonales/form.html" class="client-item perfil-item"
-           th:href="@{/cliente/perfil/editar}">
+        <a href="../cliente/datosPersonales/form.html" class="client-item perfil-item" th:href="@{/cliente/perfil/editar}">
             <h2>Editar datos personales</h2>
             <p>Modificar nombre, apellido,telefono y fecha de nacimiento.</p>
         </a>
 
         <!-- DOMICILIOS -->
-        <a href="../cliente/domicilio/lista.html" class="client-item perfil-item"
-           th:href="@{/cliente/domicilios}">
+        <a href="../cliente/domicilio/lista.html" class="client-item perfil-item" th:href="@{/cliente/domicilios}">
             <h2>Domicilios</h2>
             <p>Administrar tus direcciones.</p>
         </a>
 
         <!-- TARJETAS -->
-        <a href="../cliente/tarjeta/lista.html" class="client-item perfil-item"
-           th:href="@{/cliente/tarjetas}">
+        <a href="../cliente/tarjeta/lista.html" class="client-item perfil-item" th:href="@{/cliente/tarjetas}">
             <h2>Tarjetas</h2>
             <p>Administrar tus tarjetas.</p>
         </a>
 
     </div>
 </main>
-
 
 <footer class="footer">
     <div class="footer-brand">
