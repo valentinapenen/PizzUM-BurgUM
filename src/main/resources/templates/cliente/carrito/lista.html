@@ -18,44 +18,15 @@
     </div>
 
     <nav class="nav-bar">
-
-        <!-- Inicio -->
-        <a href="../inicio-cliente.html"
-           th:href="@{/cliente/home}">
-            Inicio
-        </a>
-
-        <!-- Crear -->
-        <a href="../creaciones/CreacionesPrincipalMenu.html"
-           th:href="@{/cliente/hacer-creacion}">
-            Crear
-        </a>
-
-        <!-- Carrito (activo) -->
-        <a class="active"
-           href="../carrito/lista.html"
-           th:href="@{/cliente/carrito}">
-            Carrito
-        </a>
-
-        <!-- Favoritos -->
-        <a href="../favoritos/lista.html"
-           th:href="@{/cliente/favoritos}">
-            Favoritos
-        </a>
-
-        <!-- Historial -->
-        <a href="../historial/lista.html"
-           th:href="@{/cliente/historial}">
-            Historial
-        </a>
-
-        <!-- Perfil -->
-        <a href="../perfil.html"
-           th:href="@{/cliente/perfil}">
-            Perfil
-        </a>
-
+        <a href="../inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
+        <a href="../creaciones/CreacionesPrincipalMenu.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a class="active" href="../carrito/lista.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
+        <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
+        <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 

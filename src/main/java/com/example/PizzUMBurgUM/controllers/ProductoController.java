@@ -23,14 +23,14 @@ public class ProductoController {
     @GetMapping
     public String listarProductos(Model model) {
         model.addAttribute("productos", productoService.listarTodos());
-        return "producto/lista";
+        return "administrador/producto/lista";
     }
 
     // Formulario de creación
     @GetMapping("/nuevo")
     public String nuevoProducto(Model model) {
         model.addAttribute("producto", new Producto());
-        return "producto/form";
+        return "administrador/producto/form";
     }
 
     // Crear producto
@@ -47,7 +47,7 @@ public class ProductoController {
     public String editarProducto(@PathVariable long id, Model model) {
         Producto producto = productoService.buscarPorId(id);
         model.addAttribute("producto", producto);
-        return "producto/form";
+        return "administrador/producto/form";
     }
 
     // Actualizar precio

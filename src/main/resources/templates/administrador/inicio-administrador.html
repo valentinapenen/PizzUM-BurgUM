@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio administrador - PizzUM & BurgUM</title>
     <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
-    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/administrador/admin.css}">
 </head>
 <body>
 
@@ -16,29 +16,44 @@
     </div>
 
     <nav class="nav-bar">
-        <a class="active" href="inicio-administrador.html" th:href="@{inicio-administrador}">Inicio</a>
-        <a href="../pedido/lista.html" th:href="@{/pedidos/lista}">Pedidos</a>
-        <a href="../producto/lista.html" th:href="@{/productos/lista}">Productos</a>
+        <a class="active" href="inicio-administrador.html" th:href="@{/administrador/inicio}">Inicio</a>
+        <a href="../administrador/pedido/lista.html" th:href="@{/pedidos}">Pedidos</a>
+        <a href="../administrador/producto/lista.html" th:href="@{/admin/productos}">Productos</a>
         <a href="../administrador/lista.html" th:href="@{/administrador/lista}">Administradores</a>
+        <a href="../administrador/perfil.html" th:href="@{/administrador/perfil}">Perfil</a>
+        <a href="../administrador/ventas/lista.html" th:href="@{/admin/ventas}">Ventas</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 
 <main class="admin-container">
     <div class="admin-panel">
 
-        <a href="../pedido/lista.html" class="admin-item medium">
+        <a href="pedido/lista.html" class="admin-item medium" th:href="@{/pedidos}">
             <h2>Pedidos</h2>
             <p>Gestiona pedidos.</p>
         </a>
 
-        <a href="../producto/lista.html" class="admin-item medium">
+        <a href="producto/lista.html" class="admin-item medium" th:href="@{/admin/productos}">
             <h2>Productos</h2>
             <p>Agrega, elimina y edita productos.</p>
         </a>
 
-        <a href="lista.html" class="admin-item medium">
+        <a href="lista.html" class="admin-item medium" th:href="@{/administrador/lista}">
             <h2>Administradores</h2>
             <p>Agrega, elimina y edita cuentas de administrador.</p>
+        </a>
+
+        <a href="perfil.html" class="admin-item medium" th:href="@{/administrador/perfil}">
+            <h2>Mi Perfil</h2>
+            <p>Ver y editar mis datos y domicilio de facturación.</p>
+        </a>
+
+        <a href="ventas/lista.html" class="admin-item medium" th:href="@{/admin/ventas}">
+            <h2>Ventas</h2>
+            <p>Consulta las ventas por fecha.</p>
         </a>
 
     </div>

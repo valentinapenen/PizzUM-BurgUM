@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ventas por fecha</title>
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/administrador/admin.css" th:href="@{/css/administrador/admin.css}">
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+    <nav class="nav-bar">
+        <a href="../inicio-administrador.html" th:href="@{/administrador/inicio}">Inicio</a>
+        <a href="../pedido/lista.html" th:href="@{/pedidos}">Pedidos</a>
+        <a href="../producto/lista.html" th:href="@{/admin/productos}">Productos</a>
+        <a href="../lista.html" th:href="@{/administrador/lista}">Administradores</a>
+        <a href="../perfil.html" th:href="@{/administrador/perfil}">Perfil</a>
+        <a class="active" href="lista.html" th:href="@{/admin/ventas}">Ventas</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<div class="admin-container">
+    <div class="admin-panel">
+        <div class="admin-item large">
+            <h2>Ventas por fecha</h2>
+
+            <form th:action="@{/admin/ventas}" method="get" style="margin-bottom: 12px; display:flex; gap:10px; align-items: end; flex-wrap: wrap;">
+                <div>
+                    <label>Desde</label>
+                    <input class="admin-input" type="date" name="desde" th:value="${desde}" required>
+                </div>
+                <div>
+                    <label>Hasta</label>
+                    <input class="admin-input" type="date" name="hasta" th:value="${hasta}" required>
+                </div>
+                <div>
+                    <button type="submit">Filtrar</button>
+                </div>
+            </form>
+
+            <div style="margin: 8px 0;">
+                <strong>Pedidos:</strong> <span th:text="${#lists.size(pedidos)}">0</span>
+                &nbsp;|&nbsp;
+                <strong>Total ventas:</strong> $<span th:text="${#numbers.formatDecimal(total,1,2)}">0.00</span>
+            </div>
+
+            <div>
+                <table style="width:100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="text-align:left; border-bottom:1px solid #ddd;">
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Estado</th>
+                            <th style="text-align:right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${pedidos}" style="border-bottom:1px solid #eee;">
+                            <td th:text="${p.idPedido}">1</td>
+                            <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2025 12:00</td>
+                            <td th:text="${p.cliente != null ? p.cliente.nombre + ' ' + p.cliente.apellido : '—'}">Cliente</td>
+                            <td th:text="${p.estado}">EN_COLA</td>
+                            <td style="text-align:right;" th:text="${#numbers.formatDecimal(p.total,1,2)}">0.00</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(pedidos)}">
+                            <td colspan="5" style="text-align:center; padding: 12px; opacity: .8;">No hay pedidos en el rango seleccionado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="footer-logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer-title">PizzUM & BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

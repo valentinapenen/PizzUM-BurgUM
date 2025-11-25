@@ -57,7 +57,7 @@
 
         <!-- Si falta domicilio o tarjeta, mostramos aviso y no el form -->
         <div class="bloque-aviso"
-             th:if="${#lists.isEmpty(domicilios)} or ${#lists.isEmpty(tarjetas)}">
+             th:if="${#lists.isEmpty(domicilios) or #lists.isEmpty(tarjetas)}">
             <p>
                 Para confirmar el pedido necesitás tener al menos
                 <strong>un domicilio</strong> y <strong>una tarjeta</strong> guardados.
@@ -83,7 +83,7 @@
 
         <!-- Formulario solo si hay al menos 1 domicilio y 1 tarjeta -->
         <form class="form-confirmar"
-              th:if="${!#lists.isEmpty(domicilios)} and ${!#lists.isEmpty(tarjetas)}"
+              th:if="${!#lists.isEmpty(domicilios) and !#lists.isEmpty(tarjetas)}"
               action="botonConfirmarPedido.html"
               th:action="@{/cliente/carrito/confirmar}"
               method="post">

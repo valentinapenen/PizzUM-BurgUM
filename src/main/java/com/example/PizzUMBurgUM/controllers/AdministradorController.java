@@ -36,6 +36,54 @@ public class AdministradorController {
         return "administrador/inicio-administrador";
     }
 
+    // Perfil administrador (similar a cliente, pero sólo editar datos y domicilio, no agregar)
+    @GetMapping("/perfil")
+    public String verPerfilAdmin(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Administrador admin)) {
+            return "redirect:/iniciar-sesion";
+        }
+        model.addAttribute("administrador", admin);
+        return "administrador/perfil";
+    }
+
+    @GetMapping("/perfil/editar")
+    public String editarPerfilAdminForm(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Administrador admin)) {
+            return "redirect:/iniciar-sesion";
+        }
+        model.addAttribute("administrador", admin);
+        return "administrador/perfil-form";
+    }
+
+    @PostMapping("/perfil/editar")
+    public String editarPerfilAdminSubmit(
+            HttpSession session,
+            @ModelAttribute("administrador") Administrador formAdmin,
+            RedirectAttributes redirectAttributes,
+            Model model
+    ) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Administrador admin)) {
+            return "redirect:/iniciar-sesion";
+        }
+
+        try {
+            // Sólo permite actualizar campos habilitados; el service ya valida que no se cambien cedula/correo
+            formAdmin.setCedula(admin.getCedula());
+            formAdmin.setCorreo(admin.getCorreo());
+            Administrador actualizado = administradorService.actualizarDatosAdmin(admin.getCedula(), formAdmin);
+            // refrescar en sesión
+            session.setAttribute("usuarioLogueado", actualizado);
+            redirectAttributes.addFlashAttribute("exito", "Perfil actualizado correctamente");
+            return "redirect:/administrador/perfil";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "administrador/perfil-form";
+        }
+    }
+
     // Listado de administradores
     @GetMapping("/lista")
     public String listarAdministradores(Model model) {

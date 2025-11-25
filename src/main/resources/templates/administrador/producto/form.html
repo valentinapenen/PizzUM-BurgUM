@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Crear y editar producto</title>
-  <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
-  <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+  <link rel="stylesheet" href="../../../static/css/administrador/admin.css" th:href="@{/css/administrador/admin.css}">
 </head>
 <body>
 
@@ -14,10 +14,15 @@
     <h1 class="brand-title">PizzUM & BurgUM</h1>
   </div>
   <nav class="nav-bar">
-    <a href="../administrador/inicio-administrador.html" th:href="@{/administrador/inicio-administrador}">Inicio</a>
-    <a href="../pedidos/lista.html" th:href="@{/pedidos/lista}">Pedidos</a>
-    <a class="active" href="lista.html" th:href="@{/lista}">Productos</a>
+    <a href="../inicio-administrador.html" th:href="@{/administrador/inicio}">Inicio</a>
+    <a href="../pedidos/lista.html" th:href="@{/pedidos}">Pedidos</a>
+    <a class="active" href="lista.html" th:href="@{/admin/productos}">Productos</a>
     <a href="../administradores/lista.html" th:href="@{/administrador/lista}">Administradores</a>
+      <a href="../administrador/perfil.html" th:href="@{/administrador/perfil}">Perfil</a>
+      <a href="../administrador/ventas/lista.html" th:href="@{/admin/ventas}">Ventas</a>
+      <form th:action="@{/logout}" method="post">
+          <button type="submit" class="nav-link">Cerrar sesión</button>
+      </form>
   </nav>
 </header>
 
@@ -25,7 +30,7 @@
   <div class="admin-panel">
 
     <!-- Formulario crear producto -->
-    <div class="admin-item large" th:if="${producto.id == null}">
+    <div class="admin-item large" th:if="${producto.id == null or producto.id == 0}">
       <h2>Crear Producto</h2>
       <form th:object="${producto}" th:action="@{/admin/productos}" method="post">
         <label>Nombre:</label>
@@ -33,21 +38,18 @@
 
         <label>Tipo:</label>
         <select class="admin-input" th:field="*{tipo}" required>
-          <option value="masa">Masa</option>
-          <option value="queso">Queso</option>
-          <option value="salsa">Salsa</option>
-          <option value="pan">Pan</option>
-          <option value="carne">Carne</option>
-          <option value="bebida">Bebida</option>
-          <option value="aderezo">Aderezo</option>
-          <option value="otro">Otro</option>
+          <option value="" disabled selected>Seleccione un tipo</option>
+          <option th:each="t : ${T(com.example.PizzUMBurgUM.entities.enums.TipoProducto).values()}"
+                  th:value="${t}"
+                  th:text="${t}"></option>
         </select>
 
         <label>Categoría:</label>
         <select class="admin-input" th:field="*{categoria}" required>
-          <option value="pizza">Pizza</option>
-          <option value="hamburguesa">Hamburguesa</option>
-          <option value="ambos">Ambos</option>
+          <option value="" disabled selected>Seleccione una categoría</option>
+          <option th:each="c : ${T(com.example.PizzUMBurgUM.entities.enums.CategoriaProducto).values()}"
+                  th:value="${c}"
+                  th:text="${c}"></option>
         </select>
 
         <label>Precio:</label>
@@ -58,7 +60,7 @@
     </div>
 
     <!-- Formulario editar precio -->
-    <div class="admin-item large" th:if="${producto.id != null}">
+    <div class="admin-item large" th:if="${producto.id != null and producto.id != 0}">
       <h2>Editar Precio</h2>
       <form th:object="${producto}" th:action="@{/admin/productos/{id}/actualizar-precio(id=${producto.id})}" method="post">
         <label>Precio:</label>

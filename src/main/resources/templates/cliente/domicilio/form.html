@@ -97,7 +97,6 @@
     </style>
 </head>
 <body>
-
 <header>
     <div class="header-brand">
         <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
@@ -105,35 +104,15 @@
     </div>
 
     <nav class="nav-bar">
-        <a href="../inicio-cliente.html"
-           th:href="@{/cliente/home}">
-            Inicio
-        </a>
-
-        <a href="../hacer-creacion.html"
-           th:href="@{/cliente/hacer-creacion}">
-            Crear
-        </a>
-
-        <a href="../carrito.html"
-           th:href="@{/cliente/carrito}">
-            Carrito
-        </a>
-
-        <a href="../favoritos/lista.html"
-           th:href="@{/cliente/favoritos}">
-            Favoritos
-        </a>
-
-        <a href="../historial/lista.html"
-           th:href="@{/cliente/historial}">
-            Historial
-        </a>
-
+        <a href="../inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
+        <a href="../hacer-creacion.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a href="../carrito.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
+        <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
         <a class="active" href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
-
-
-
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 

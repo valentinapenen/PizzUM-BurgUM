@@ -14,7 +14,8 @@ import lombok.experimental.SuperBuilder;
 
 public class Administrador extends Usuario{
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    // EAGER para evitar LazyInitializationException en vistas de perfil/admin
+    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
     @JoinColumn(name = "domicilio_id")
     private Domicilio domicilioFacturacion;
 }

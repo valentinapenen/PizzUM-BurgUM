@@ -25,6 +25,9 @@
         <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
         <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
         <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 
@@ -65,6 +68,16 @@
                     </select>
                 </div>
 
+                <!-- Cantidad de carnes -->
+                <div class="form-group">
+                    <label for="carneCantidad">Cantidad de carnes</label>
+                    <select id="carneCantidad" name="carneCantidad" required>
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+
                 <!-- Queso -->
                 <div class="form-group">
                     <label for="quesoSelect">Queso</label>
@@ -95,7 +108,7 @@
                                 </label>
                             </div>
                             <span class="item-price"
-                                  th:text="'$' + #numbers.formatDecimal(a.precio,1,2)">
+                                  th:text="|$${#numbers.formatDecimal(a.precio,1,2)}|">
                                 $0.00
                             </span>
                         </div>
@@ -119,7 +132,7 @@
                                 </label>
                             </div>
                             <span class="item-price"
-                                  th:text="'$' + #numbers.formatDecimal(t.precio,1,2)">
+                                  th:text="|$${#numbers.formatDecimal(t.precio,1,2)}|">
                                 $0.00
                             </span>
                         </div>
@@ -143,7 +156,7 @@
                                 </label>
                             </div>
                             <span class="item-price"
-                                  th:text="'$' + #numbers.formatDecimal(b.precio,1,2)">
+                                  th:text="|$${#numbers.formatDecimal(b.precio,1,2)}|">
                                 $0.00
                             </span>
                         </div>
@@ -167,7 +180,7 @@
                                 </label>
                             </div>
                             <span class="item-price"
-                                  th:text="'$' + #numbers.formatDecimal(p.precio,1,2)">
+                                  th:text="|$${#numbers.formatDecimal(p.precio,1,2)}|">
                                 $0.00
                             </span>
                         </div>
@@ -230,7 +243,9 @@
         total += parsePrecio(pan);
 
         const carne = document.querySelector("#carneSelect option:checked");
-        total += parsePrecio(carne);
+        const cantCarneEl = document.getElementById("carneCantidad");
+        const cantCarne = cantCarneEl ? parseInt(cantCarneEl.value || '1') : 1;
+        total += parsePrecio(carne) * Math.max(1, Math.min(3, cantCarne));
 
         const queso = document.querySelector("#quesoSelect option:checked");
         total += parsePrecio(queso);
@@ -258,6 +273,8 @@
     }
 
     document.addEventListener("change", actualizarTotal);
+    const carneCantSel = document.getElementById("carneCantidad");
+    if (carneCantSel) carneCantSel.addEventListener("change", actualizarTotal);
     window.addEventListener("load", actualizarTotal);
 </script>
 

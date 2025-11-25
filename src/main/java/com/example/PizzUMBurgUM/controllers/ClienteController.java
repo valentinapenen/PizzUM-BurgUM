@@ -11,6 +11,7 @@ import com.example.PizzUMBurgUM.entities.enums.TipoProducto;
 import com.example.PizzUMBurgUM.services.ClienteService;
 import com.example.PizzUMBurgUM.services.CreacionService;
 import com.example.PizzUMBurgUM.services.ProductoService;
+import com.example.PizzUMBurgUM.services.PrecioTamanoPizzaService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,11 @@ import com.example.PizzUMBurgUM.services.PedidoService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.example.PizzUMBurgUM.repositories.UsuarioRepository;
 
 @Controller
 
@@ -35,6 +41,39 @@ public class ClienteController {
 
     @Autowired
     private ProductoService productoService;
+
+    @Autowired
+    private PrecioTamanoPizzaService precioTamanoPizzaService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    /**
+     * Obtiene el cliente desde la sesión; si no está, lo rehidrata usando
+     * el usuario autenticado por Spring Security y lo guarda en sesión.
+     */
+    private Cliente obtenerClienteDesdeSesionOSeguridad(HttpSession session) {
+        // 1) Sesión existente
+        Object obj = session.getAttribute("usuarioLogueado");
+        if (obj instanceof Cliente) {
+            return (Cliente) obj;
+        }
+
+        // 2) Rehidratar desde Spring Security (evitar usuario anónimo)
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            String correo = auth.getName();
+            if (correo != null && !"anonymousUser".equalsIgnoreCase(correo)) {
+                Usuario u = usuarioRepository.findByCorreo(correo);
+                if (u instanceof Cliente c) {
+                    // Guardar en sesión para siguientes requests
+                    session.setAttribute("usuarioLogueado", c);
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
 
 
     @GetMapping("/home")
@@ -166,7 +205,7 @@ public class ClienteController {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login"; // igual que en favoritos / historial
+            return "redirect:/iniciar-sesion"; // redirección consistente con seguridad
         }
 
         model.addAttribute("cliente", cliente);
@@ -182,13 +221,20 @@ public class ClienteController {
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         model.addAttribute("cliente", cliente);
 
         // Tamaños (enum)
         model.addAttribute("tamanos", TamanoPizza.values());
+
+        // Precios actuales por tamaño (para mostrar y calcular el total aproximado en el cliente)
+        java.util.Map<String, Double> preciosTam = new java.util.HashMap<>();
+        for (TamanoPizza t : TamanoPizza.values()) {
+            preciosTam.put(t.name(), precioTamanoPizzaService.obtenerPrecioPorTamano(t));
+        }
+        model.addAttribute("preciosTam", preciosTam);
 
         // Productos para pizza (tipo + categoría PIZZA o AMBOS)
         model.addAttribute("masas",
@@ -228,14 +274,15 @@ public class ClienteController {
             RedirectAttributes redirectAttributes
     ) {
 
-        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login";
+        Cliente cliente = obtenerClienteDesdeSesionOSeguridad(session);
+        if (cliente == null) {
+            return "redirect:/iniciar-sesion";
         }
 
         // 👉 delegamos la lógica de armar la pizza al service
         Creacion creacion = creacionService.crearPizzaCompleta(
                 cliente.getId(),
+                tamano,
                 masaId,
                 salsaId,
                 quesoId,
@@ -260,7 +307,7 @@ public class ClienteController {
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         model.addAttribute("cliente", cliente);
@@ -291,12 +338,55 @@ public class ClienteController {
         return "cliente/creaciones/formHamburguesa";
     }
 
+    @PostMapping("/creaciones/hamburguesa/guardar")
+    public String guardarHamburguesa(
+            @RequestParam("panId") Long panId,
+            @RequestParam("carneId") Long carneId,
+            @RequestParam(value = "carneCantidad", defaultValue = "1") Integer carneCantidad,
+            @RequestParam("quesoId") Long quesoId,
+            @RequestParam(value = "aderezoIds", required = false) java.util.List<Long> aderezoIds,
+            @RequestParam(value = "toppingIds", required = false) java.util.List<Long> toppingIds,
+            @RequestParam(value = "bebidaIds", required = false) java.util.List<Long> bebidaIds,
+            @RequestParam(value = "papasIds", required = false) java.util.List<Long> papasIds,
+            @RequestParam(value = "favorito", defaultValue = "false") boolean favorito,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+
+        Cliente cliente = obtenerClienteDesdeSesionOSeguridad(session);
+        if (cliente == null) {
+            return "redirect:/iniciar-sesion";
+        }
+
+        int cant = carneCantidad == null ? 1 : Math.max(1, Math.min(3, carneCantidad));
+
+        Creacion creacion = creacionService.crearHamburguesaCompleta(
+                cliente.getId(),
+                panId,
+                carneId,
+                cant,
+                quesoId,
+                aderezoIds,
+                toppingIds,
+                bebidaIds,
+                papasIds,
+                favorito
+        );
+
+        redirectAttributes.addFlashAttribute(
+                "exito",
+                "Tu hamburguesa se creó correctamente."
+        );
+
+        return "redirect:/cliente/hacer-creacion";
+    }
+
     @GetMapping("/carrito")
     public String verCarrito(HttpSession session, Model model) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         model.addAttribute("cliente", cliente);
@@ -334,7 +424,7 @@ public class ClienteController {
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         try {
@@ -363,7 +453,7 @@ public class ClienteController {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         Pedido pedido = pedidoService.obtenerPedido(id);
@@ -387,7 +477,7 @@ public class ClienteController {
 
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         // Si el carrito está vacío → volver
@@ -421,8 +511,8 @@ public class ClienteController {
         model.addAttribute("domicilios", cliente.getDomicilios());
         model.addAttribute("tarjetas", cliente.getTarjetas());
 
-        // va a templates/cliente/carrito/form.html
-        return "cliente/carrito/form";
+        // va a templates/cliente/carrito/botonConfirmarPedido.html
+        return "cliente/carrito/botonConfirmarPedido";
     }
 
 
@@ -435,7 +525,7 @@ public class ClienteController {
     ) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null || !(usuario instanceof Cliente cliente)) {
-            return "redirect:/usuario/login";
+            return "redirect:/iniciar-sesion";
         }
 
         try {
@@ -459,7 +549,8 @@ public class ClienteController {
                     "error",
                     "No se pudo confirmar el pedido: " + e.getMessage()
             );
-            return "cliente/carrito/botonConfirmarPedido";
+            // Redirigimos al paso de continuar para rehidratar el modelo (domicilios, tarjetas, creaciones, total)
+            return "redirect:/cliente/carrito/continuar";
         }
     }
 

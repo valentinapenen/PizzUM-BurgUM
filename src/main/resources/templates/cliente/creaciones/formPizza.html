@@ -24,6 +24,9 @@
         <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
         <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
         <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 
@@ -45,7 +48,8 @@
                         <option value="" disabled selected>Seleccionar tamaño...</option>
                         <option th:each="t : ${tamanos}"
                                 th:value="${t}"
-                                th:text="${t}">
+                                th:attr="data-precio=${preciosTam[t.name()]}"
+                                th:text="|${t} ($${#numbers.formatDecimal(preciosTam[t.name()],1,2)})|">
                         </option>
                     </select>
                 </div>
@@ -106,7 +110,7 @@
                                 </label>
                             </div>
                             <span class="item-price"
-                                  th:text="'$' + #numbers.formatDecimal(top.precio,1,2)">
+                                  th:text="|$${#numbers.formatDecimal(top.precio,1,2)}|">
                                 $0.00
                             </span>
                         </div>
@@ -130,7 +134,7 @@
                                 </label>
                             </div>
                             <span class="item-price"
-                                  th:text="'$' + #numbers.formatDecimal(b.precio,1,2)">
+                                  th:text="|$${#numbers.formatDecimal(b.precio,1,2)}|">
                                 $0.00
                             </span>
                         </div>
@@ -154,7 +158,7 @@
                                 </label>
                             </div>
                             <span class="item-price"
-                                  th:text="'$' + #numbers.formatDecimal(p.precio,1,2)">
+                                  th:text="|$${#numbers.formatDecimal(p.precio,1,2)}|">
                                 $0.00
                             </span>
                         </div>
@@ -189,6 +193,62 @@
                 </div>
 
             </form>
+            <script>
+                (function() {
+                    function parsePrecio(val) {
+                        var n = parseFloat(val);
+                        return isNaN(n) ? 0 : n;
+                    }
+
+                    function getSelectedPrecio(selectId) {
+                        var sel = document.getElementById(selectId);
+                        if (!sel) return 0;
+                        var opt = sel.options[sel.selectedIndex];
+                        if (!opt) return 0;
+                        return parsePrecio(opt.getAttribute('data-precio'));
+                    }
+
+                    function sumChecked(name) {
+                        var total = 0;
+                        document.querySelectorAll('input[name="' + name + '"]:checked').forEach(function(el) {
+                            total += parsePrecio(el.getAttribute('data-precio'));
+                        });
+                        return total;
+                    }
+
+                    function updateTotal() {
+                        var total = 0;
+                        // tamaño base
+                        total += getSelectedPrecio('tamano');
+                        // base de pizza
+                        total += getSelectedPrecio('masaSelect');
+                        total += getSelectedPrecio('salsaSelect');
+                        total += getSelectedPrecio('quesoSelect');
+                        // extras
+                        total += sumChecked('toppingIds');
+                        total += sumChecked('bebidaIds');
+                        total += sumChecked('papasIds');
+                        var totalEl = document.getElementById('total');
+                        if (totalEl) totalEl.textContent = total.toFixed(2);
+                    }
+
+                    // listeners
+                    ['tamano','masaSelect','salsaSelect','quesoSelect'].forEach(function(id){
+                        var el = document.getElementById(id);
+                        if (el) el.addEventListener('change', updateTotal);
+                    });
+                    ['toppingIds','bebidaIds','papasIds'].forEach(function(name){
+                        document.querySelectorAll('input[name="' + name + '"]').forEach(function(el){
+                            el.addEventListener('change', updateTotal);
+                        });
+                    });
+
+                    // inicial
+                    document.addEventListener('DOMContentLoaded', updateTotal);
+                    // por si el script carga después
+                    updateTotal();
+                })();
+            </script>
         </div>
 
     </div>
@@ -201,49 +261,6 @@
     </div>
     <small>© 2025 — Todos los derechos reservados</small>
 </footer>
-
-<script>
-    function parsePrecio(el) {
-        if (!el) return 0;
-        const val = el.getAttribute("data-precio");
-        if (!val) return 0;
-        const n = parseFloat(val);
-        return isNaN(n) ? 0 : n;
-    }
-
-    function actualizarTotal() {
-        let total = 0;
-
-        const masa = document.querySelector("#masaSelect option:checked");
-        total += parsePrecio(masa);
-
-        const salsa = document.querySelector("#salsaSelect option:checked");
-        total += parsePrecio(salsa);
-
-        const queso = document.querySelector("#quesoSelect option:checked");
-        total += parsePrecio(queso);
-
-        document.querySelectorAll("input[name='toppingIds']:checked").forEach(cb => {
-            total += parsePrecio(cb);
-        });
-
-        document.querySelectorAll("input[name='bebidaIds']:checked").forEach(cb => {
-            total += parsePrecio(cb);
-        });
-
-        document.querySelectorAll("input[name='papasIds']:checked").forEach(cb => {
-            total += parsePrecio(cb);
-        });
-
-        const totalSpan = document.getElementById("total");
-        if (totalSpan) {
-            totalSpan.textContent = total.toFixed(2);
-        }
-    }
-
-    document.addEventListener("change", actualizarTotal);
-    window.addEventListener("load", actualizarTotal);
-</script>
 
 </body>
 </html>

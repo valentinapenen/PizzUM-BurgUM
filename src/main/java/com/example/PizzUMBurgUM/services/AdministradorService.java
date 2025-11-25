@@ -21,6 +21,9 @@ public class AdministradorService {
     @Autowired
     private DomicilioService domicilioService;
 
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     public List<Administrador> listarTodos() {
         List<Administrador> administradores = administradorRepository.findAll();
         return administradores;
@@ -61,7 +64,8 @@ public class AdministradorService {
         }
 
         if(nuevosDatos.getContrasena() != null && !nuevosDatos.getContrasena().isBlank()){
-            admin.setContrasena(nuevosDatos.getContrasena());
+            // Codificar la nueva contraseña antes de guardar
+            admin.setContrasena(passwordEncoder.encode(nuevosDatos.getContrasena()));
         }
 
         if (nuevosDatos.getDomicilioFacturacion() != null){
@@ -132,7 +136,8 @@ public class AdministradorService {
         admin.setFechaNacimiento(creacionAdministradorRequest.getFechaNacimiento());
         admin.setCorreo(creacionAdministradorRequest.getCorreo());
         admin.setTelefono(creacionAdministradorRequest.getTelefono());
-        admin.setContrasena(creacionAdministradorRequest.getContrasena());
+        // Guardar la contraseña codificada (BCrypt)
+        admin.setContrasena(passwordEncoder.encode(creacionAdministradorRequest.getContrasena()));
 
         Domicilio domicilio = new Domicilio(
                 creacionAdministradorRequest.getDomicilio_facturacion().getNumero(),

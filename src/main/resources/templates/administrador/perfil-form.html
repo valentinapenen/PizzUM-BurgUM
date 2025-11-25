@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar perfil administrador</title>
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/administrador/admin.css}">
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+    <nav class="nav-bar">
+        <a href="inicio-administrador.html" th:href="@{/administrador/inicio}">Inicio</a>
+        <a href="pedido/lista.html" th:href="@{/pedidos}">Pedidos</a>
+        <a href="producto/lista.html" th:href="@{/admin/productos}">Productos</a>
+        <a href="lista.html" th:href="@{/administrador/lista}">Administradores</a>
+        <a class="active" href="../administrador/perfil.html" th:href="@{/administrador/perfil}">Perfil</a>
+        <a href="../administrador/ventas/lista.html" th:href="@{/admin/ventas}">Ventas</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<div class="admin-container">
+    <div class="admin-panel">
+        <div class="admin-item large">
+            <h2>Editar datos del administrador</h2>
+
+            <form th:action="@{/administrador/perfil/editar}" th:object="${administrador}" method="post">
+                <!-- Datos personales permitidos -->
+                <label>Nombre</label>
+                <input class="admin-input" type="text" th:field="*{nombre}" required />
+
+                <label>Apellido</label>
+                <input class="admin-input" type="text" th:field="*{apellido}" required />
+
+                <label>Teléfono</label>
+                <input class="admin-input" type="tel" th:field="*{telefono}" required />
+
+                <label>Fecha de nacimiento</label>
+                <input class="admin-input" type="date" th:field="*{fechaNacimiento}" required />
+
+                <label>Nueva contraseña (opcional)</label>
+                <input class="admin-input" type="password" th:field="*{contrasena}" placeholder="Dejar vacío para mantener" />
+
+                <h3 style="margin-top:16px;">Domicilio de facturación</h3>
+                <div th:if="${administrador.domicilioFacturacion != null}">
+                    <label>Número</label>
+                    <input class="admin-input" type="text" th:field="*{domicilioFacturacion.numero}" />
+
+                    <label>Calle</label>
+                    <input class="admin-input" type="text" th:field="*{domicilioFacturacion.calle}" />
+
+                    <label>Departamento</label>
+                    <input class="admin-input" type="text" th:field="*{domicilioFacturacion.departamento}" />
+
+                    <label>Ciudad</label>
+                    <input class="admin-input" type="text" th:field="*{domicilioFacturacion.ciudad}" />
+
+                    <label>Apartamento (opcional)</label>
+                    <input class="admin-input" type="text" th:field="*{domicilioFacturacion.apartamento}" />
+                </div>
+                <p th:if="${administrador.domicilioFacturacion == null}" style="color:#e67e22;">
+                    No hay domicilio asignado. Comuníquese con soporte para registrarlo.
+                </p>
+
+                <div class="form-actions" style="margin-top:14px; display:flex; gap:10px;">
+                    <button type="submit">Guardar cambios</button>
+                    <a class="admin-link" th:href="@{/administrador/perfil}"><button type="button" class="btn-secondary">Cancelar</button></a>
+                </div>
+
+                <p th:if="${error}" th:text="${error}" style="color:#e74c3c; margin-top:10px;"></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="footer-logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer-title">PizzUM & BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

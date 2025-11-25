@@ -1,6 +1,7 @@
 package com.example.PizzUMBurgUM.entities;
 
 import com.example.PizzUMBurgUM.entities.enums.TipoCreacion;
+import com.example.PizzUMBurgUM.entities.enums.TamanoPizza;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -25,6 +26,9 @@ public class Creacion {
 
     @OneToMany
     private List<Producto> productos;
+
+    @Enumerated(EnumType.STRING)
+    private TamanoPizza tamanoPizza; // solo aplica cuando tipo = PIZZA
 
     @NotNull
     private double precioTotal;

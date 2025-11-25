@@ -68,8 +68,24 @@ header {
     transition: background 0.2s, color 0.2s;
 }
 
+.nav-bar .nav-link {
+    background: transparent;
+    border: none;
+    color: #444;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 10px;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 /* Hover */
 .nav-bar a:hover {
+    background-color: #f2f2f2;
+}
+
+.nav-bar .nav-link:hover {
     background-color: #f2f2f2;
 }
 

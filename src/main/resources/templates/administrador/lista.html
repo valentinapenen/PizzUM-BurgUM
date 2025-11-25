@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Administradores</title>
     <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
-    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/administrador/admin.css}">
 </head>
 <body>
 
@@ -14,10 +14,15 @@
         <h1 class="brand-title">PizzUM & BurgUM</h1>
     </div>
     <nav class="nav-bar">
-        <a href="inicio-administrador.html" th:href="@{inicio-administrador}">Inicio</a>
-        <a href="../pedido/lista.html" th:href="@{/pedidos/lista}">Pedidos</a>
-        <a href="../producto/lista.html" th:href="@{/productos/lista}">Productos</a>
-        <a class="active" href="lista.html" th:href="@{lista}">Administradores</a>
+        <a href="inicio-administrador.html" th:href="@{/administrador/inicio}">Inicio</a>
+        <a href="pedido/lista.html" th:href="@{/pedidos}">Pedidos</a>
+        <a href="producto/lista.html" th:href="@{/admin/productos}">Productos</a>
+        <a class="active" href="lista.html" th:href="@{/administrador/lista}">Administradores</a>
+        <a href="../administrador/perfil.html" th:href="@{/administrador/perfil}">Perfil</a>
+        <a href="../administrador/ventas/lista.html" th:href="@{/admin/ventas}">Ventas</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 

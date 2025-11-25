@@ -30,6 +30,9 @@ public class CreacionService {
     @Autowired
     private TarjetaRepository tarjetaRepository;
 
+    @Autowired
+    private PrecioTamanoPizzaService precioTamanoPizzaService;
+
 
     // Hacer creación
     @Transactional
@@ -54,7 +57,8 @@ public class CreacionService {
 
     // Listar todas las creaciones de un cliente
     public List<Creacion> listarPorCliente(Long clienteId) {
-        return creacionRepository.findByClienteId(clienteId);
+        // Mostrar solo las creaciones que siguen en el carrito (no asociadas a un Pedido)
+        return creacionRepository.findCarritoByClienteId(clienteId);
     }
 
 
@@ -84,6 +88,7 @@ public class CreacionService {
 
     @Transactional
     public Creacion crearPizzaCompleta(Long clienteId,
+                                       TamanoPizza tamano,
                                        Long masaId,
                                        Long salsaId,
                                        Long quesoId,
@@ -107,14 +112,21 @@ public class CreacionService {
             productosIds.addAll(papasIds);
         }
 
-        // Reutilizamos la lógica genérica
-        return crearCreacion(clienteId, TipoCreacion.PIZZA, productosIds, favorito);
+        // Reutilizamos la lógica genérica para crear la base
+        Creacion creacion = crearCreacion(clienteId, TipoCreacion.PIZZA, productosIds, favorito);
+
+        // Sumar precio base por tamaño y persistir el tamaño elegido
+        double precioBaseTamano = precioTamanoPizzaService.obtenerPrecioPorTamano(tamano);
+        creacion.setTamanoPizza(tamano);
+        creacion.setPrecioTotal(creacion.getPrecioTotal() + precioBaseTamano);
+        return creacionRepository.save(creacion);
     }
 
     @Transactional
     public Creacion crearHamburguesaCompleta(Long clienteId,
                                              Long panId,
                                              Long carneId,
+                                             int carneCantidad,
                                              Long quesoId,
                                              java.util.List<Long> aderezoIds,
                                              java.util.List<Long> toppingIds,
@@ -124,6 +136,11 @@ public class CreacionService {
 
         java.util.List<Long> productosIds = new java.util.ArrayList<>();
         productosIds.add(panId);
+        // Validar cantidad de carne (1..3)
+        int cant = Math.max(1, Math.min(3, carneCantidad));
+        // Agregamos una sola vez el ID de carne a la lista de productos
+        // porque JPA findAllById usa IN y devolverá una fila por ID, no por repetición.
+        // Luego ajustamos el precio total manualmente por las carnes extra.
         productosIds.add(carneId);
         productosIds.add(quesoId);
 
@@ -140,8 +157,19 @@ public class CreacionService {
             productosIds.addAll(papasIds);
         }
 
-        // reaprovechamos la lógica genérica
-        return crearCreacion(clienteId, TipoCreacion.HAMBURGUESA, productosIds, favorito);
+        // Crear la base (sumará precios de pan, 1x carne, queso y extras)
+        Creacion creacion = crearCreacion(clienteId, TipoCreacion.HAMBURGUESA, productosIds, favorito);
+
+        // Si eligió más de 1 carne, sumar las carnes adicionales al precio total
+        if (cant > 1) {
+            Producto carne = productoRepository.findById(carneId)
+                    .orElseThrow(() -> new RuntimeException("Carne no encontrada"));
+            double extra = (cant - 1) * carne.getPrecio();
+            creacion.setPrecioTotal(creacion.getPrecioTotal() + extra);
+            return creacionRepository.save(creacion);
+        }
+
+        return creacion;
     }
 
     @Transactional
