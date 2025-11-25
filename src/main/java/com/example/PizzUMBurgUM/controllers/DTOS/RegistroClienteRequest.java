@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
@@ -24,6 +26,7 @@ public class RegistroClienteRequest {
     private String cedula;
 
     @NotNull(message = "La fecha de nacimiento es obligatoria.")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate fechaNacimiento;
 
     @NotBlank(message = "El correo es obligatorio.")
@@ -31,6 +34,7 @@ public class RegistroClienteRequest {
     private String correo;
 
     @NotBlank(message = "El teléfono es obligatorio.")
+    @Pattern(regexp = "^09\\d{7}$", message = "El teléfono debe tener 9 dígitos y comenzar con 09.")
     private String telefono;
 
     @NotBlank(message = "La contraseña es obligatoria.")

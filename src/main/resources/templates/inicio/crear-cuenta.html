@@ -54,14 +54,18 @@
 
                 <div class="field">
                     <label class="label" for="fechaNacimiento">Fecha de nacimiento</label>
-                    <input class="input" id="fechaNacimiento" type="date" th:field="*{fechaNacimiento}" required>
+                    <input class="input" id="fechaNacimiento" type="text" th:field="*{fechaNacimiento}"
+                           placeholder="DD/MM/YYYY" pattern="^\d{2}/\d{2}/\d{4}$" inputmode="numeric"
+                           title="Formato requerido: DD/MM/YYYY" required>
                 </div>
             </div>
 
             <div class="grid-2">
                 <div class="field">
                     <label class="label" for="telefono">Teléfono</label>
-                    <input class="input" id="telefono" type="tel" th:field="*{telefono}" placeholder="+598 9 123 4567" required>
+                    <input class="input" id="telefono" type="tel" th:field="*{telefono}"
+                           placeholder="09xxxxxxx" pattern="^09\d{7}$" maxlength="9" inputmode="numeric"
+                           title="Ingrese 9 dígitos comenzando con 09" required>
                 </div>
 
                 <div class="field">
@@ -142,7 +146,9 @@
 
                 <div class="field">
                     <label class="label" for="tar-venc">Fecha de vencimiento</label>
-                    <input class="input" id="tar-venc" type="month" th:field="*{tarjeta.fechaVencimiento}" required>
+                    <input class="input" id="tar-venc" type="text" th:field="*{tarjeta.fechaVencimiento}"
+                           placeholder="MM/YYYY" pattern="^(0[1-9]|1[0-2])\/\d{4}$" inputmode="numeric"
+                           title="Formato requerido: MM/YYYY" required>
                 </div>
             </div>
 

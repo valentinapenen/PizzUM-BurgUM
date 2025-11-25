@@ -28,6 +28,7 @@ public class ClienteService {
     @Autowired
     private TarjetaService tarjetaService;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public Cliente registrarCliente(RegistroClienteRequest req){
@@ -69,14 +70,14 @@ public class ClienteService {
 
         cliente.getDomicilios().add(domicilio);
 
-        // Convertir el string de fecha (YYYY-MM) a un objeto Date
+        // Convertir el string de fecha (MM/YYYY) a un objeto Date
         Date fechaVencimiento = null;
         try {
             String fechaStr = req.getTarjeta().getFechaVencimiento();
-            // Añadir el día (último día del mes)
-            String[] partes = fechaStr.split("-");
-            int año = Integer.parseInt(partes[0]);
-            int mes = Integer.parseInt(partes[1]);
+            // Formato esperado MM/YYYY
+            String[] partes = fechaStr.split("/");
+            int mes = Integer.parseInt(partes[0]);
+            int año = Integer.parseInt(partes[1]);
 
             Calendar calendar = Calendar.getInstance();
             calendar.set(año, mes - 1, 1); // Mes en Calendar es 0-based
@@ -84,7 +85,7 @@ public class ClienteService {
 
             fechaVencimiento = calendar.getTime();
         } catch (Exception e) {
-            throw new IllegalArgumentException("Formato de fecha inválido. Use YYYY-MM.");
+            throw new IllegalArgumentException("Formato de fecha inválido. Use MM/YYYY.");
         }
 
         Tarjeta tarjeta = Tarjeta.builder()

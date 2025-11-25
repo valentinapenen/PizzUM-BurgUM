@@ -4,202 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmar pedido - PizzUM &amp; BurgUM</title>
-
-    <!-- CSS fondo/header/footer -->
-    <link rel="stylesheet"
-          href="../../../static/css/background-header-footer.css"
-          th:href="@{/css/background-header-footer.css}">
-
-    <!-- CSS del panel de cliente -->
-    <link rel="stylesheet"
-          href="../../../static/css/cliente/paneles-cliente.css"
-          th:href="@{/css/cliente/paneles-cliente.css}">
-
-    <style>
-        .confirmacion-contenido {
-            max-width: 900px;
-            margin: 40px auto 80px auto;
-            padding: 24px;
-            border-radius: 24px;
-            background: rgba(20, 20, 20, 0.75);
-            backdrop-filter: blur(8px);
-            color: #fff;
-        }
-
-        .confirmacion-titulo {
-            font-family: "Bebas Neue", sans-serif;
-            font-size: 2.2rem;
-            margin-bottom: 8px;
-        }
-
-        .confirmacion-sub {
-            font-size: 0.95rem;
-            opacity: 0.85;
-            margin-bottom: 18px;
-        }
-
-        .mensaje-error {
-            margin-bottom: 12px;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            background: rgba(200, 40, 40, 0.12);
-            border: 1px solid rgba(200, 40, 40, 0.65);
-        }
-
-        .resumen-carrito {
-            margin-bottom: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-            padding-bottom: 12px;
-        }
-
-        .resumen-carrito h2 {
-            font-size: 1.15rem;
-            margin-bottom: 6px;
-        }
-
-        .resumen-carrito ul {
-            margin: 0;
-            padding-left: 18px;
-            font-size: 0.9rem;
-        }
-
-        .resumen-carrito li {
-            margin-bottom: 2px;
-        }
-
-        .resumen-total {
-            margin-top: 6px;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .form-confirmar {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-top: 12px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .form-group label {
-            font-size: 0.95rem;
-        }
-
-        .form-group select {
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.45);
-            padding: 8px 14px;
-            background: rgba(0, 0, 0, 0.25);
-            color: #fff;
-            outline: none;
-        }
-
-        .form-group select option {
-            color: #000;
-        }
-
-        .ayuda {
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-
-        .form-actions {
-            margin-top: 14px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .btn-principal,
-        .btn-secundario {
-            border-radius: 999px;
-            padding: 8px 18px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-        }
-
-        .btn-principal {
-            background: #ff7a2f;
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .btn-secundario {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: #fff;
-        }
-
-        .btn-principal:hover,
-        .btn-secundario:hover {
-            filter: brightness(1.08);
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 16px;
-        }
-
-        .bloque-aviso {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 14px;
-            padding: 10px 12px;
-        }
-    </style>
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/confirmar-pedido.css" th:href="@{/css/cliente/confirmar-pedido.css}">
 </head>
 <body>
 
 <header>
     <div class="header-brand">
-        <img class="logo" alt="PizzUM & BurgUM logo" src="../../../static/images/logo.png" />
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
         <h1 class="brand-title">PizzUM &amp; BurgUM</h1>
     </div>
 
     <nav class="nav-bar">
-        <a href="../inicio-cliente.html"
-           th:href="@{/cliente/home}">
-            Inicio
-        </a>
-
-        <a href="../creaciones/CreacionesPrincipalMenu.html"
-           th:href="@{/cliente/hacer-creacion}">
-            Crear
-        </a>
-
-        <a class="active"
-           href="../carrito/lista.html"
-           th:href="@{/cliente/carrito}">
-            Carrito
-        </a>
-
-        <a href="../favoritos/lista.html"
-           th:href="@{/cliente/favoritos}">
-            Favoritos
-        </a>
-
-        <a href="../historial/lista.html"
-           th:href="@{/cliente/historial}">
-            Historial
-        </a>
-
-        <a href="../perfil.html"
-           th:href="@{/cliente/perfil}">
-            Perfil
-        </a>
+        <a href="../inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
+        <a href="../creaciones/CreacionesPrincipalMenu.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a class="active" href="../carrito/lista.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
+        <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
+        <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
     </nav>
 </header>
 

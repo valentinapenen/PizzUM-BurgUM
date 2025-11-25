@@ -4,162 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito - PizzUM &amp; BurgUM</title>
-
     <!-- Auto-refresh solo si hay pedido en curso -->
     <meta http-equiv="refresh" content="10" th:if="${tienePedidoEnCurso}"/>
-
-    <!-- Fuentes -->
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700&display=swap"
-          rel="stylesheet">
-
-    <!-- CSS fondo/header/footer -->
-    <link rel="stylesheet"
-          href="../../../static/css/background-header-footer.css"
-          th:href="@{/css/background-header-footer.css}">
-
-    <!-- CSS de panel cliente -->
-    <link rel="stylesheet"
-          href="../../../static/css/cliente/paneles-cliente.css"
-          th:href="@{/css/paneles-cliente.css}">
-
-    <!-- CSS extra para carrito -->
-    <style>
-        .carrito-contenido {
-            max-width: 1000px;
-            margin: 40px auto 80px auto;
-            padding: 24px;
-            border-radius: 24px;
-            background: rgba(20, 20, 20, 0.7);
-            backdrop-filter: blur(8px);
-        }
-
-        .carrito-titulo {
-            font-family: "Bebas Neue", sans-serif;
-            font-size: 2.2rem;
-            margin-bottom: 16px;
-            color: #ffffff;
-        }
-
-        .tabla-carrito {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            margin-bottom: 16px;
-        }
-
-        .tabla-carrito th,
-        .tabla-carrito td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.95rem;
-        }
-
-        .tabla-carrito th {
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .tabla-carrito td ul {
-            padding-left: 18px;
-            margin: 0;
-        }
-
-        .precio {
-            white-space: nowrap;
-        }
-
-        .mensaje-exito,
-        .mensaje-error {
-            margin-bottom: 12px;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-
-        .mensaje-exito {
-            background: rgba(0, 180, 90, 0.1);
-            border: 1px solid rgba(0, 180, 90, 0.6);
-        }
-
-        .mensaje-error {
-            background: rgba(200, 40, 40, 0.1);
-            border: 1px solid rgba(200, 40, 40, 0.6);
-        }
-
-        .btn-accion {
-            border: none;
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            background: #ff4b4b;
-            color: #fff;
-        }
-
-        .btn-accion:hover {
-            filter: brightness(1.1);
-        }
-
-        .carrito-resumen {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .carrito-total {
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .carrito-botones {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 4px;
-        }
-
-        .btn-principal,
-        .btn-secundario {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-size: 0.95rem;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-principal {
-            background: #ff7a2f;
-            color: #fff;
-        }
-
-        .btn-secundario {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: #fff;
-        }
-
-        .btn-principal:hover,
-        .btn-secundario:hover {
-            filter: brightness(1.1);
-        }
-
-        .texto-vacio {
-            font-size: 0.95rem;
-            opacity: 0.8;
-        }
-    </style>
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/carrito.css" th:href="@{/css/cliente/carrito.css}">
 </head>
 <body>
-
 <header>
     <div class="header-brand">
-        <img class="logo" alt="PizzUM & BurgUM logo" src="../../../static/images/logo.png" />
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
         <h1 class="brand-title">PizzUM & BurgUM</h1>
     </div>
 
