@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Calendar;
 
 @Service
 public class TarjetaService {
@@ -23,6 +24,23 @@ public class TarjetaService {
 
     public Tarjeta crearTarjeta(String numero, String nombreTitular, long clienteId,
                                 TipoTarjeta tipoTarjeta, Date fechaVencimiento, boolean predeterminada) {
+
+        // Validaciones básicas
+        if (numero == null || numero.isBlank()) {
+            throw new IllegalArgumentException("El número de la tarjeta es obligatorio.");
+        }
+        if (nombreTitular == null || nombreTitular.isBlank()) {
+            throw new IllegalArgumentException("El nombre del titular es obligatorio.");
+        }
+        if (tipoTarjeta == null) {
+            throw new IllegalArgumentException("El tipo de tarjeta es obligatorio.");
+        }
+        if (fechaVencimiento == null) {
+            throw new IllegalArgumentException("La fecha de vencimiento es obligatoria.");
+        }
+
+        // Normalizar fecha al último día del mes (coherente con registro)
+        fechaVencimiento = ajustarAlFinDeMes(fechaVencimiento);
 
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
@@ -89,6 +107,19 @@ public class TarjetaService {
 
         // NUEVA tarjeta
         if (datos.getId() == 0) {
+            // Validar datos requeridos para creación
+            if (datos.getNumero() == null || datos.getNumero().isBlank()) {
+                throw new IllegalArgumentException("El número de la tarjeta es obligatorio.");
+            }
+            if (datos.getNombreTitular() == null || datos.getNombreTitular().isBlank()) {
+                throw new IllegalArgumentException("El nombre del titular es obligatorio.");
+            }
+            if (datos.getTipoTarjeta() == null) {
+                throw new IllegalArgumentException("El tipo de tarjeta es obligatorio.");
+            }
+            if (datos.getFecha_vencimiento() == null) {
+                throw new IllegalArgumentException("La fecha de vencimiento es obligatoria.");
+            }
             return crearTarjeta(
                     datos.getNumero(),
                     datos.getNombreTitular(),
@@ -102,12 +133,42 @@ public class TarjetaService {
         // EDITAR tarjeta existente
         Tarjeta existente = buscarPorIdDeCliente(clienteId, datos.getId());
 
+        if (datos.getNumero() == null || datos.getNumero().isBlank()) {
+            throw new IllegalArgumentException("El número de la tarjeta es obligatorio.");
+        }
+        if (datos.getNombreTitular() == null || datos.getNombreTitular().isBlank()) {
+            throw new IllegalArgumentException("El nombre del titular es obligatorio.");
+        }
+        if (datos.getTipoTarjeta() == null) {
+            throw new IllegalArgumentException("El tipo de tarjeta es obligatorio.");
+        }
+
         existente.setNumero(datos.getNumero());
         existente.setNombreTitular(datos.getNombreTitular());
         existente.setTipoTarjeta(datos.getTipoTarjeta());
-        existente.setFecha_vencimiento(datos.getFecha_vencimiento());
+
+        // Si la fecha de vencimiento viene nula (fallo de binding del formulario),
+        // no la sobreescribimos para evitar violar la restricción @NotNull en la BD
+        if (datos.getFecha_vencimiento() != null) {
+            existente.setFecha_vencimiento(ajustarAlFinDeMes(datos.getFecha_vencimiento()));
+        }
 
         return tarjetaRepository.save(existente);
+    }
+
+    /** Ajusta una fecha (yyyy-MM o cualquier día) al último día de ese mes a las 00:00:00 */
+    private Date ajustarAlFinDeMes(Date fecha) {
+        if (fecha == null) return null;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(fecha);
+        // Ir al último día del mes
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        // Normalizar hora a medianoche
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 
 

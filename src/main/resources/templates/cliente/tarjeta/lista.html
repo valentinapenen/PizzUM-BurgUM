@@ -6,12 +6,8 @@
     <title>Tarjetas - PizzUM & BurgUM</title>
 
     <!-- CSS base -->
-    <link rel="stylesheet"
-          href="../../../static/css/background-header-footer.css"
-          th:href="@{/css/background-header-footer.css}">
-    <link rel="stylesheet"
-          href="../../../static/css/cliente/paneles-cliente.css"
-          th:href="@{/css/paneles-cliente.css}">
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
 
     <style>
         .client-panel {
@@ -185,7 +181,7 @@
 
             <p class="tar-info">
                 <strong>Vence:</strong>
-                <span th:text="${#temporals.format(tar.fecha_vencimiento, 'MM/yyyy')}">
+                <span th:text="${#dates.format(tar.fecha_vencimiento, 'MM/yyyy')}">
                     01/2030
                 </span>
             </p>

@@ -2,6 +2,7 @@ package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.entities.Cliente;
 import com.example.PizzUMBurgUM.entities.Tarjeta;
+import com.example.PizzUMBurgUM.entities.Usuario;
 import com.example.PizzUMBurgUM.entities.enums.TipoTarjeta;
 import com.example.PizzUMBurgUM.services.TarjetaService;
 import com.example.PizzUMBurgUM.services.ClienteService;
@@ -26,26 +27,26 @@ public class TarjetaClienteController {
     @GetMapping
     public String listarTarjetas(HttpSession session, Model model) {
 
-        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-        if (cliente == null) return "redirect:/usuario/login";
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) return "redirect:/iniciar-sesion";
 
         model.addAttribute("cliente", cliente);
         model.addAttribute("tarjetas",
                 tarjetaService.listarTarjetasPorCliente(cliente.getId()));
 
-        return "tarjetas/lista";
+        return "cliente/tarjeta/lista";
     }
 
-    // para nuev atarjeta
+    // para nueva tarjeta
     @GetMapping("/nueva")
     public String nuevaTarjeta(HttpSession session, Model model) {
 
-        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-        if (cliente == null) return "redirect:/usuario/login";
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) return "redirect:/iniciar-sesion";
 
         model.addAttribute("tarjeta", new Tarjeta());
         model.addAttribute("tipos", TipoTarjeta.values());
-        return "tarjetas/form";
+        return "cliente/tarjeta/form";
     }
 
     //para editar tarjeta
@@ -55,8 +56,8 @@ public class TarjetaClienteController {
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
 
-        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-        if (cliente == null) return "redirect:/usuario/login";
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) return "redirect:/iniciar-sesion";
 
         Tarjeta tarjeta = tarjetaService.buscarPorIdDeCliente(cliente.getId(), id);
         if (tarjeta == null) {
@@ -66,7 +67,7 @@ public class TarjetaClienteController {
 
         model.addAttribute("tarjeta", tarjeta);
         model.addAttribute("tipos", TipoTarjeta.values());
-        return "tarjetas/form";
+        return "cliente/tarjeta/form";
     }
 
     //guardar crear o editar tarjeta
@@ -76,8 +77,8 @@ public class TarjetaClienteController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-        if (cliente == null) return "redirect:/usuario/login";
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) return "redirect:/iniciar-sesion";
 
         try {
             tarjetaService.guardarTarjetaDeCliente(cliente.getId(), datos);
@@ -96,8 +97,8 @@ public class TarjetaClienteController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-        if (cliente == null) return "redirect:/usuario/login";
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) return "redirect:/iniciar-sesion";
 
         try {
             tarjetaService.eliminarTarjetaDeCliente(cliente.getId(), id);
@@ -116,8 +117,8 @@ public class TarjetaClienteController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        Cliente cliente = (Cliente) session.getAttribute("usuarioLogueado");
-        if (cliente == null) return "redirect:/usuario/login";
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) return "redirect:/iniciar-sesion";
 
         try {
             tarjetaService.marcarPredeterminada(cliente.getId(), id);

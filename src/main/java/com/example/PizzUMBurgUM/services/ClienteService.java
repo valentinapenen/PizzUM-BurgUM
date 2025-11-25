@@ -106,7 +106,8 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + idCliente));
 
         // Validaciones de campos no modificables
-        if (!nuevosDatos.getCedula().equals(cliente.getCedula())){
+        // Cedula: solo validar si viene informada en la solicitud para evitar NPE
+        if (nuevosDatos.getCedula() != null && !nuevosDatos.getCedula().equals(cliente.getCedula())){
             throw new IllegalArgumentException("No se puede cambiar la cedula.");
         }
 
@@ -125,6 +126,11 @@ public class ClienteService {
 
         if(nuevosDatos.getTelefono() != null && !nuevosDatos.getTelefono().isBlank()){
             cliente.setTelefono(nuevosDatos.getTelefono());
+        }
+
+        // Actualizar fecha de nacimiento si viene informada
+        if (nuevosDatos.getFechaNacimiento() != null) {
+            cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
         }
 
         if(nuevosDatos.getContrasena() != null && !nuevosDatos.getContrasena().isBlank()){
