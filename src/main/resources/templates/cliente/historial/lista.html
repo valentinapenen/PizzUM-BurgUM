@@ -86,7 +86,7 @@
         <div class="client-item medium"
              th:each="pedido : ${historial}">
             <h2>
-                Pedido #<span th:text="${pedido.id}">1</span>
+                Pedido #<span th:text="${pedido.idPedido}">1</span>
             </h2>
 
             <p>
@@ -121,7 +121,7 @@
             <!-- Botón para ver detalle completo del pedido -->
             <a class="btn-detalle"
                href="detalle-cliente.html"
-               th:href="@{/cliente/pedido/{id}(id=${pedido.id})}">
+               th:href="@{/cliente/pedido/{id}(id=${pedido.idPedido})}">
                 Ver detalle
             </a>
         </div>
