@@ -18,8 +18,8 @@
 
   <nav class="nav-bar">
         <a class="active" href="inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
-        <a href="hacer-creacion.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
-        <a href="../cliente/carrito/lista.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="creaciones/CreacionesPrincipalMenu.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a href="carrito/lista.html" th:href="@{/cliente/carrito}">Carrito</a>
         <a href="favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
         <a href="historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
         <a href="perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
@@ -32,8 +32,8 @@
 <main class="client-container">
 
   <div class="client-panel">
-    <a href="../cliente/creaciones/CreacionesPrincipalMenu.html" class="client-item large"><h2>Crear</h2><p>Agrega un nuevo producto al carrito.</p></a>
-    <a href="../cliente/carrito/lista.html" class="client-item medium"><h2>Ver carrito</h2><p>Visualiza tu carrito y pide.</p></a>
+    <a href="../cliente/creaciones/CreacionesPrincipalMenu.html" th:href="@{/cliente/hacer-creacion}" class="client-item large"><h2>Crear</h2><p>Agrega un nuevo producto al carrito.</p></a>
+    <a href="../cliente/carrito/lista.html" th:href="@{/cliente/carrito}" class="client-item medium"><h2>Ver carrito</h2><p>Visualiza tu carrito y pide.</p></a>
     <a href="../cliente/favoritos/lista.html" th:href="@{/cliente/favoritos}" class="client-item medium"><h2>Favoritos</h2><p>Accede a tus productos guardados.</p></a>
     <a href="../cliente/historial/lista.html" th:href="@{/cliente/historial}" class="client-item medium"><h2>Historial</h2><p>Consulta tus pedidos anteriores.</p></a>
     <a href="../cliente/perfil.html" class="client-item medium" th:href="@{/cliente/perfil}"><h2>Perfil</h2><p>Revisa o edita tus datos personales.</p></a>

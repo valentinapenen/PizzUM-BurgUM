@@ -23,6 +23,9 @@
         <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
         <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
         <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 

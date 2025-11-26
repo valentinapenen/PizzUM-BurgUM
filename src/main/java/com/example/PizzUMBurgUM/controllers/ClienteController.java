@@ -78,12 +78,11 @@ public class ClienteController {
 
     @GetMapping("/home")
     public String paginaInicioCliente(HttpSession session, Model model){
-        Usuario usuario = (Usuario)  session.getAttribute("usuarioLogueado");
-
-        if(usuario == null || !(usuario instanceof Cliente)){
+        // Reutilizamos la misma estrategia de rehidratación que en los POST
+        Cliente cliente = obtenerClienteDesdeSesionOSeguridad(session);
+        if (cliente == null) {
             return "redirect:/iniciar-sesion";
         }
-        Cliente cliente = (Cliente) usuario;
         model.addAttribute("cliente", cliente);
 
         return "cliente/inicio-cliente";
