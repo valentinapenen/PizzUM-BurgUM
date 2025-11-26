@@ -29,7 +29,7 @@ public class Producto {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private TipoProducto tipo;  // MASA, QUESO, SALSA, PAN, CARNE, BEBIDA, ADEREZO, ETC.
+    private TipoProducto tipo;  // MASA, QUESO, SALSA, PAN, CARNE, BEBIDA, ADEREZO,PAPAS BEBIDAS etc ETC.
 
     @Enumerated(EnumType.STRING)
     @NotNull

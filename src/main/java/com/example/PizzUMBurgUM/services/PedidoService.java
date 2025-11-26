@@ -31,6 +31,8 @@ public class PedidoService {
     @Autowired
     private DomicilioRepository domicilioRepository;
 
+
+
     @Transactional
     public Pedido crearPedido(long clienteId, List<Long> idsCreaciones, long domicilioId, MedioDePago medioPago) {
         Cliente cliente = clienteRepository.findById(clienteId)
@@ -56,10 +58,26 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
+    public List<Pedido> listarActivos() {
+        List<Pedido> pedidosActivos = pedidoRepository.findByEstadoNot(EstadoPedido.ENTREGADO);
+        return pedidosActivos;
+    }
+
     @Transactional
     public Pedido cambiarEstado(long id, EstadoPedido nuevoEstado) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
+        EstadoPedido actual = pedido.getEstado();
+
+        if (actual == EstadoPedido.EN_COLA && nuevoEstado == EstadoPedido.CANCELADO) {
+            pedido.setEstado(nuevoEstado);
+            return pedidoRepository.save(pedido);
+        }
+        if (nuevoEstado.ordinal() < actual.ordinal()) {
+            throw new IllegalArgumentException("No se puede retroceder el estado del pedido.");
+        }
+
         pedido.setEstado(nuevoEstado);
         return pedidoRepository.save(pedido);
     }
@@ -67,5 +85,35 @@ public class PedidoService {
     public List<Pedido> listarPorCliente(long clienteId) {
         return pedidoRepository.findByClienteId(clienteId);
     }
+
+    public List<Pedido> listarPedidosPorFecha(LocalDateTime desde, LocalDateTime hasta) {
+        return pedidoRepository.findByFechaBetween(desde, hasta);
+    }
+
+    public Pedido obtenerPedido(long id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+    }
+
+
+    public java.util.Optional<Pedido> buscarPedidoEnCurso(Long clienteId) {
+        java.util.List<EstadoPedido> estadosEnCurso = java.util.List.of(
+                EstadoPedido.EN_COLA,
+                EstadoPedido.EN_PREPARACION,
+                EstadoPedido.EN_CAMINO
+        );
+
+        return pedidoRepository.findFirstByClienteIdAndEstadoInOrderByFechaDesc(
+                clienteId,
+                estadosEnCurso
+        );
+    }
+
+
+    public boolean clienteTienePedidoEnCurso(Long clienteId) {
+        return buscarPedidoEnCurso(clienteId).isPresent();
+    }
+
+
 
 }

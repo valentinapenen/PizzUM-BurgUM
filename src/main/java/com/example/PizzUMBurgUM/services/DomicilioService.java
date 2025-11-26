@@ -72,4 +72,71 @@ public class DomicilioService {
     public List<Domicilio> listarPorCliente(Cliente cliente) {
         return domicilioRepository.findByCliente(cliente);
     }
+
+
+    // --- NUEVO: helper genérico para guardar cambios en un domicilio ---
+    public Domicilio guardar(Domicilio domicilio) {
+        return domicilioRepository.save(domicilio);
+    }
+
+    // --- NUEVO: métodos "pensados para el cliente logueado" ---
+
+    /** Lista domicilios por id de cliente (por si no querés pasar el objeto Cliente) */
+    public List<Domicilio> listarPorClienteId(long clienteId) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
+        return domicilioRepository.findByCliente(cliente);
+    }
+
+    /** Obtiene un domicilio que debe pertenecer al cliente; si no, lanza excepción */
+    public Domicilio obtenerDomicilioDeCliente(long clienteId, long domicilioId) {
+
+        Domicilio domicilio = buscarPorId(domicilioId);
+
+        if (domicilio.getCliente() == null ||
+                domicilio.getCliente().getId() != clienteId) {
+
+            throw new IllegalArgumentException("El domicilio no pertenece al cliente.");
+        }
+
+        return domicilio;
+    }
+
+
+
+    //Elimina un domicilio solo si pertenece al cliente
+    public void eliminarDomicilioDeCliente(long clienteId, long domicilioId) {
+        Domicilio domicilio = obtenerDomicilioDeCliente(clienteId, domicilioId);
+        domicilioRepository.deleteById(domicilio.getId());
+    }
+
+    /** Crea o actualiza un domicilio de un cliente según si tiene id o no */
+    public Domicilio guardarDomicilioDeCliente(long clienteId, Domicilio datos) {
+
+        // NUEVO domicilio
+        if (datos.getId() == 0) {
+            return crearDomicilioCliente(
+                    clienteId,
+                    datos.getNumero(),
+                    datos.getCalle(),
+                    datos.getDepartamento(),
+                    datos.getCiudad(),
+                    datos.getApartamento(),
+                    false
+            );
+        }
+
+        // EDITAR existente
+        Domicilio existente = obtenerDomicilioDeCliente(clienteId, datos.getId());
+
+        existente.setCalle(datos.getCalle());
+        existente.setNumero(datos.getNumero());
+        existente.setDepartamento(datos.getDepartamento());
+        existente.setCiudad(datos.getCiudad());
+        existente.setApartamento(datos.getApartamento());
+
+        return guardar(existente);
+    }
+
+
 }

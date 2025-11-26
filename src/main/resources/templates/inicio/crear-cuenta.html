@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <title>Crear cuenta - PizzUM & BurgUM</title>
-    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
-    <link rel="stylesheet" href="../../static/css/inicio/crear-cuenta.css" th:href="@{/css/inicio/crear-cuenta.css}">
+
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css"
+          th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/inicio/crear-cuenta.css"
+          th:href="@{/css/inicio/crear-cuenta.css}">
 </head>
 <body>
 
@@ -27,69 +28,136 @@
 <main class="container">
     <section class="card hero">
         <h1 class="title">Registrar usuario</h1>
+
         <div th:if="${error}" class="error-banner" th:text="${error}"></div>
 
-        <form class="form-grid" th:action="@{/crear-cuenta}" method="post">
+        <form class="form-grid" th:action="@{/crear-cuenta}" th:object="${registroClienteRequest}" method="post">
 
+            <!-- DATOS PERSONALES -->
             <div class="grid-2">
                 <div class="field">
                     <label class="label" for="nombre">Nombre</label>
-                    <input class="input" id="nombre" name="nombre" type="text"
-                           placeholder="Tu nombre" required>
+                    <input class="input" id="nombre" type="text" th:field="*{nombre}" placeholder="Tu nombre" required>
                 </div>
+
                 <div class="field">
                     <label class="label" for="apellido">Apellido</label>
-                    <input class="input" id="apellido" name="apellido" type="text"
-                           placeholder="Tu apellido" required>
+                    <input class="input" id="apellido" type="text" th:field="*{apellido}" placeholder="Tu apellido" required>
                 </div>
             </div>
 
             <div class="grid-2">
                 <div class="field">
                     <label class="label" for="cedula">Cédula</label>
-                    <input class="input" id="cedula" name="cedula" type="text"
-                           placeholder="12345678" maxlength="8" pattern="[0-9]{7,8}" required>
+                    <input class="input" id="cedula" type="text" th:field="*{cedula}" placeholder="12345678" maxlength="8" pattern="[0-9]{7,8}" required>
                 </div>
+
                 <div class="field">
                     <label class="label" for="fechaNacimiento">Fecha de nacimiento</label>
-                    <input class="input" id="fechaNacimiento" name="fechaNacimiento"
-                           type="date" required>
+                    <input class="input" id="fechaNacimiento" type="text" th:field="*{fechaNacimiento}"
+                           placeholder="DD/MM/YYYY" pattern="^\d{2}/\d{2}/\d{4}$" inputmode="numeric"
+                           title="Formato requerido: DD/MM/YYYY" required>
                 </div>
             </div>
 
             <div class="grid-2">
                 <div class="field">
                     <label class="label" for="telefono">Teléfono</label>
-                    <input class="input" id="telefono" name="telefono" type="tel" placeholder="+598 9 123 4567" required>
+                    <input class="input" id="telefono" type="tel" th:field="*{telefono}"
+                           placeholder="09xxxxxxx" pattern="^09\d{7}$" maxlength="9" inputmode="numeric"
+                           title="Ingrese 9 dígitos comenzando con 09" required>
                 </div>
+
                 <div class="field">
                     <label class="label" for="correo">Correo electrónico</label>
-                    <input class="input" id="correo" name="correo" type="email" placeholder="tucorreo@ejemplo.com" required>
+                    <input class="input" id="correo" type="email" th:field="*{correo}" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+            </div>
+
+            <!-- CONTRASEÑA -->
+            <div class="grid-2">
+                <div class="field">
+                    <label class="label" for="contrasena">Contraseña</label>
+                    <input class="input" id="contrasena" type="password" th:field="*{contrasena}" placeholder="Mín. 8 caracteres" minlength="8" required>
+                </div>
+                <div class="field">
+                    <label class="label" for="contrasena2">Confirmar contraseña</label>
+                    <input class="input" id="contrasena2" type="password" th:field="*{contrasena2}" placeholder="Repetí la contraseña" minlength="8" required>
+                </div>
+            </div>
+
+            <!-- DOMICILIO -->
+            <h2 class="subtitle">Domicilio</h2>
+
+            <div class="grid-2">
+                <div class="field">
+                    <label class="label" for="dom-numero">Número</label>
+                    <input class="input" id="dom-numero" type="text" th:field="*{domicilio.numero}" required>
+                </div>
+
+                <div class="field">
+                    <label class="label" for="dom-calle">Calle</label>
+                    <input class="input" id="dom-calle" type="text" th:field="*{domicilio.calle}" required>
                 </div>
             </div>
 
             <div class="grid-2">
                 <div class="field">
-                    <label class="label" for="contrasena">Contraseña</label>
-                    <input class="input" id="contrasena" name="contrasena" type="password"
-                         placeholder="Mín. 8 caracteres" minlength="8" required>
+                    <label class="label" for="dom-dep">Departamento</label>
+                    <input class="input" id="dom-dep" type="text" th:field="*{domicilio.departamento}" required>
                 </div>
+
                 <div class="field">
-                    <label class="label" for="contrasena2">Confirmar contraseña</label>
-                    <input class="input" id="contrasena2" name="contrasena2" type="password"
-                         placeholder="Repetí la contraseña" minlength="8" required>
+                    <label class="label" for="dom-ciudad">Ciudad</label>
+                    <input class="input" id="dom-ciudad" type="text" th:field="*{domicilio.ciudad}" required>
                 </div>
             </div>
 
-            <label class="checkbox">
-                <input type="checkbox" id="tyc" name="tyc" required>
-                Acepto los términos y condiciones
-            </label>
+            <div class="field">
+                <label class="label" for="dom-apartamento">Apartamento (opcional)</label>
+                <input class="input" id="dom-apartamento" type="text" th:field="*{domicilio.apartamento}">
+            </div>
 
+            <!-- TARJETA -->
+            <h2 class="subtitle">Tarjeta</h2>
+
+            <div class="grid-2">
+                <div class="field">
+                    <label class="label" for="tar-numero">Número</label>
+                    <input class="input" id="tar-numero" type="text" th:field="*{tarjeta.numero}" required>
+                </div>
+
+                <div class="field">
+                    <label class="label" for="tar-nombre-titular">Nombre del titular</label>
+                    <input class="input" id="tar-nombre-titular" type="text" th:field="*{tarjeta.nombreTitular}" required>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="field">
+                    <label class="label" for="tar-tipo">Tipo de tarjeta</label>
+                    <select class="input" id="tar-tipo" th:field="*{tarjeta.tipoTarjeta}" required>
+                        <option value="">Seleccione...</option>
+                        <option value="VISA">VISA</option>
+                        <option value="MASTERCARD">Mastercard</option>
+                        <option value="OTRA">Otra</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label class="label" for="tar-venc">Fecha de vencimiento</label>
+                    <input class="input" id="tar-venc" type="text" th:field="*{tarjeta.fechaVencimiento}"
+                           placeholder="MM/YYYY" pattern="^(0[1-9]|1[0-2])\/\d{4}$" inputmode="numeric"
+                           title="Formato requerido: MM/YYYY" required>
+                </div>
+            </div>
+
+            <!-- BOTONES -->
             <div class="actions">
                 <button class="btn btn--primary" type="submit">Registrar</button>
                 <a class="btn btn--ghost" href="iniciar-sesion.html" th:href="@{/iniciar-sesion}">¿Ya tienes cuenta? Inicia sesión</a>
             </div>
+
         </form>
     </section>
 </main>

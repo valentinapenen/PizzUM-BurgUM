@@ -16,4 +16,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     boolean existsByCedula(String cedula);
 
     Cliente findByCorreo(String correo);
+
+
 }

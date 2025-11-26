@@ -1,53 +1,60 @@
 package com.example.PizzUMBurgUM.configuracion;
 
+import com.example.PizzUMBurgUM.services.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class ConfiguracionSeguridad {
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
+    private CustomAuthenticationFailureHandler authenticationFailureHandler;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
-                // Permisos por tipo de ruta
                 .authorizeHttpRequests(auth -> auth
-                        // Rutas accesibles solo para administradores
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        // Rutas accesibles solo para usuarios registrados
-                        .requestMatchers("/usuario/**").hasRole("USER")
-
-                        // Rutas públicas (no requieren autenticación)
-                        .requestMatchers(
-                                "/",                   // raíz → bienvenida
-                                "/bienvenida",         // página de bienvenida
-                                "/iniciar-sesion",     // login
-                                "/crear-cuenta",       // registro
-                                "/css/**", "/js/**", "/images/**" // archivos estáticos
+                                // To do lo público
+                                .requestMatchers(
+                                "/", "/bienvenida", "/iniciar-sesion", "/crear-cuenta",
+                                "/css/**", "/js/**", "/images/**",
+                                "/api/bps/**", "/api/tarjetas/**", "/api/dgi/**"
                         ).permitAll()
-
-                        // To do lo demás requiere estar logueado
                         .anyRequest().authenticated()
                 )
 
-                // Configurar el login
+                // Config login
                 .formLogin(form -> form
-                        .loginPage("/iniciar-sesion")       // Página del formulario de login
-                        .loginProcessingUrl("/procesar-login") // Acción del formulario
-                        .defaultSuccessUrl("/cliente/inicio-cliente", false) // Redirige después del login exitoso
+                        .loginPage("/iniciar-sesion")          // Tu formulario
+                        .loginProcessingUrl("/procesar-login") // URL del POST
+                        .usernameParameter("correo")          // Nombre del campo de correo
+                        .passwordParameter("contrasena")      // Nombre del campo de contraseña
+                        .successHandler(authenticationSuccessHandler) // Manejador personalizado de éxito
+                        .failureHandler(authenticationFailureHandler) // Manejador personalizado de fallo
                         .permitAll()
                 )
 
-                // Configurar logout
+                // Config logout
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/bienvenida")     // Volver a bienvenida al salir
+                        .logoutSuccessUrl("/iniciar-sesion")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
@@ -58,9 +65,10 @@ public class ConfiguracionSeguridad {
         return http.build();
     }
 
-    // Bean para cifrar contraseñas (obligatorio para Spring Security)
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        // Configurar el servicio de usuarios y el codificador de contraseñas
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder);
     }
 }

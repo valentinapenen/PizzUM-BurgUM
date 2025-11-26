@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjetas - PizzUM & BurgUM</title>
+
+    <!-- CSS base -->
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
+
+    <style>
+        .client-panel {
+            grid-auto-rows: auto !important;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+
+        .client-item.medium {
+            height: auto !important;
+            min-height: 190px;
+        }
+
+        .alert-exito,
+        .alert-error {
+            grid-column: 1 / -1;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .alert-exito {
+            background: rgba(22, 163, 74, 0.2);
+            border: 1px solid rgba(22, 163, 74, 0.7);
+        }
+
+        .alert-error {
+            background: rgba(220, 38, 38, 0.25);
+            border: 1px solid rgba(220, 38, 38, 0.8);
+        }
+
+        .btn-chip {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: transparent;
+            color: #fff;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+        }
+
+        .acciones-tarjeta {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tar-numero {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .tar-info {
+            font-size: 0.95rem;
+            margin: 2px 0;
+        }
+
+        .badge-predeterminada {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(250, 204, 21, 0.9);
+            background: rgba(250, 204, 21, 0.2);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html"
+           th:href="@{/cliente/home}">
+            Inicio
+        </a>
+
+        <a href="../hacer-creacion.html"
+           th:href="@{/cliente/hacer-creacion}">
+            Crear
+        </a>
+
+        <a href="../carrito.html"
+           th:href="@{/cliente/carrito}">
+            Carrito
+        </a>
+
+        <a href="../favoritos/lista.html"
+           th:href="@{/cliente/favoritos}">
+            Favoritos
+        </a>
+
+        <a href="../historial/lista.html"
+           th:href="@{/cliente/historial}">
+            Historial
+        </a>
+        <a class="active" href="../perfil.html"
+           th:href="@{/cliente/perfil}">
+            Perfil
+        </a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="client-container">
+    <div class="client-panel">
+
+        <!-- Título -->
+        <h2 style="grid-column: 1 / -1; text-align: center; margin-bottom: 1rem;">
+            Mis tarjetas
+        </h2>
+
+        <!-- Mensajes flash -->
+        <div th:if="${exito}"
+             class="alert-exito"
+             th:text="${exito}">
+            Mensaje de éxito
+        </div>
+
+        <div th:if="${error}"
+             class="alert-error"
+             th:text="${error}">
+            Mensaje de error
+        </div>
+
+        <!-- Tarjeta para agregar nueva tarjeta -->
+        <a href="form.html"
+           th:href="@{/cliente/tarjetas/nueva}"
+           class="client-item medium">
+            <h2>Agregar tarjeta</h2>
+            <p>Cargar un nuevo medio de pago.</p>
+        </a>
+
+        <!-- Tarjetas del cliente -->
+        <div th:each="tar : ${tarjetas}"
+             class="client-item medium">
+
+            <div class="tar-numero">
+                <span><strong>Número:</strong></span>
+                <span th:text="${tar.numero}">**** **** **** 1234</span>
+            </div>
+
+            <p class="tar-info">
+                <strong>Titular:</strong>
+                <span th:text="${tar.nombreTitular}">Nombre Apellido</span>
+            </p>
+
+            <p class="tar-info">
+                <strong>Tipo:</strong>
+                <span th:text="${tar.tipoTarjeta}">VISA</span>
+            </p>
+
+            <p class="tar-info">
+                <strong>Vence:</strong>
+                <span th:text="${#dates.format(tar.fecha_vencimiento, 'MM/yyyy')}">
+                    01/2030
+                </span>
+            </p>
+
+            <span class="badge-predeterminada"
+                  th:if="${tar.predeterminada}">
+                Predeterminada
+            </span>
+
+            <div class="acciones-tarjeta">
+                <!-- Editar -->
+                <a href="form.html"
+                   th:href="@{'/cliente/tarjetas/' + ${tar.id} + '/editar'}"
+                   class="btn-chip">
+                    Editar
+                </a>
+
+                <!-- Marcar predeterminada -->
+                <form action="#"
+                      th:action="@{'/cliente/tarjetas/' + ${tar.id} + '/predeterminada'}"
+                      method="post"
+                      style="display:inline;">
+                    <button type="submit" class="btn-chip">
+                        Marcar predeterminada
+                    </button>
+                </form>
+
+                <!-- Eliminar -->
+                <form action="#"
+                      th:action="@{'/cliente/tarjetas/' + ${tar.id} + '/eliminar'}"
+                      method="post"
+                      style="display:inline;">
+                    <button type="submit"
+                            class="btn-chip"
+                            onclick="return confirm('¿Seguro que querés eliminar esta tarjeta?');">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Mensaje cuando no hay tarjetas -->
+        <p th:if="${#lists.isEmpty(tarjetas)}"
+           style="grid-column: 1 / -1; text-align: center; margin-top: 1rem;">
+            Todavía no tenés tarjetas guardadas.
+        </p>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

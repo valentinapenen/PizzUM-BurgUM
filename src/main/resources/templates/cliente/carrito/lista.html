@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - PizzUM &amp; BurgUM</title>
+    <!-- Auto-refresh solo si hay pedido en curso -->
+    <meta http-equiv="refresh" content="10" th:if="${tienePedidoEnCurso}"/>
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/carrito.css" th:href="@{/css/cliente/carrito.css}">
+</head>
+<body>
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
+        <a href="../creaciones/CreacionesPrincipalMenu.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a class="active" href="../carrito/lista.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
+        <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
+        <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main>
+    <section class="carrito-contenido">
+
+        <h1 class="carrito-titulo">Tu carrito</h1>
+
+        <!-- Mensajes flash -->
+        <div th:if="${exito}" class="mensaje-exito" th:text="${exito}"></div>
+        <div th:if="${error}" class="mensaje-error" th:text="${error}"></div>
+
+        <!-- Si no hay creaciones -->
+        <p class="texto-vacio" th:if="${#lists.isEmpty(creaciones)}">
+            Por ahora no tenés creaciones en tu carrito.
+        </p>
+
+        <!-- Lista de creaciones -->
+        <table class="tabla-carrito" th:if="${!#lists.isEmpty(creaciones)}">
+            <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Detalle</th>
+                <th>Favorito</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="creacion : ${creaciones}">
+                <td th:text="${creacion.tipo}">PIZZA</td>
+
+                <td>
+                    <ul>
+                        <li th:each="prod : ${creacion.productos}"
+                            th:text="${prod.nombre + ' (' + prod.tipo + ')'}">
+                            Masa clásica (MASA)
+                        </li>
+                    </ul>
+                </td>
+
+                <td th:text="${creacion.favorito ? 'Sí' : 'No'}">No</td>
+
+                <td class="precio">
+                    $ <span th:text="${#numbers.formatDecimal(creacion.precioTotal,1,2)}">0.00</span>
+                </td>
+
+                <td>
+                    <!-- Eliminar del carrito -->
+                    <form th:action="@{/cliente/carrito/eliminar/{idCreacion}(idCreacion=${creacion.id})}"
+                          method="post"
+                          style="display: inline;">
+                        <button type="submit" class="btn-accion">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Resumen y botones -->
+        <div class="carrito-resumen" th:if="${!#lists.isEmpty(creaciones)}">
+            <p class="carrito-total">
+                Total aproximado:
+                $ <span th:text="${#numbers.formatDecimal(totalCarrito,1,2)}">0.00</span>
+            </p>
+
+            <div class="carrito-botones">
+                <!-- Si HAY pedido en curso: botón de seguimiento -->
+                <div th:if="${tienePedidoEnCurso}">
+                    <a class="btn-principal"
+                       href="botonSeguimientoPedido.html"
+                       th:href="@{/cliente/pedido/seguimiento/{id}(id=${pedidoEnCurso.idPedido})}">
+                        Ver seguimiento del pedido
+                    </a>
+                </div>
+
+
+
+
+
+
+
+
+
+                <!-- Si NO hay pedido en curso: botón de continuar compra -->
+                <div th:if="${!tienePedidoEnCurso}">
+                    <a class="btn-principal"
+                       href="botonConfirmarPedido.html"
+                       th:href="@{/cliente/carrito/continuar}">
+                        Continuar compra
+                    </a>
+                </div>
+
+                <!-- Botón para volver a crear más cosas -->
+                <a class="btn-secundario"
+                   href="../creaciones/CreacionesPrincipalMenu.html"
+                   th:href="@{/cliente/hacer-creacion}">
+                    Seguir creando
+                </a>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

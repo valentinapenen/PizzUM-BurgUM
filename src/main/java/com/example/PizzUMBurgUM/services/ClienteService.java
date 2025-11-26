@@ -3,10 +3,18 @@ package com.example.PizzUMBurgUM.services;
 
 import com.example.PizzUMBurgUM.controllers.DTOS.RegistroClienteRequest;
 import com.example.PizzUMBurgUM.entities.Cliente;
+import com.example.PizzUMBurgUM.entities.Domicilio;
+import com.example.PizzUMBurgUM.entities.Tarjeta;
 import com.example.PizzUMBurgUM.repositories.ClienteRepository;
 import com.example.PizzUMBurgUM.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Calendar;
 
 @Service
 public class ClienteService {
@@ -16,85 +24,117 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
     @Autowired
-    private UsuarioServicio usuarioServicio;
-    @Autowired
     private DomicilioService domicilioService;
     @Autowired
     private TarjetaService tarjetaService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public Cliente registrarCliente(RegistroClienteRequest registroClienteRequest){
-        if (registroClienteRequest.getDomicilio() == null){
-            throw new IllegalArgumentException("Debe de ingresar al menos un domicilio.");
+    public Cliente registrarCliente(RegistroClienteRequest req){
+        if (!req.getContrasena().equals(req.getContrasena2())) {
+            throw new IllegalArgumentException("Las contraseñas no coinciden.");
         }
-        if (registroClienteRequest.getTarjeta() == null){
-            throw new IllegalArgumentException("Debe de ingresar al menos una tarjeta.");
+
+        if (usuarioRepository.existsByCorreo(req.getCorreo())) {
+            throw new IllegalArgumentException("El correo ya está registrado.");
         }
 
-        Cliente cliente = new Cliente();
-        cliente.setNombre(registroClienteRequest.getNombre());
-        cliente.setApellido(registroClienteRequest.getApellido());
-        cliente.setCedula(registroClienteRequest.getCedula());
-        cliente.setFechaNacimiento(registroClienteRequest.getFechaNacimiento());
-        cliente.setCorreo(registroClienteRequest.getCorreo());
-        cliente.setTelefono(registroClienteRequest.getTelefono());
-        cliente.setContrasena(registroClienteRequest.getContrasena());
+        if (clienteRepository.existsByCedula(req.getCedula())) {
+            throw new IllegalArgumentException("Ya existe un cliente con esta cédula.");
+        }
 
-        Cliente clienteGuardado = usuarioServicio.registrarCliente(cliente);
+        Cliente cliente = Cliente.builder()
+                .nombre(req.getNombre())
+                .apellido(req.getApellido())
+                .cedula(req.getCedula())
+                .fechaNacimiento(req.getFechaNacimiento())
+                .correo(req.getCorreo())
+                .telefono(req.getTelefono())
+                .contrasena(passwordEncoder.encode(req.getContrasena()))
+                .domicilios(new ArrayList<>())
+                .tarjetas(new ArrayList<>())
+                .pedidos(new ArrayList<>())
+                .build();
 
-        domicilioService.crearDomicilioCliente(
-                clienteGuardado.getId(),
-                registroClienteRequest.getDomicilio().getNumero(),
-                registroClienteRequest.getDomicilio().getCalle(),
-                registroClienteRequest.getDomicilio().getDepartamento(),
-                registroClienteRequest.getDomicilio().getCiudad(),
-                registroClienteRequest.getDomicilio().getApartamento(),
-                true);
+        Domicilio domicilio = Domicilio.builder()
+                .numero(req.getDomicilio().getNumero())
+                .calle(req.getDomicilio().getCalle())
+                .departamento(req.getDomicilio().getDepartamento())
+                .ciudad(req.getDomicilio().getCiudad())
+                .apartamento(req.getDomicilio().getApartamento())
+                .predeterminado(true)
+                .cliente(cliente)
+                .administrador(null)
+                .build();
 
-        tarjetaService.crearTarjeta(
-                registroClienteRequest.getTarjeta().getNumero(),
-                registroClienteRequest.getTarjeta().getNombreTitular(),
-                clienteGuardado.getId(),
-                registroClienteRequest.getTarjeta().getTipoTarjeta(),
-                registroClienteRequest.getTarjeta().getFechaVencimiento(),
-                true);
+        cliente.getDomicilios().add(domicilio);
 
-        return clienteGuardado;
+        // Convertir el string de fecha (MM/YYYY) a un objeto Date
+        Date fechaVencimiento = null;
+        try {
+            String fechaStr = req.getTarjeta().getFechaVencimiento();
+            // Formato esperado MM/YYYY
+            String[] partes = fechaStr.split("/");
+            int mes = Integer.parseInt(partes[0]);
+            int año = Integer.parseInt(partes[1]);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(año, mes - 1, 1); // Mes en Calendar es 0-based
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+            fechaVencimiento = calendar.getTime();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Formato de fecha inválido. Use MM/YYYY.");
+        }
+
+        Tarjeta tarjeta = Tarjeta.builder()
+                .numero(req.getTarjeta().getNumero())
+                .nombreTitular(req.getTarjeta().getNombreTitular())
+                .tipoTarjeta(req.getTarjeta().getTipoTarjeta())
+                .fecha_vencimiento(fechaVencimiento)
+                .predeterminada(true)
+                .cliente(cliente)
+                .build();
+
+        cliente.getTarjetas().add(tarjeta);
+
+        return clienteRepository.save(cliente);
     }
-
 
     public Cliente actualizarCliente(long idCliente,  Cliente nuevosDatos){
 
-        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new RuntimeException("Domicilio no encontrado con ID: " + idCliente));
+        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + idCliente));
 
-        if(cliente == null){
-            throw new IllegalArgumentException("No existe este cliente.");
-        }
-
-        if (!nuevosDatos.getCedula().equals(cliente.getCedula())){
+        // Validaciones de campos no modificables
+        // Cedula: solo validar si viene informada en la solicitud para evitar NPE
+        if (nuevosDatos.getCedula() != null && !nuevosDatos.getCedula().equals(cliente.getCedula())){
             throw new IllegalArgumentException("No se puede cambiar la cedula.");
         }
-        if (!nuevosDatos.getCorreo().equals(cliente.getCorreo())){
+
+        if (nuevosDatos.getCorreo() != null &&
+                !nuevosDatos.getCorreo().equals(cliente.getCorreo())) {
             throw new IllegalArgumentException("No se puede cambiar el correo.");
         }
 
-        if(nuevosDatos.getNombre() != null && nuevosDatos.getNombre().isBlank()){
+        if(nuevosDatos.getNombre() != null && !nuevosDatos.getNombre().isBlank()){
             cliente.setNombre(nuevosDatos.getNombre());
         }
 
-        if(nuevosDatos.getApellido() != null && nuevosDatos.getApellido().isBlank()){
+        if(nuevosDatos.getApellido() != null && !nuevosDatos.getApellido().isBlank()){
             cliente.setApellido(nuevosDatos.getApellido());
         }
 
-        if(nuevosDatos.getFechaNacimiento() != null ){
-            cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
-        }
-
-        if(nuevosDatos.getTelefono() != null && nuevosDatos.getTelefono().isBlank()){
+        if(nuevosDatos.getTelefono() != null && !nuevosDatos.getTelefono().isBlank()){
             cliente.setTelefono(nuevosDatos.getTelefono());
         }
 
-        if(nuevosDatos.getContrasena() != null && nuevosDatos.getContrasena().isBlank()){
+        // Actualizar fecha de nacimiento si viene informada
+        if (nuevosDatos.getFechaNacimiento() != null) {
+            cliente.setFechaNacimiento(nuevosDatos.getFechaNacimiento());
+        }
+
+        if(nuevosDatos.getContrasena() != null && !nuevosDatos.getContrasena().isBlank()){
             cliente.setContrasena(nuevosDatos.getContrasena());
         }
 
@@ -104,5 +144,4 @@ public class ClienteService {
     public Cliente buscarPorId(long clienteId){
         return clienteRepository.findById(clienteId).orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
     }
-
 }

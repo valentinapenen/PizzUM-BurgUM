@@ -1,0 +1,176 @@
+.client-container {
+    position: relative;
+    z-index: 1;
+    padding: 70px 20px;
+    color: #fff;
+}
+
+/* Panel único centrado */
+.client-panel {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(14px);
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 32px 28px;
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+}
+
+.client-item.form-wrapper {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    border: none;
+}
+
+.burger-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.burger-form h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+}
+
+.form-group select {
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    padding: 8px 14px;
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    outline: none;
+}
+
+.form-group select option {
+    color: #000;
+}
+
+.items-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 170px;
+    overflow-y: auto;
+    padding: 8px 12px;
+    border-radius: 18px;
+    /* Recuadro pequeño sin borde */
+    border: none;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.item-row-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.item-price {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.section-title-small {
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+.favorito-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    margin-top: 6px;
+    /* apariencia de botón más notable */
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #FF6347; /* tomato */
+    background: #FF6347FF; /* con alfa explícita */
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    cursor: pointer;
+    user-select: none;
+}
+
+.favorito-checkbox input[type="checkbox"] {
+    accent-color: #FF6347;
+}
+
+.favorito-checkbox:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(255, 99, 71, 0.45);
+}
+
+.total-row {
+    margin-top: 4px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.form-actions {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.btn-primary,
+.btn-secondary {
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary {
+    background: #FF6347; /* tomato */
+    background: #FF6347FF; /* con alfa explícita */
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.btn-primary:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(255,99,71,0.45);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+}

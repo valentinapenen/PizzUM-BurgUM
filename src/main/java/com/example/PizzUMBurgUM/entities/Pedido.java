@@ -37,7 +37,7 @@ public class Pedido {
     private MedioDePago medioDePago;
 
     @NotNull
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "pedido_creaciones", joinColumns = @JoinColumn(name = "pedido_id"), inverseJoinColumns = @JoinColumn(name = "creacion_id"))
     private List<Creacion> creaciones;
 

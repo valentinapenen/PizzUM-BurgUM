@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de pedidos - PizzUM & BurgUM</title>
+
+    <!-- CSS base -->
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
+
+    <style>
+        /* que las filas del grid puedan crecer según el contenido */
+        .client-panel {
+            grid-auto-rows: auto !important;
+        }
+
+        /* que las tarjetas del historial no queden chatas */
+        .client-item.medium {
+            height: auto !important;
+            min-height: 220px;
+        }
+
+        /* Botón "Ver detalle" */
+        .btn-detalle {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: transparent;
+            color: #fff;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-detalle:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png"/>
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html"
+           th:href="@{/cliente/home}">Inicio</a>
+
+        <a href="../hacer-creacion.html"
+           th:href="@{/cliente/hacer-creacion}">Crear</a>
+
+        <a href="../carrito.html"
+           th:href="@{/cliente/carrito}">Carrito</a>
+
+        <a href="../favoritos/lista.html"
+           th:href="@{/cliente/favoritos}">Favoritos</a>
+
+        <a class="active"
+           href="lista.html"
+           th:href="@{/cliente/historial}">Historial</a>
+
+        <a href="../perfil.html"
+           th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="client-container">
+    <div class="client-panel">
+
+        <h2 style="grid-column: 1 / -1; text-align:center; margin-bottom: 1.5rem;">
+            Historial de pedidos
+        </h2>
+
+        <!-- tarjeta de cada pedido -->
+        <div class="client-item medium"
+             th:each="pedido : ${historial}">
+            <h2>
+                Pedido #<span th:text="${pedido.id}">1</span>
+            </h2>
+
+            <p>
+                <strong>Fecha:</strong>
+                <span th:text="${#temporals.format(pedido.fecha, 'dd/MM/yyyy HH:mm')}">
+                    01/01/2025 20:30
+                </span>
+            </p>
+
+            <p>
+                <strong>Estado:</strong>
+                <span th:text="${pedido.estado}">EN_PREPARACION</span>
+            </p>
+
+            <p>
+                <strong>Total:</strong>
+                $<span th:text="${pedido.total}">0.00</span>
+            </p>
+
+            <!-- Resumen de creaciones -->
+            <div style="margin-top: 0.75rem;">
+                <strong>Creaciones:</strong>
+                <ul style="margin: 0.25rem 0 0 1rem; padding: 0;">
+                    <li th:each="creacion, stat : ${pedido.creaciones}">
+                        Creación <span th:text="${stat.index + 1}">1</span>
+                        — Total: $
+                        <span th:text="${creacion.precioTotal}">0.00</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Botón para ver detalle completo del pedido -->
+            <a class="btn-detalle"
+               href="detalle-cliente.html"
+               th:href="@{/cliente/pedido/{id}(id=${pedido.id})}">
+                Ver detalle
+            </a>
+        </div>
+
+
+
+
+
+
+        <!-- Mensaje si no hay pedidos -->
+        <p th:if="${#lists.isEmpty(historial)}"
+           style="grid-column: 1 / -1; text-align:center; margin-top:1rem;">
+            Todavía no tenés pedidos en tu historial.
+        </p>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png"/>
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

@@ -22,7 +22,7 @@ public class TarjetaRequest {
     @NotNull
     private TipoTarjeta tipoTarjeta;
     @NotNull
-    private Date fechaVencimiento;
+    private String fechaVencimiento;
     @NotNull
     private Boolean predeterminada;
 }

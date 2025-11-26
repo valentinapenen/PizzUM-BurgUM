@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - PizzUM & BurgUM</title>
+    <link rel="stylesheet" href="../background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
+</head>
+
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../cliente/inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
+        <a href="hacer-creacion.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a href="carrito.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="../cliente/favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
+        <a href="../cliente/historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
+        <a class="active" href="perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="client-container">
+
+    <div class="client-panel">
+
+        <!-- BLOQUE PRINCIPAL -->
+        <div class="client-item perfil-datos">
+            <h2>Mis datos</h2>
+
+            <p><strong>Nombre:</strong>
+                <span th:text="${cliente.nombre}">Nombre</span>
+                <span th:text="${cliente.apellido}">Apellido</span>
+            </p>
+
+            <p><strong>Correo:</strong>
+                <span th:text="${cliente.correo}">correo@ejemplo.com</span>
+            </p>
+
+            <p><strong>Teléfono:</strong>
+                <span th:text="${cliente.telefono}">099 123 456</span>
+            </p>
+
+            <p><strong>Fecha de nacimiento:</strong>
+                <span th:text="${#temporals.format(cliente.fechaNacimiento,'dd/MM/yyyy')}">
+          01/01/2000
+        </span>
+            </p>
+        </div>
+
+        <!-- EDITAR DATOS -->
+        <a href="../cliente/datosPersonales/form.html" class="client-item perfil-item" th:href="@{/cliente/perfil/editar}">
+            <h2>Editar datos personales</h2>
+            <p>Modificar nombre, apellido,telefono y fecha de nacimiento.</p>
+        </a>
+
+        <!-- DOMICILIOS -->
+        <a href="../cliente/domicilio/lista.html" class="client-item perfil-item" th:href="@{/cliente/domicilios}">
+            <h2>Domicilios</h2>
+            <p>Administrar tus direcciones.</p>
+        </a>
+
+        <!-- TARJETAS -->
+        <a href="../cliente/tarjeta/lista.html" class="client-item perfil-item" th:href="@{/cliente/tarjetas}">
+            <h2>Tarjetas</h2>
+            <p>Administrar tus tarjetas.</p>
+        </a>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio administrador - PizzUM & BurgUM</title>
     <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
-    <link rel="stylesheet" href="../../static/css/inicio/bienvenida.css" th:href="@{/css/bienvenida.css}">
+    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/administrador/admin.css}">
 </head>
 <body>
 
@@ -16,41 +16,46 @@
     </div>
 
     <nav class="nav-bar">
-        <a class="active" href="inicio-administrador.html" th:href="@{/inicio-administrador.html}">Inicio</a>
-        <a href="editar-estado.html" th:href="@{/editar-estado}">Editar estado</a>
-        <a href="crear-producto.html" th:href="@{/crear-producto}">Crear producto</a>
-        <a href="crear-administrador.html" th:href="@{/crear-administrador}">Crear administrador</a>
-        <a href="editar-producto.html" th:href="@{/editar-producto}">Editar producto</a>
-        <a href="eliminar-producto.html" th:href="@{/eliminar-producto}">Eliminar producto</a>
+        <a class="active" href="inicio-administrador.html" th:href="@{/administrador/inicio}">Inicio</a>
+        <a href="../administrador/pedido/lista.html" th:href="@{/pedidos}">Pedidos</a>
+        <a href="../administrador/producto/lista.html" th:href="@{/admin/productos}">Productos</a>
+        <a href="../administrador/lista.html" th:href="@{/administrador/lista}">Administradores</a>
+        <a href="../administrador/perfil.html" th:href="@{/administrador/perfil}">Perfil</a>
+        <a href="../administrador/ventas/lista.html" th:href="@{/admin/ventas}">Ventas</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 
 <main class="admin-container">
     <div class="admin-panel">
-        <a href="crear-producto.html" class="admin-item large">
-            <h2>Crear Producto</h2>
-            <p>Agrega un nuevo producto al menú.</p>
+
+        <a href="pedido/lista.html" class="admin-item medium" th:href="@{/pedidos}">
+            <h2>Pedidos</h2>
+            <p>Gestiona pedidos.</p>
         </a>
 
-        <a href="editar-producto.html" class="admin-item medium">
-            <h2>Editar Producto</h2>
-            <p>Actualiza información o precios.</p>
+        <a href="producto/lista.html" class="admin-item medium" th:href="@{/admin/productos}">
+            <h2>Productos</h2>
+            <p>Agrega, elimina y edita productos.</p>
         </a>
 
-        <a href="eliminar-producto.html" class="admin-item small">
-            <h2>Eliminar Producto</h2>
-            <p>Quita productos del sistema.</p>
+        <a href="lista.html" class="admin-item medium" th:href="@{/administrador/lista}">
+            <h2>Administradores</h2>
+            <p>Agrega, elimina y edita cuentas de administrador.</p>
         </a>
 
-        <a href="editar-estado.html" class="admin-item medium">
-            <h2>Editar Estado</h2>
-            <p>Gestiona disponibilidad y pedidos.</p>
+        <a href="perfil.html" class="admin-item medium" th:href="@{/administrador/perfil}">
+            <h2>Mi Perfil</h2>
+            <p>Ver y editar mis datos y domicilio de facturación.</p>
         </a>
 
-        <a href="crear-administrador.html" class="admin-item small">
-            <h2>Crear Administrador</h2>
-            <p>Agrega nuevos usuarios con acceso al panel.</p>
+        <a href="ventas/lista.html" class="admin-item medium" th:href="@{/admin/ventas}">
+            <h2>Ventas</h2>
+            <p>Consulta las ventas por fecha.</p>
         </a>
+
     </div>
 </main>
 

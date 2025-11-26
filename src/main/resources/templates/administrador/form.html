@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Administrador</title>
+  <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+  <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/administrador/admin.css}">
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png"/>
+    <h1 class="brand-title">PizzUM & BurgUM</h1>
+  </div>
+
+  <nav class="nav-bar">
+    <a href="inicio-administrador.html" th:href="@{/administrador/inicio}">Inicio</a>
+    <a href="pedido/lista.html" th:href="@{/pedidos}">Pedidos</a>
+    <a href="producto/lista.html" th:href="@{/admin/productos}">Productos</a>
+    <a class="active" href="lista.html" th:href="@{/administrador/lista}">Administradores</a>
+      <a href="../administrador/perfil.html" th:href="@{/administrador/perfil}">Perfil</a>
+      <a href="../administrador/ventas/lista.html" th:href="@{/admin/ventas}">Ventas</a>
+      <form th:action="@{/logout}" method="post">
+          <button type="submit" class="nav-link">Cerrar sesión</button>
+      </form>
+  </nav>
+</header>
+
+<div class="admin-container">
+  <div class="admin-panel">
+
+    <div class="admin-item large">
+      <h2>Nuevo administrador</h2>
+
+      <!-- ✔️ FORM corregido: coincide con tu Controller y DTO -->
+      <form th:action="@{/administrador/crearAdministrador}"
+            th:object="${creacionAdmin}"
+            method="post">
+
+        <!-- Datos personales -->
+        <input type="text" th:field="*{nombre}" placeholder="Nombre" required>
+        <input type="text" th:field="*{apellido}" placeholder="Apellido" required>
+        <input type="text" th:field="*{cedula}" placeholder="Cédula" required>
+        <input type="date" th:field="*{fechaNacimiento}" placeholder="Fecha de nacimiento" required>
+        <input type="email" th:field="*{correo}" placeholder="Correo" required>
+        <input type="tel" th:field="*{telefono}" placeholder="Teléfono" required>
+        <input type="password" th:field="*{contrasena}" placeholder="Contraseña" required>
+
+        <!-- Domicilio de facturación -->
+        <h3>Domicilio de facturación</h3>
+
+        <input type="text" th:field="*{domicilio_facturacion.numero}" placeholder="Número" required>
+        <input type="text" th:field="*{domicilio_facturacion.calle}" placeholder="Calle" required>
+        <input type="text" th:field="*{domicilio_facturacion.departamento}" placeholder="Departamento" required>
+        <input type="text" th:field="*{domicilio_facturacion.ciudad}" placeholder="Ciudad" required>
+        <input type="text" th:field="*{domicilio_facturacion.apartamento}" placeholder="Apartamento (opcional)">
+
+        <input type="hidden" th:field="*{domicilio_facturacion.predeterminado}" value="true">
+
+        <button type="submit">Crear Administrador</button>
+      </form>
+
+      <!-- Mensaje de error -->
+      <p th:if="${error}" th:text="${error}"
+         style="color:#e74c3c; margin-top:10px;"></p>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img class="footer-logo" alt="PizzUM & BurgUM logo" src="/images/logo.png"/>
+    <strong class="footer-title">PizzUM & BurgUM</strong>
+  </div>
+  <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

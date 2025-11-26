@@ -191,3 +191,31 @@ html, body {
         grid-row: span 1;
     }
 }
+
+.perfil-datos {
+    grid-column: span 2;
+    grid-row: span 1;
+    padding: 25px;
+}
+
+/* Los paneles normales */
+.perfil-item {
+    padding: 25px;
+}
+
+/* Ajuste de texto para que no se desborde */
+.perfil-datos p, .perfil-item p {
+    margin: 6px 0;
+    font-size: 1rem;
+}
+
+/* Títulos de los paneles */
+.perfil-item h2 {
+    margin-bottom: 8px;
+}
+
+/* Para que to do quede alineado como inicio-cliente */
+.client-panel {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-auto-rows: auto !important;
+}

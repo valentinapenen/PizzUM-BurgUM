@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear hamburguesa - PizzUM & BurgUM</title>
+
+    <!-- CSS base -->
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/form-creaciones.css" th:href="@{/css/cliente/form-creaciones.css}">
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png">
+        <h1 class="brand-title">PizzUM &amp; BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
+        <a class="active" href="CreacionesPrincipalMenu.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a href="../carrito/lista.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
+        <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
+        <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="client-container">
+    <div class="client-panel">
+
+        <div class="client-item form-wrapper">
+            <h2>Crear hamburguesa</h2>
+
+            <form class="burger-form"
+                  action="/cliente/creaciones/hamburguesa/guardar"
+                  th:action="@{/cliente/creaciones/hamburguesa/guardar}"
+                  method="post">
+
+                <!-- Pan -->
+                <div class="form-group">
+                    <label for="panSelect">Pan</label>
+                    <select id="panSelect" name="panId" required>
+                        <option value="" disabled selected>Seleccionar pan...</option>
+                        <option th:each="p : ${panes}"
+                                th:value="${p.id}"
+                                th:data-precio="${p.precio}"
+                                th:text="${p.nombre + ' ($' + #numbers.formatDecimal(p.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Carne -->
+                <div class="form-group">
+                    <label for="carneSelect">Carne</label>
+                    <select id="carneSelect" name="carneId" required>
+                        <option value="" disabled selected>Seleccionar carne...</option>
+                        <option th:each="c : ${carnes}"
+                                th:value="${c.id}"
+                                th:data-precio="${c.precio}"
+                                th:text="${c.nombre + ' ($' + #numbers.formatDecimal(c.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Cantidad de carnes -->
+                <div class="form-group">
+                    <label for="carneCantidad">Cantidad de carnes</label>
+                    <select id="carneCantidad" name="carneCantidad" required>
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+
+                <!-- Queso -->
+                <div class="form-group">
+                    <label for="quesoSelect">Queso</label>
+                    <select id="quesoSelect" name="quesoId" required>
+                        <option value="" disabled selected>Seleccionar queso...</option>
+                        <option th:each="q : ${quesosHamb}"
+                                th:value="${q.id}"
+                                th:data-precio="${q.precio}"
+                                th:text="${q.nombre + ' ($' + #numbers.formatDecimal(q.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Aderezos -->
+                <div class="form-group" th:if="${aderezos != null}">
+                    <label class="section-title-small">Aderezos</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="a : ${aderezos}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="aderezoIds"
+                                       th:id="'ad-' + ${a.id}"
+                                       th:value="${a.id}"
+                                       th:attr="data-precio=${a.precio}">
+                                <label th:for="'ad-' + ${a.id}">
+                                    <span th:text="${a.nombre}">Aderezo</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="|$${#numbers.formatDecimal(a.precio,1,2)}|">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toppings -->
+                <div class="form-group" th:if="${toppingsHamb != null}">
+                    <label class="section-title-small">Extras / Toppings</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="t : ${toppingsHamb}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="toppingIds"
+                                       th:id="'top-' + ${t.id}"
+                                       th:value="${t.id}"
+                                       th:attr="data-precio=${t.precio}">
+                                <label th:for="'top-' + ${t.id}">
+                                    <span th:text="${t.nombre}">Topping</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="|$${#numbers.formatDecimal(t.precio,1,2)}|">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bebidas -->
+                <div class="form-group" th:if="${bebidasHamb != null}">
+                    <label class="section-title-small">Bebidas</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="b : ${bebidasHamb}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="bebidaIds"
+                                       th:id="'beb-' + ${b.id}"
+                                       th:value="${b.id}"
+                                       th:attr="data-precio=${b.precio}">
+                                <label th:for="'beb-' + ${b.id}">
+                                    <span th:text="${b.nombre}">Bebida</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="|$${#numbers.formatDecimal(b.precio,1,2)}|">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Papas -->
+                <div class="form-group" th:if="${papasHamb != null}">
+                    <label class="section-title-small">Papas</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="p : ${papasHamb}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="papasIds"
+                                       th:id="'pap-' + ${p.id}"
+                                       th:value="${p.id}"
+                                       th:attr="data-precio=${p.precio}">
+                                <label th:for="'pap-' + ${p.id}">
+                                    <span th:text="${p.nombre}">Papas</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="|$${#numbers.formatDecimal(p.precio,1,2)}|">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorito -->
+                <div class="favorito-checkbox">
+                    <input type="checkbox"
+                           id="favorito"
+                           name="favorito">
+                    <label for="favorito">Guardar esta hamburguesa como favorita</label>
+                </div>
+
+                <!-- Total aproximado -->
+                <div class="total-row">
+                    Total aproximado: $<span id="total">0.00</span>
+                </div>
+
+                <!-- Acciones -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        Crear hamburguesa
+                    </button>
+
+                    <a href="CreacionesPrincipalMenu.html"
+                       th:href="@{/cliente/hacer-creacion}"
+                       class="btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png">
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+<script>
+    function parsePrecio(el) {
+        if (!el) return 0;
+        const val = el.getAttribute("data-precio");
+        if (!val) return 0;
+        const n = parseFloat(val);
+        return isNaN(n) ? 0 : n;
+    }
+
+    function actualizarTotal() {
+        let total = 0;
+
+        const pan = document.querySelector("#panSelect option:checked");
+        total += parsePrecio(pan);
+
+        const carne = document.querySelector("#carneSelect option:checked");
+        const cantCarneEl = document.getElementById("carneCantidad");
+        const cantCarne = cantCarneEl ? parseInt(cantCarneEl.value || '1') : 1;
+        total += parsePrecio(carne) * Math.max(1, Math.min(3, cantCarne));
+
+        const queso = document.querySelector("#quesoSelect option:checked");
+        total += parsePrecio(queso);
+
+        document.querySelectorAll("input[name='aderezoIds']:checked").forEach(cb => {
+            total += parsePrecio(cb);
+        });
+
+        document.querySelectorAll("input[name='toppingIds']:checked").forEach(cb => {
+            total += parsePrecio(cb);
+        });
+
+        document.querySelectorAll("input[name='bebidaIds']:checked").forEach(cb => {
+            total += parsePrecio(cb);
+        });
+
+        document.querySelectorAll("input[name='papasIds']:checked").forEach(cb => {
+            total += parsePrecio(cb);
+        });
+
+        const totalSpan = document.getElementById("total");
+        if (totalSpan) {
+            totalSpan.textContent = total.toFixed(2);
+        }
+    }
+
+    document.addEventListener("change", actualizarTotal);
+    const carneCantSel = document.getElementById("carneCantidad");
+    if (carneCantSel) carneCantSel.addEventListener("change", actualizarTotal);
+    window.addEventListener("load", actualizarTotal);
+</script>
+
+</body>
+</html>

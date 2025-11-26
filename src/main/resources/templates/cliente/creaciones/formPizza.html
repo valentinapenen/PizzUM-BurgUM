@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear pizza - PizzUM & BurgUM</title>
+    <!-- CSS base -->
+    <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
+    <link rel="stylesheet" href="../../../static/css/cliente/form-creaciones.css" th:href="@{/css/cliente/form-creaciones.css}">
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png">
+        <h1 class="brand-title">PizzUM &amp; BurgUM</h1>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="../inicio-cliente.html" th:href="@{/cliente/home}">Inicio</a>
+        <a class="active" href="CreacionesPrincipalMenu.html" th:href="@{/cliente/hacer-creacion}">Crear</a>
+        <a href="../carrito/lista.html" th:href="@{/cliente/carrito}">Carrito</a>
+        <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
+        <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
+        <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="client-container">
+    <div class="client-panel">
+
+        <div class="client-item form-wrapper">
+            <h2>Crear pizza</h2>
+
+            <form class="burger-form"
+                  action="/cliente/creaciones/pizza/guardar"
+                  th:action="@{/cliente/creaciones/pizza/guardar}"
+                  method="post">
+
+                <!-- Tamaño -->
+                <div class="form-group">
+                    <label for="tamano">Tamaño</label>
+                    <select id="tamano" name="tamano" required>
+                        <option value="" disabled selected>Seleccionar tamaño...</option>
+                        <option th:each="t : ${tamanos}"
+                                th:value="${t}"
+                                th:attr="data-precio=${preciosTam[t.name()]}"
+                                th:text="|${t} ($${#numbers.formatDecimal(preciosTam[t.name()],1,2)})|">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Masa -->
+                <div class="form-group">
+                    <label for="masaSelect">Masa</label>
+                    <select id="masaSelect" name="masaId" required>
+                        <option value="" disabled selected>Seleccionar masa...</option>
+                        <option th:each="m : ${masas}"
+                                th:value="${m.id}"
+                                th:data-precio="${m.precio}"
+                                th:text="${m.nombre + ' ($' + #numbers.formatDecimal(m.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Salsa -->
+                <div class="form-group">
+                    <label for="salsaSelect">Salsa</label>
+                    <select id="salsaSelect" name="salsaId" required>
+                        <option value="" disabled selected>Seleccionar salsa...</option>
+                        <option th:each="s : ${salsas}"
+                                th:value="${s.id}"
+                                th:data-precio="${s.precio}"
+                                th:text="${s.nombre + ' ($' + #numbers.formatDecimal(s.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Queso -->
+                <div class="form-group">
+                    <label for="quesoSelect">Queso</label>
+                    <select id="quesoSelect" name="quesoId" required>
+                        <option value="" disabled selected>Seleccionar queso...</option>
+                        <option th:each="q : ${quesos}"
+                                th:value="${q.id}"
+                                th:data-precio="${q.precio}"
+                                th:text="${q.nombre + ' ($' + #numbers.formatDecimal(q.precio,1,2) + ')'}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Toppings -->
+                <div class="form-group">
+                    <label class="section-title-small">Toppings</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="top : ${toppings}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="toppingIds"
+                                       th:id="'top-' + ${top.id}"
+                                       th:value="${top.id}"
+                                       th:attr="data-precio=${top.precio}">
+                                <label th:for="'top-' + ${top.id}">
+                                    <span th:text="${top.nombre}">Topping</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="|$${#numbers.formatDecimal(top.precio,1,2)}|">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bebidas (extras) -->
+                <div class="form-group" th:if="${bebidas != null}">
+                    <label class="section-title-small">Bebidas</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="b : ${bebidas}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="bebidaIds"
+                                       th:id="'beb-' + ${b.id}"
+                                       th:value="${b.id}"
+                                       th:attr="data-precio=${b.precio}">
+                                <label th:for="'beb-' + ${b.id}">
+                                    <span th:text="${b.nombre}">Bebida</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="|$${#numbers.formatDecimal(b.precio,1,2)}|">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Papas (extras) -->
+                <div class="form-group" th:if="${papas != null}">
+                    <label class="section-title-small">Papas</label>
+                    <div class="items-group">
+                        <div class="item-row"
+                             th:each="p : ${papas}">
+                            <div class="item-row-left">
+                                <input type="checkbox"
+                                       name="papasIds"
+                                       th:id="'pap-' + ${p.id}"
+                                       th:value="${p.id}"
+                                       th:attr="data-precio=${p.precio}">
+                                <label th:for="'pap-' + ${p.id}">
+                                    <span th:text="${p.nombre}">Papas</span>
+                                </label>
+                            </div>
+                            <span class="item-price"
+                                  th:text="|$${#numbers.formatDecimal(p.precio,1,2)}|">
+                                $0.00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total aproximado -->
+                <div class="total-row">
+                    Total aproximado: $<span id="total">0.00</span>
+                </div>
+
+                <!-- Favorito -->
+                <div class="favorito-checkbox">
+                    <input type="checkbox"
+                           id="favorito"
+                           name="favorito">
+                    <label for="favorito">Guardar esta pizza como favorito</label>
+                </div>
+
+
+                <!-- Acciones -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        Crear pizza
+                    </button>
+
+                    <a href="CreacionesPrincipalMenu.html"
+                       th:href="@{/cliente/hacer-creacion}"
+                       class="btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+            <script>
+                (function() {
+                    function parsePrecio(val) {
+                        var n = parseFloat(val);
+                        return isNaN(n) ? 0 : n;
+                    }
+
+                    function getSelectedPrecio(selectId) {
+                        var sel = document.getElementById(selectId);
+                        if (!sel) return 0;
+                        var opt = sel.options[sel.selectedIndex];
+                        if (!opt) return 0;
+                        return parsePrecio(opt.getAttribute('data-precio'));
+                    }
+
+                    function sumChecked(name) {
+                        var total = 0;
+                        document.querySelectorAll('input[name="' + name + '"]:checked').forEach(function(el) {
+                            total += parsePrecio(el.getAttribute('data-precio'));
+                        });
+                        return total;
+                    }
+
+                    function updateTotal() {
+                        var total = 0;
+                        // tamaño base
+                        total += getSelectedPrecio('tamano');
+                        // base de pizza
+                        total += getSelectedPrecio('masaSelect');
+                        total += getSelectedPrecio('salsaSelect');
+                        total += getSelectedPrecio('quesoSelect');
+                        // extras
+                        total += sumChecked('toppingIds');
+                        total += sumChecked('bebidaIds');
+                        total += sumChecked('papasIds');
+                        var totalEl = document.getElementById('total');
+                        if (totalEl) totalEl.textContent = total.toFixed(2);
+                    }
+
+                    // listeners
+                    ['tamano','masaSelect','salsaSelect','quesoSelect'].forEach(function(id){
+                        var el = document.getElementById(id);
+                        if (el) el.addEventListener('change', updateTotal);
+                    });
+                    ['toppingIds','bebidaIds','papasIds'].forEach(function(name){
+                        document.querySelectorAll('input[name="' + name + '"]').forEach(function(el){
+                            el.addEventListener('change', updateTotal);
+                        });
+                    });
+
+                    // inicial
+                    document.addEventListener('DOMContentLoaded', updateTotal);
+                    // por si el script carga después
+                    updateTotal();
+                })();
+            </script>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png">
+        <strong class="footer__title">PizzUM &amp; BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+</footer>
+
+</body>
+</html>

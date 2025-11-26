@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil administrador</title>
+    <link rel="stylesheet" href="../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
+    <link rel="stylesheet" href="../../static/css/administrador/admin.css" th:href="@{/css/administrador/admin.css}">
+</head>
+<body>
+
+<header>
+    <div class="header-brand">
+        <img class="logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <h1 class="brand-title">PizzUM & BurgUM</h1>
+    </div>
+    <nav class="nav-bar">
+        <a href="inicio-administrador.html" th:href="@{/administrador/inicio}">Inicio</a>
+        <a href="pedido/lista.html" th:href="@{/pedidos}">Pedidos</a>
+        <a href="producto/lista.html" th:href="@{/admin/productos}">Productos</a>
+        <a href="lista.html" th:href="@{/administrador/lista}">Administradores</a>
+        <a class="active" href="../administrador/perfil.html" th:href="@{/administrador/perfil}">Perfil</a>
+        <a href="../administrador/ventas/lista.html" th:href="@{/admin/ventas}">Ventas</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<div class="admin-container">
+    <div class="admin-panel">
+        <div class="admin-item large">
+            <h2>Mi perfil</h2>
+
+            <p><strong>Nombre:</strong> <span th:text="${administrador.nombre}">Nombre</span> <span th:text="${administrador.apellido}">Apellido</span></p>
+            <p><strong>Correo:</strong> <span th:text="${administrador.correo}">correo@ejemplo.com</span></p>
+            <p><strong>Teléfono:</strong> <span th:text="${administrador.telefono}">099 000 000</span></p>
+            <p><strong>Fecha de nacimiento:</strong> <span th:text="${#temporals.format(administrador.fechaNacimiento,'dd/MM/yyyy')}">01/01/2000</span></p>
+
+            <h3>Domicilio de facturación</h3>
+            <div th:if="${administrador.domicilioFacturacion != null}">
+                <p>
+                    <strong>Calle y número:</strong>
+                    <span th:text="${administrador.domicilioFacturacion.calle}">Calle</span>
+                    <span th:text="${administrador.domicilioFacturacion.numero}">123</span>
+                </p>
+                <p><strong>Departamento:</strong> <span th:text="${administrador.domicilioFacturacion.departamento}">Departamento</span></p>
+                <p><strong>Ciudad:</strong> <span th:text="${administrador.domicilioFacturacion.ciudad}">Ciudad</span></p>
+                <p th:if="${administrador.domicilioFacturacion.apartamento}"><strong>Apartamento:</strong> <span th:text="${administrador.domicilioFacturacion.apartamento}">APT</span></p>
+            </div>
+            <p th:if="${administrador.domicilioFacturacion == null}" style="color:#e67e22;">Aún no hay domicilio de facturación asignado.</p>
+
+            <a th:href="@{/administrador/perfil/editar}">
+                <button type="button">Editar datos</button>
+            </a>
+
+            <p th:if="${exito}" th:text="${exito}" style="color:#2ecc71; margin-top:10px;"></p>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-brand">
+        <img class="footer-logo" alt="PizzUM & BurgUM logo" src="/images/logo.png" />
+        <strong class="footer-title">PizzUM & BurgUM</strong>
+    </div>
+    <small>© 2025 — Todos los derechos reservados</small>
+    </footer>
+
+</body>
+</html>

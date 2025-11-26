@@ -37,7 +37,8 @@ public class Tarjeta {
     private TipoTarjeta tipoTarjeta;
 
     @NotNull
-    @DateTimeFormat
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM")
     private Date fecha_vencimiento;
 
     @NotNull

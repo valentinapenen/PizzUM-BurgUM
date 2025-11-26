@@ -7,5 +7,7 @@ public enum TipoProducto {
     CARNE,
     SALSA,
     QUESO,
-    MASA
+    MASA,
+    PAPAS,
+    TOPPING,
 }
