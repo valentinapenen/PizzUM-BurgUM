@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PedidoService {
@@ -112,6 +113,48 @@ public class PedidoService {
 
     public boolean clienteTienePedidoEnCurso(Long clienteId) {
         return buscarPedidoEnCurso(clienteId).isPresent();
+    }
+
+    @Transactional
+    public Pedido cancelarPedido(Long clienteId, Long pedidoId) {
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
+        if (!Objects.equals(pedido.getCliente().getId(), clienteId)) {
+            throw new IllegalArgumentException("El pedido no pertenece al cliente");
+        }
+
+        // Sólo permitir cancelar si aún no fue entregado ni va en camino avanzado
+        if (pedido.getEstado() != EstadoPedido.EN_COLA && pedido.getEstado() != EstadoPedido.EN_PREPARACION) {
+            throw new IllegalStateException("El pedido no se puede cancelar en su estado actual");
+        }
+
+        // Eliminar las creaciones no favoritas asociadas a este pedido
+        List<Creacion> creaciones = pedido.getCreaciones();
+
+        // Primero procesamos favoritas (no se eliminan) y vamos recolectando las no favoritas
+        java.util.List<Creacion> aEliminar = new java.util.ArrayList<>();
+        for (Creacion c : creaciones) {
+            if (c.isFavorito()) {
+                // Si era favorita, asegurar que no quede en carrito
+                c.setEnCarrito(false);
+                creacionRepository.save(c);
+            } else {
+                aEliminar.add(c);
+            }
+        }
+
+        // Desvincular las no favoritas del pedido para evitar problemas con la join table
+        if (!aEliminar.isEmpty()) {
+            creaciones.removeAll(aEliminar);
+            pedido.setCreaciones(creaciones);
+            pedidoRepository.save(pedido);
+            // Ahora sí, eliminarlas físicamente
+            creacionRepository.deleteAll(aEliminar);
+        }
+
+        pedido.setEstado(EstadoPedido.CANCELADO);
+        return pedidoRepository.save(pedido);
     }
 
 

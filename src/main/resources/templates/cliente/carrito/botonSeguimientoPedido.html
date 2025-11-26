@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
     <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
     <link rel="stylesheet" href="../../../static/css/cliente/seguimiento-pedido.css" th:href="@{/css/cliente/seguimiento-pedido.css}">
+    <style>
+        .alert { padding: 10px; border-radius: 6px; margin: 8px 0; }
+        .alert-success { background: #e6ffed; color: #056b27; border: 1px solid #8de1a8; }
+        .alert-danger { background: #ffe6e6; color: #8a0910; border: 1px solid #f3a3a7; }
+        .btn-cancelar { background: #b00020; color: #fff; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; }
+        .btn-cancelar:hover { background: #93001a; }
+    </style>
+    
 </head>
 <body>
 
@@ -23,8 +31,11 @@
         <a href="../favoritos/lista.html" th:href="@{/cliente/favoritos}">Favoritos</a>
         <a href="../historial/lista.html" th:href="@{/cliente/historial}">Historial</a>
         <a href="../perfil.html" th:href="@{/cliente/perfil}">Perfil</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link">Cerrar sesión</button>
+        </form>
     </nav>
-</header>
+    </header>
 
 <main>
     <section class="seguimiento-box">
@@ -39,6 +50,19 @@
             <strong th:text="${pedido.estado}">EN_PREPARACION</strong>
         </p>
 
+        <!-- Mensajes flash -->
+        <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <!-- Botón cancelar pedido: sólo si el estado permite cancelación -->
+        <form th:if="${pedido.estado.name() == 'EN_COLA' or pedido.estado.name() == 'EN_PREPARACION'}"
+              th:action="@{'/cliente/pedido/' + ${pedido.idPedido} + '/cancelar'}"
+              method="post"
+              style="margin-bottom: 16px;">
+            <button type="submit" class="btn-cancelar" onclick="return confirm('¿Seguro que querés cancelar el pedido?');">
+                Cancelar pedido
+            </button>
+        </form>
 
         <a class="btn-volver"
            href="lista.html"
@@ -54,7 +78,7 @@
         <strong class="footer__title">PizzUM & BurgUM</strong>
     </div>
     <small>© 2025 — Todos los derechos reservados</small>
-</footer>
+    </footer>
 
 </body>
 </html>

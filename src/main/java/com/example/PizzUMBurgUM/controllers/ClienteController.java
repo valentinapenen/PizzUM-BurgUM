@@ -475,6 +475,27 @@ public class ClienteController {
         return "cliente/carrito/botonSeguimientoPedido";
     }
 
+    @PostMapping("/pedido/{id}/cancelar")
+    public String cancelarPedido(@PathVariable Long id,
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/iniciar-sesion";
+        }
+
+        try {
+            pedidoService.cancelarPedido(cliente.getId(), id);
+            redirectAttributes.addFlashAttribute("exito", "Tu pedido fue cancelado. Las creaciones no favoritas se eliminaron.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "No se pudo cancelar el pedido: " + e.getMessage());
+        }
+
+        // Volver a la pantalla de seguimiento para ver el estado actualizado
+        return "redirect:/cliente/pedido/seguimiento/" + id;
+    }
+
 
     @GetMapping("/carrito/continuar")
     public String continuarCompra(HttpSession session, Model model,
