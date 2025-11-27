@@ -60,7 +60,10 @@ public class PedidoService {
     }
 
     public List<Pedido> listarActivos() {
-        List<Pedido> pedidosActivos = pedidoRepository.findByEstadoNot(EstadoPedido.ENTREGADO);
+        // Excluir pedidos ENTREGADO y CANCELADO del listado de administración
+        List<Pedido> pedidosActivos = pedidoRepository.findByEstadoNotIn(
+                java.util.List.of(EstadoPedido.ENTREGADO, EstadoPedido.CANCELADO)
+        );
         return pedidosActivos;
     }
 
@@ -70,6 +73,11 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
 
         EstadoPedido actual = pedido.getEstado();
+
+        // Si el pedido fue cancelado por el cliente, no se permite modificar su estado
+        if (actual == EstadoPedido.CANCELADO) {
+            throw new IllegalStateException("No se puede modificar un pedido cancelado.");
+        }
 
         if (actual == EstadoPedido.EN_COLA && nuevoEstado == EstadoPedido.CANCELADO) {
             pedido.setEstado(nuevoEstado);
@@ -89,6 +97,13 @@ public class PedidoService {
 
     public List<Pedido> listarPedidosPorFecha(LocalDateTime desde, LocalDateTime hasta) {
         return pedidoRepository.findByFechaBetween(desde, hasta);
+    }
+
+    public List<Pedido> listarPedidosPorFechaYEstado(LocalDateTime desde, LocalDateTime hasta, EstadoPedido estado) {
+        if (estado == null) {
+            return listarPedidosPorFecha(desde, hasta);
+        }
+        return pedidoRepository.findByFechaBetweenAndEstado(desde, hasta, estado);
     }
 
     public Pedido obtenerPedido(long id) {
@@ -125,7 +140,7 @@ public class PedidoService {
         }
 
         // Sólo permitir cancelar si aún no fue entregado ni va en camino avanzado
-        if (pedido.getEstado() != EstadoPedido.EN_COLA && pedido.getEstado() != EstadoPedido.EN_PREPARACION) {
+        if (pedido.getEstado() != EstadoPedido.EN_COLA) {
             throw new IllegalStateException("El pedido no se puede cancelar en su estado actual");
         }
 

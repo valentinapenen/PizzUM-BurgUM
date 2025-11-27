@@ -1,6 +1,7 @@
 package com.example.PizzUMBurgUM.controllers;
 
 import com.example.PizzUMBurgUM.entities.Pedido;
+import com.example.PizzUMBurgUM.entities.enums.EstadoPedido;
 import com.example.PizzUMBurgUM.entities.Usuario;
 import com.example.PizzUMBurgUM.entities.Administrador;
 import com.example.PizzUMBurgUM.services.PedidoService;
@@ -29,6 +30,7 @@ public class AdminVentasController {
             HttpSession session,
             @RequestParam(value = "desde", required = false) LocalDate desde,
             @RequestParam(value = "hasta", required = false) LocalDate hasta,
+            @RequestParam(value = "estado", required = false) EstadoPedido estado,
             Model model
     ) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
@@ -44,12 +46,13 @@ public class AdminVentasController {
         LocalDateTime dtDesde = desde.atStartOfDay();
         LocalDateTime dtHasta = hasta.atTime(LocalTime.MAX);
 
-        List<Pedido> pedidos = pedidoService.listarPedidosPorFecha(dtDesde, dtHasta);
+        List<Pedido> pedidos = pedidoService.listarPedidosPorFechaYEstado(dtDesde, dtHasta, estado);
         double total = pedidos.stream().mapToDouble(Pedido::getTotal).sum();
 
         model.addAttribute("pedidos", pedidos);
         model.addAttribute("desde", desde);
         model.addAttribute("hasta", hasta);
+        model.addAttribute("estado", estado);
         model.addAttribute("total", total);
 
         return "administrador/ventas/lista";

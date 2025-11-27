@@ -29,6 +29,23 @@
 <div class="admin-container">
   <div class="admin-panel">
 
+      <!-- Nuevo producto -->
+      <div class="admin-item medium">
+          <h2>Crear nuevo producto</h2>
+          <a class="admin-link" th:href="@{/admin/productos/nuevo}">
+              <button type="button">Nuevo Producto</button>
+          </a>
+      </div>
+
+      <!-- Configurar precios por tamaño de pizza -->
+      <div class="admin-item medium">
+          <h2>Precios por tamaño de Pizza</h2>
+          <p>Configura los precios base de CHICA, MEDIANA y GRANDE.</p>
+          <a class="admin-link" th:href="@{/admin/pizzas/precios}">
+              <button type="button">Editar precios de tamaños</button>
+          </a>
+      </div>
+
     <!-- Cada producto -->
     <div class="admin-item medium" th:each="p : ${productos}">
       <h2 th:text="${p.nombre}">Nombre Producto</h2>
@@ -52,23 +69,6 @@
       <form th:if="${!p.disponible}" th:action="@{'/admin/productos/' + ${p.id} + '/activar'}" method="post" style="margin-top:5px;">
         <button type="submit" style="background:#27ae60; color:white;">Reactivar</button>
       </form>
-    </div>
-
-    <!-- Nuevo producto -->
-    <div class="admin-item medium">
-      <h2>Crear nuevo producto</h2>
-      <a class="admin-link" th:href="@{/admin/productos/nuevo}">
-        <button type="button">Nuevo Producto</button>
-      </a>
-    </div>
-
-    <!-- Configurar precios por tamaño de pizza -->
-    <div class="admin-item medium">
-      <h2>Precios por tamaño de Pizza</h2>
-      <p>Configura los precios base de CHICA, MEDIANA y GRANDE.</p>
-      <a class="admin-link" th:href="@{/admin/pizzas/precios}">
-        <button type="button">Editar precios de tamaños</button>
-      </a>
     </div>
 
   </div>

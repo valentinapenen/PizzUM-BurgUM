@@ -41,6 +41,17 @@
                     <input class="admin-input" type="date" name="hasta" th:value="${hasta}" required>
                 </div>
                 <div>
+                    <label>Estado</label>
+                    <select class="admin-input" name="estado">
+                        <option value="" th:selected="${estado == null}">Todos</option>
+                        <option th:each="e : ${T(com.example.PizzUMBurgUM.entities.enums.EstadoPedido).values()}"
+                                th:value="${e}"
+                                th:text="${e}"
+                                th:selected="${estado != null and e.name() == estado.name()}">
+                        </option>
+                    </select>
+                </div>
+                <div>
                     <button type="submit">Filtrar</button>
                 </div>
             </form>

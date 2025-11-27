@@ -44,13 +44,26 @@
             Por ahora no tenés creaciones en tu carrito.
         </p>
 
+        <!-- Bloque de seguimiento siempre visible cuando hay pedido en curso
+             incluso si el carrito está vacío (evita que "desaparezca" el acceso) -->
+        <div th:if="${tienePedidoEnCurso and #lists.isEmpty(creaciones)}"
+             style="background:#fff3cd; color:#856404; padding:12px; border-radius:8px; border:1px solid #ffeeba; margin: 12px 0;">
+            Tenés un pedido en curso. Podés seguir su estado desde aquí:
+            <div style="margin-top:8px;">
+                <a class="btn-principal"
+                   href="botonSeguimientoPedido.html"
+                   th:href="@{/cliente/pedido/seguimiento/{id}(id=${pedidoEnCurso.idPedido})}">
+                    Ver seguimiento del pedido
+                </a>
+            </div>
+        </div>
+
         <!-- Lista de creaciones -->
         <table class="tabla-carrito" th:if="${!#lists.isEmpty(creaciones)}">
             <thead>
             <tr>
                 <th>Tipo</th>
                 <th>Detalle</th>
-                <th>Favorito</th>
                 <th>Precio</th>
                 <th>Acciones</th>
             </tr>
@@ -68,18 +81,25 @@
                     </ul>
                 </td>
 
-                <td th:text="${creacion.favorito ? 'Sí' : 'No'}">No</td>
-
                 <td class="precio">
                     $ <span th:text="${#numbers.formatDecimal(creacion.precioTotal,1,2)}">0.00</span>
                 </td>
 
                 <td>
-                    <!-- Eliminar del carrito -->
+                    <!-- Sumar (duplicar) solo si NO hay pedido en curso -->
+                    <form th:if="${!tienePedidoEnCurso}"
+                          th:action="@{/cliente/carrito/sumar/{idCreacion}(idCreacion=${creacion.id})}"
+                          method="post"
+                          style="display: inline; margin-right: 6px;">
+                        <button type="submit" class="btn-accion">+</button>
+                    </form>
+                    <span th:if="${tienePedidoEnCurso}" style="color:#7f8c8d; font-size:0.9rem; margin-right:6px;">Cantidad bloqueada por pedido en curso</span>
+
+                    <!-- Restar (eliminar una unidad) -->
                     <form th:action="@{/cliente/carrito/eliminar/{idCreacion}(idCreacion=${creacion.id})}"
                           method="post"
                           style="display: inline;">
-                        <button type="submit" class="btn-accion">Eliminar</button>
+                        <button type="submit" class="btn-accion">-</button>
                     </form>
                 </td>
             </tr>
@@ -94,7 +114,7 @@
             </p>
 
             <div class="carrito-botones">
-                <!-- Si HAY pedido en curso: botón de seguimiento -->
+                <!-- Si HAY pedido en curso y hay items, mostrar botón de seguimiento en el resumen -->
                 <div th:if="${tienePedidoEnCurso}">
                     <a class="btn-principal"
                        href="botonSeguimientoPedido.html"
@@ -120,12 +140,16 @@
                     </a>
                 </div>
 
-                <!-- Botón para volver a crear más cosas -->
+                <!-- Botón para volver a crear más cosas (oculto si hay pedido en curso) -->
                 <a class="btn-secundario"
+                   th:if="${!tienePedidoEnCurso}"
                    href="../creaciones/CreacionesPrincipalMenu.html"
                    th:href="@{/cliente/hacer-creacion}">
                     Seguir creando
                 </a>
+                <span th:if="${tienePedidoEnCurso}" style="color:#7f8c8d; font-size:0.95rem;">
+                    No podés agregar nuevas creaciones hasta que finalice tu pedido en curso.
+                </span>
             </div>
         </div>
 

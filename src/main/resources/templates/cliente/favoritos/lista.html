@@ -48,7 +48,7 @@
 
     <nav class="nav-bar">
         <a href="../inicio-cliente.html"
-           th:href="@{/inicio-cliente}">
+           th:href="@{/cliente/home}">
             Inicio
         </a>
 
@@ -87,6 +87,25 @@
 
     <div class="client-panel">
 
+        <!-- Aviso si hay un pedido en curso -->
+        <div th:if="${tienePedidoEnCurso}"
+             class="client-item"
+             style="background:#fff3cd; color:#856404; padding:10px 12px; border-radius:8px; border:1px solid #ffeeba;">
+            Ya tenés un pedido en curso. Mientras esté en proceso no podés agregar nuevas creaciones al carrito.
+        </div>
+
+        <!-- Mensajes flash -->
+        <div th:if="${exito}"
+             class="client-item"
+             style="background:#eafaf1; color:#1e8449; padding:10px 12px; border-radius:8px;">
+            <span th:text="${exito}">Acción realizada correctamente</span>
+        </div>
+        <div th:if="${error}"
+             class="client-item"
+             style="background:#fdecea; color:#c0392b; padding:10px 12px; border-radius:8px;">
+            <span th:text="${error}">Ocurrió un error</span>
+        </div>
+
         <!-- solo mensaje cuando no hay favoritos -->
         <div th:if="${#lists.isEmpty(favoritos)}"
              class="client-item no-favs">
@@ -120,6 +139,20 @@
                     TipoProducto: nombre del producto
                 </li>
             </ul>
+
+            <!-- Acciones: Permitir agregar al carrito las veces que se quiera (si NO hay pedido en curso) -->
+            <div style="margin-top:12px; display:flex; gap:10px; align-items:center;">
+                <form th:if="${!tienePedidoEnCurso}"
+                      th:action="@{'/cliente/favoritos/' + ${creacion.id} + '/agregar-carrito'}"
+                      method="post">
+                    <button type="submit" style="background:#1e8449; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">
+                        Agregar al carrito
+                    </button>
+                </form>
+                <span th:if="${tienePedidoEnCurso}" style="color:#7f8c8d; font-size:0.9rem;">
+                    Agregar deshabilitado por pedido en curso
+                </span>
+            </div>
 
         </div>
 

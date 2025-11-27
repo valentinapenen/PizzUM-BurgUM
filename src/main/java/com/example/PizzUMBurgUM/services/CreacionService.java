@@ -37,6 +37,8 @@ public class CreacionService {
     // Hacer creación
     @Transactional
     public Creacion crearCreacion(long clienteId, TipoCreacion tipo, List<Long> idsProductos, boolean favorito) {
+        // Regla: no permitir agregar creaciones al carrito si el cliente tiene un pedido en curso
+        validarSinPedidoEnCurso(clienteId);
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
@@ -68,6 +70,44 @@ public class CreacionService {
     }
 
 
+    /**
+     * Agrega al carrito una NUEVA creación basada en una favorita del cliente.
+     * No modifica la favorita original; permite agregarla múltiples veces.
+     */
+    @Transactional
+    public Creacion agregarFavoritoAlCarrito(Long creacionId, Long clienteId) {
+        // Regla: no permitir agregar creaciones al carrito si hay pedido en curso
+        validarSinPedidoEnCurso(clienteId);
+        Creacion favorita = creacionRepository.findById(creacionId)
+                .orElseThrow(() -> new EntityNotFoundException("Creación no encontrada con ID: " + creacionId));
+
+        if (favorita.getCliente() == null || favorita.getCliente().getId() != clienteId) {
+            throw new IllegalArgumentException("La creación no pertenece al cliente");
+        }
+
+        if (!favorita.isFavorito()) {
+            throw new IllegalStateException("La creación no está marcada como favorita");
+        }
+
+        // Clonar la favorita en una nueva creación para el carrito
+        // IMPORTANTE: crear una NUEVA lista para evitar compartir la misma
+        // colección de Hibernate (PersistentBag) entre entidades distintas,
+        // lo cual genera el error "Found shared references to a collection".
+        java.util.List<Producto> productosClonados = new java.util.ArrayList<>(favorita.getProductos());
+        Creacion nueva = Creacion.builder()
+                .cliente(favorita.getCliente())
+                .tipo(favorita.getTipo())
+                .productos(productosClonados)
+                .tamanoPizza(favorita.getTamanoPizza())
+                .precioTotal(favorita.getPrecioTotal())
+                .favorito(false)
+                .enCarrito(true)
+                .build();
+
+        return creacionRepository.save(nueva);
+    }
+
+
     // Marcar o desmarcar como favorita
     public Creacion marcarFavorito(Long creacionId, boolean favorito) {
         Creacion creacion = creacionRepository.findById(creacionId)
@@ -88,6 +128,61 @@ public class CreacionService {
             creacionRepository.save(c);
         } else {
             creacionRepository.delete(c);
+        }
+    }
+
+
+    /**
+     * Duplica una creación que está en el carrito para simular "sumar" una unidad.
+     * Crea una nueva Creacion con los mismos datos y una NUEVA lista de productos
+     * para evitar compartir la colección de Hibernate entre entidades (PersistentBag).
+     */
+    @Transactional
+    public Creacion duplicarCreacionEnCarrito(Long creacionId, Long clienteId) {
+        // Regla: no permitir agregar más unidades si hay pedido en curso
+        validarSinPedidoEnCurso(clienteId);
+        Creacion original = creacionRepository.findById(creacionId)
+                .orElseThrow(() -> new EntityNotFoundException("Creación no encontrada con ID: " + creacionId));
+
+        if (original.getCliente() == null || original.getCliente().getId() != clienteId) {
+            throw new IllegalArgumentException("La creación no pertenece al cliente");
+        }
+
+        if (!original.isEnCarrito()) {
+            throw new IllegalStateException("La creación no está en el carrito");
+        }
+
+        java.util.List<Producto> productosClonados = new java.util.ArrayList<>(original.getProductos());
+        Creacion copia = Creacion.builder()
+                .cliente(original.getCliente())
+                .tipo(original.getTipo())
+                .productos(productosClonados)
+                .tamanoPizza(original.getTamanoPizza())
+                .precioTotal(original.getPrecioTotal())
+                // la copia no se marca como favorita aunque la original lo sea; es un item del carrito
+                .favorito(false)
+                .enCarrito(true)
+                .build();
+
+        return creacionRepository.save(copia);
+    }
+
+    /**
+     * Lanza IllegalStateException si el cliente tiene un pedido en curso
+     * (EN_COLA, EN_PREPARACION o EN_CAMINO).
+     */
+    private void validarSinPedidoEnCurso(Long clienteId) {
+        java.util.List<com.example.PizzUMBurgUM.entities.enums.EstadoPedido> estadosEnCurso = java.util.List.of(
+                com.example.PizzUMBurgUM.entities.enums.EstadoPedido.EN_COLA,
+                com.example.PizzUMBurgUM.entities.enums.EstadoPedido.EN_PREPARACION,
+                com.example.PizzUMBurgUM.entities.enums.EstadoPedido.EN_CAMINO
+        );
+
+        java.util.Optional<com.example.PizzUMBurgUM.entities.Pedido> pedidoOpt =
+                pedidoRepository.findFirstByClienteIdAndEstadoInOrderByFechaDesc(clienteId, estadosEnCurso);
+
+        if (pedidoOpt.isPresent()) {
+            throw new IllegalStateException("Ya tenés un pedido en curso. No podés agregar más creaciones al carrito.");
         }
     }
 

@@ -36,6 +36,19 @@
         <div class="client-item form-wrapper">
             <h2>Crear pizza</h2>
 
+            <!-- Aviso de bloqueo cuando hay un pedido en curso -->
+            <div th:if="${tienePedidoEnCurso}"
+                 style="background:#fff3cd; color:#856404; padding:10px 12px; border-radius:8px; border:1px solid #ffeeba; margin-bottom:12px;">
+                Ya tenés un pedido en curso. Mientras esté en proceso no podés agregar nuevas creaciones al carrito.
+                <div style="margin-top:8px;">
+                    <a class="btn-secondary"
+                       th:if="${pedidoEnCurso != null}"
+                       th:href="@{/cliente/pedido/seguimiento/{id}(id=${pedidoEnCurso.idPedido})}">
+                        Ver seguimiento del pedido
+                    </a>
+                </div>
+            </div>
+
             <form class="burger-form"
                   action="/cliente/creaciones/pizza/guardar"
                   th:action="@{/cliente/creaciones/pizza/guardar}"
@@ -181,9 +194,14 @@
 
                 <!-- Acciones -->
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">
+                    <!-- Mostrar botón crear solo si NO hay pedido en curso -->
+                    <button th:if="${!tienePedidoEnCurso}" type="submit" class="btn-primary">
                         Crear pizza
                     </button>
+                    <!-- Si hay pedido en curso, informar el bloqueo -->
+                    <span th:if="${tienePedidoEnCurso}" style="color:#7f8c8d; margin-right:12px;">
+                        Creación bloqueada por pedido en curso
+                    </span>
 
                     <a href="CreacionesPrincipalMenu.html"
                        th:href="@{/cliente/hacer-creacion}"

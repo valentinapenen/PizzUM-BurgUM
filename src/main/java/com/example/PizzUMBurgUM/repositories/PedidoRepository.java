@@ -13,7 +13,9 @@ import java.util.Optional;
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findByClienteId(long clienteId);
     List<Pedido> findByFechaBetween(LocalDateTime desde, LocalDateTime hasta);
+    List<Pedido> findByFechaBetweenAndEstado(LocalDateTime desde, LocalDateTime hasta, EstadoPedido estado);
     List<Pedido> findByEstadoNot(EstadoPedido estado);
+    List<Pedido> findByEstadoNotIn(List<EstadoPedido> estados);
 
 
     //hay un valor T (por ejemplo un Pedido)

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Seguimiento del pedido - PizzUM & BurgUM</title>
-    <!-- 🔄 Recargar cada 5 segundos para actualizar estado -->
-    <meta http-equiv="refresh" content="5">
+    <!-- Recargar cada 5 segundos para actualizar estado solo mientras no esté ENTREGADO -->
+    <meta http-equiv="refresh" content="5" th:if="${pedido.estado.name() != 'ENTREGADO'}">
     <link rel="stylesheet" href="../../../static/css/background-header-footer.css" th:href="@{/css/background-header-footer.css}">
     <link rel="stylesheet" href="../../../static/css/cliente/paneles-cliente.css" th:href="@{/css/cliente/paneles-cliente.css}">
     <link rel="stylesheet" href="../../../static/css/cliente/seguimiento-pedido.css" th:href="@{/css/cliente/seguimiento-pedido.css}">
@@ -50,12 +50,17 @@
             <strong th:text="${pedido.estado}">EN_PREPARACION</strong>
         </p>
 
+        <!-- Mensaje final cuando el pedido fue entregado -->
+        <div th:if="${pedido.estado.name() == 'ENTREGADO'}" class="alert alert-success">
+            ¡Tu pedido fue entregado! El seguimiento ha finalizado.
+        </div>
+
         <!-- Mensajes flash -->
         <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-        <!-- Botón cancelar pedido: sólo si el estado permite cancelación -->
-        <form th:if="${pedido.estado.name() == 'EN_COLA' or pedido.estado.name() == 'EN_PREPARACION'}"
+        <!-- Botón cancelar pedido: sólo si el estado es EN_COLA -->
+        <form th:if="${pedido.estado.name() == 'EN_COLA'}"
               th:action="@{'/cliente/pedido/' + ${pedido.idPedido} + '/cancelar'}"
               method="post"
               style="margin-bottom: 16px;">

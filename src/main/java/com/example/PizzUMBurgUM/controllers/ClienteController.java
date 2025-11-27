@@ -134,7 +134,31 @@ public class ClienteController {
         model.addAttribute("cliente", cliente);
         model.addAttribute("favoritos", creacionService.listarFavoritosPorCliente(cliente.getId()));
 
+        // Indicar si el cliente tiene un pedido en curso para bloquear agregados al carrito
+        java.util.Optional<Pedido> pedidoEnCursoOpt =
+                pedidoService.buscarPedidoEnCurso(cliente.getId());
+        model.addAttribute("tienePedidoEnCurso", pedidoEnCursoOpt.isPresent());
+
         return "cliente/favoritos/lista";
+    }
+
+    @PostMapping("/favoritos/{id}/agregar-carrito")
+    public String agregarFavoritoAlCarrito(@PathVariable("id") Long creacionId,
+                                           HttpSession session,
+                                           RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/iniciar-sesion";
+        }
+
+        try {
+            creacionService.agregarFavoritoAlCarrito(creacionId, cliente.getId());
+            redirectAttributes.addFlashAttribute("exito", "Se agregó la creación al carrito.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "No se pudo agregar al carrito: " + e.getMessage());
+        }
+
+        return "redirect:/cliente/favoritos";
     }
 
 
@@ -253,6 +277,12 @@ public class ClienteController {
         model.addAttribute("papas",
                 productoService.listarPorTipoYCategoria(TipoProducto.PAPAS, CategoriaProducto.AMBOS));
 
+        // Indicadores de pedido en curso para bloquear el submit del formulario
+        java.util.Optional<Pedido> pedidoEnCursoOpt =
+                pedidoService.buscarPedidoEnCurso(cliente.getId());
+        model.addAttribute("tienePedidoEnCurso", pedidoEnCursoOpt.isPresent());
+        pedidoEnCursoOpt.ifPresent(p -> model.addAttribute("pedidoEnCurso", p));
+
 
         // va a templates/cliente/creaciones/formPizza.html
         return "cliente/creaciones/formPizza";
@@ -338,6 +368,12 @@ public class ClienteController {
 
         model.addAttribute("papasHamb",
                 productoService.listarPorTipoYCategoria(TipoProducto.PAPAS, CategoriaProducto.AMBOS));
+
+        // Indicadores de pedido en curso para bloquear el submit del formulario
+        java.util.Optional<Pedido> pedidoEnCursoOpt =
+                pedidoService.buscarPedidoEnCurso(cliente.getId());
+        model.addAttribute("tienePedidoEnCurso", pedidoEnCursoOpt.isPresent());
+        pedidoEnCursoOpt.ifPresent(p -> model.addAttribute("pedidoEnCurso", p));
 
         // va a templates/cliente/creaciones/formHamburguesa.html
         return "cliente/creaciones/formHamburguesa";
@@ -445,6 +481,28 @@ public class ClienteController {
                     "error",
                     "No se pudo eliminar la creación."
             );
+        }
+
+        return "redirect:/cliente/carrito";
+    }
+
+    // sumar (duplicar) una creación en el carrito
+    @PostMapping("/carrito/sumar/{idCreacion}")
+    public String sumarCreacionAlCarrito(
+            @PathVariable Long idCreacion,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null || !(usuario instanceof Cliente cliente)) {
+            return "redirect:/iniciar-sesion";
+        }
+
+        try {
+            creacionService.duplicarCreacionEnCarrito(idCreacion, cliente.getId());
+            redirectAttributes.addFlashAttribute("exito", "Se agregó otra unidad al carrito.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "No se pudo agregar otra unidad: " + e.getMessage());
         }
 
         return "redirect:/cliente/carrito";
