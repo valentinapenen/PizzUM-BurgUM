@@ -144,7 +144,7 @@ main.container {
     }
 }
 
-/* Selects y datalists (coinciden con el estilo de los inputs) */
+/* Selects y datalists */
 .select,
 input[list] {
     padding: 10px 12px;
@@ -164,7 +164,6 @@ input[list] {
     color: rgba(255,255,255,0.6);
 }
 
-/* Hover y focus coherentes */
 .select:hover,
 input[list]:hover {
     background-color: rgba(255,255,255,0.15);
@@ -177,7 +176,6 @@ input[list]:focus {
     box-shadow: 0 0 6px rgba(255,99,71,0.4);
 }
 
-/* Flecha personalizada para select */
 .select {
     background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
     background-repeat: no-repeat;
@@ -185,7 +183,6 @@ input[list]:focus {
     background-size: 12px;
 }
 
-/* Evita que el texto quede tapado por la flecha */
 .select::-ms-expand {
     display: none;
 }

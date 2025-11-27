@@ -25,8 +25,8 @@ body {
     padding: 40px 30px;
     border-radius: 20px;
     width: 100%;
-    max-width: 1200px; /* o el ancho máximo que quieras */
-    box-sizing: border-box; /* para que el padding no sume al ancho total */
+    max-width: 1200px;
+    box-sizing: border-box;
     text-align: center;
 }
 
@@ -74,7 +74,7 @@ body {
 /* contenedor de botones */
 .hero .btn-container {
     display: flex;
-    justify-content: center; /* centra los botones horizontalmente */
+    justify-content: center;
     gap: 20px; /* espacio entre botones */
     margin-top: 20px; /* separación con el título */
 }
@@ -105,7 +105,7 @@ body {
 }
 
 .main-section {
-    background-color: #440c0c; /* rojo oscuro profundo */
+    background-color: #440c0c;
     padding-top: 10px;
     padding-bottom: 40px;
 }
